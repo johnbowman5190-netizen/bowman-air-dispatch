@@ -98,7 +98,7 @@
             <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">DISPATCH OPS</span>
             <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">N361VA (A320-200)</span>
           </div>
-          <p class="text-[11px] text-slate-400 font-medium">CALLSIGN PREFIX: BCJ • REALISTIC TEAM MOVEMENTS • 180 SEATS (NO ROW 13)</p>
+          <p class="text-[11px] text-slate-400 font-medium">CALLSIGN PREFIX: BCJ • REALISTIC MULTI-MISSION CHARTER ENGINE • 180 SEATS (NO ROW 13)</p>
         </div>
       </div>
 
@@ -162,7 +162,7 @@
 
         <form id="dispatchForm" onsubmit="event.preventDefault(); handleGenerateDispatch();" class="space-y-4">
           
-          <!-- 175+ AIRPORT DROPDOWN (HARDCODED IN HTML + DYNAMICALLY POPULATED) -->
+          <!-- 175+ AIRPORT DROPDOWN -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Leg 1 Origin Airport (Operating Hub)
@@ -191,7 +191,7 @@
               <option value="KTUL">KTUL - Tulsa Int'l (Tulsa/Tulsa Golden Hurricane, OK)</option>
               <option value="LFMN">LFMN - Nice Côte d'Azur (Monaco Link, France)</option>
             </select>
-            <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, AAC & MN Sports.</p>
+            <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, AAC, MN & VIP network.</p>
           </div>
 
           <!-- Range Profile -->
@@ -207,31 +207,29 @@
             </select>
           </div>
 
-          <!-- Charter Categories -->
+          <!-- UPDATED CHARTER CATEGORIES DROPDOWN (EXACT 7 CATEGORIES) -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Charter Mission Category
             </label>
-            <select id="charterCategory" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
-              <option value="INTEGRATED_SPORTS" selected>⚽ Integrated Sports Charters (MN Pro & AAC Conference)</option>
-              <option value="MN_PRO_ONLY">⭐ Minnesota Pro Teams (Vikings, Wolves, Wild, Twins)</option>
-              <option value="AAC_NCAA_ONLY">🎓 NCAA AAC Conference Teams (American Athletic Conference)</option>
-              <option value="MONACO_GP_VIP">🏎️ Monaco Grand Prix & Formula 1 Luxury VIP Envoy</option>
-              <option value="CORPORATE">💼 Corporate Tech & Executive Delegations</option>
-              <option value="CONCERT_FILM">🎸 World Concert Tours & Film Production Unit</option>
-              <option value="DIPLOMATIC">🏛️ Diplomatic & UN Government Missions</option>
-              <option value="EMERGENCY">🚑 Emergency & Medical Humanitarian Airlift</option>
-              <option value="AEROSPACE">🚀 Aerospace & Launch Engineering Teams</option>
+            <select id="charterCategory" onchange="updateSubGroupOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+              <option value="SPORTS" selected>1. ⚽ Sports Team & Franchise Charters</option>
+              <option value="CORPORATE">2. 💼 Corporate & Executive Group Travel</option>
+              <option value="ACJ320_VIP">3. 👑 VIP, Executive & Head-of-State Charters (ACJ320)</option>
+              <option value="ENTERTAINMENT">4. 🎸 Entertainment & Music Tour Charters</option>
+              <option value="TOUR_OPERATOR">5. 🏝️ Tour Operator & Ad-Hoc Seasonal Charters</option>
+              <option value="GOVERNMENT">6. 🏛️ Government, Military & Humanitarian Airlifts</option>
+              <option value="ACMI_LEASE">7. ✈️ Airline ACMI / Wet Lease & Sub-Service Charters</option>
             </select>
           </div>
 
-          <!-- Target Charter Team / Sub-Group -->
+          <!-- Target Charter Sub-Group -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-              Target Charter Team / Sub-Group
+              Target Sub-Group / Specific Mission
             </label>
-            <select id="targetTeam" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
-              <option value="AUTO_ROTATION" selected>⭐ Auto-Anchor Teams to Selection / Home Airfield</option>
+            <select id="targetSubGroup" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+              <!-- Dynamically populated based on category -->
             </select>
           </div>
 
@@ -240,20 +238,21 @@
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Dispatch Operating Date (Controls Seasonality)
             </label>
-            <input type="date" id="dispatchDate" value="2026-11-07" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
+            <input type="date" id="dispatchDate" value="2026-11-07" onchange="updateSubGroupOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
             <p id="seasonIndicator" class="text-[10px] text-amber-400 font-semibold mt-1">SEASON: FALL (NFL Vikings, NBA Timberwolves & AAC Football Active)</p>
           </div>
 
           <!-- Sequential Leg Chain Count -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-              Sequential Leg Chain Count (A → B → C → D)
+              Sequential Leg Chain Count (A → B → C → D → E)
             </label>
             <select id="legCount" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-semibold">
               <option value="1">1 Leg Direct (A → B)</option>
               <option value="2">2 Continuous Legs (A → B → C)</option>
               <option value="3">3 Continuous Legs (A → B → C → D)</option>
               <option value="4" selected>4 Continuous Legs (A → B → C → D → E)</option>
+              <option value="5">5 Continuous Legs (A → B → C → D → E → F)</option>
             </select>
             <p class="text-[10px] text-emerald-400 mt-1">✓ Strict Rule: Teams fly ONCE per day. No same-day return loops.</p>
           </div>
@@ -358,11 +357,11 @@
               </span>
               <span class="flex items-center space-x-1">
                 <span class="w-3 h-3 rounded bg-amber-500/30 border border-amber-400 inline-block"></span>
-                <span>Coaching / Staff</span>
+                <span>Staff / Execs</span>
               </span>
               <span class="flex items-center space-x-1">
                 <span class="w-3 h-3 rounded bg-slate-700 border border-slate-500 inline-block"></span>
-                <span>Active Roster</span>
+                <span>Main Passenger Roster</span>
               </span>
             </div>
           </div>
@@ -392,7 +391,7 @@
                   LEG 1: BCJ3611
                 </span>
               </div>
-              <p class="text-xs text-slate-400 mt-1">Hold allocations and equipment manifests customized to the active leg charter type.</p>
+              <p class="text-xs text-slate-400 mt-1">Hold allocations and equipment manifests synchronized to the active leg charter category.</p>
             </div>
           </div>
 
@@ -429,7 +428,7 @@
                   <span>AFT HOLDS 3 & 4</span>
                   <span class="bg-amber-950 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono">BELT LOADER</span>
                 </div>
-                <p id="holdAftTitle" class="text-xs text-slate-300 font-medium mb-2">Travel Luggage & Medical Chests</p>
+                <p id="holdAftTitle" class="text-xs text-slate-300 font-medium mb-2">Travel Luggage & Gear Chests</p>
                 <div id="holdAftManifest" class="text-[11px] text-slate-400 space-y-1 font-mono">
                   <!-- Dynamic JS -->
                 </div>
@@ -450,7 +449,7 @@
               <div>
                 <div class="flex items-center justify-between text-xs font-bold text-emerald-400 mb-2">
                   <span>BULK HOLD 5</span>
-                  <span class="bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono">LOOSE BULK</span>
+                  <span class="bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono">LOOSE BULK NET</span>
                 </div>
                 <p id="holdBulkTitle" class="text-xs text-slate-300 font-medium mb-2">Flyaway Kit & Aircraft Spares</p>
                 <div id="holdBulkManifest" class="text-[11px] text-slate-400 space-y-1 font-mono">
@@ -713,7 +712,7 @@
       { icao: "KORF", iata: "ORF", name: "Norfolk International", city: "Norfolk, VA", lat: 36.8946, lng: -76.2012 },
       { icao: "KSDF", iata: "SDF", name: "Louisville Muhammad Ali Int'l", city: "Louisville, KY", lat: 38.1744, lng: -85.7360 },
 
-      // INTERNATIONAL MONACO GP & LUXURY VIP HUBS
+      // INTERNATIONAL ACJ320 & LUXURY HUBS
       { icao: "LFMN", iata: "NCE", name: "Nice Côte d'Azur (Monaco Link)", city: "Nice/Monaco, France", lat: 43.6584, lng: 7.2159 },
       { icao: "LFPB", iata: "LBG", name: "Paris Le Bourget Executive", city: "Paris, France", lat: 48.9694, lng: 2.4414 },
       { icao: "EGLL", iata: "LHR", name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543 },
@@ -726,7 +725,7 @@
       { icao: "MYNN", iata: "NAS", name: "Lynden Pindling Int'l", city: "Nassau, Bahamas", lat: 25.0390, lng: -77.4662 }
     ];
 
-    // Clean Deduplicated Airport List (Alphabetical by ICAO)
+    // Clean Deduplicated Airport List
     const AIRPORT_MAP = new Map();
     AIRPORTS_RAW.forEach(ap => {
       if (!AIRPORT_MAP.has(ap.icao)) AIRPORT_MAP.set(ap.icao, ap);
@@ -734,7 +733,7 @@
     const AIRPORTS = Array.from(AIRPORT_MAP.values()).sort((a,b) => a.icao.localeCompare(b.icao));
 
     /* =========================================================================
-       2. ANCHORED TEAMS & OPPONENTS DATABASE
+       2. ANCHORED TEAMS & CATEGORY SUB-GROUPS DATABASE
        ========================================================================= */
     const MN_PRO_TEAMS = [
       { 
@@ -747,8 +746,7 @@
           { name: "Philadelphia Eagles", home: "KPHL" },
           { name: "Atlanta Falcons", home: "KATL" },
           { name: "Tampa Bay Buccaneers", home: "KTPA" },
-          { name: "Seattle Seahawks", home: "KSEA" },
-          { name: "Los Angeles Rams", home: "KLAX" }
+          { name: "Seattle Seahawks", home: "KSEA" }
         ]
       },
       { 
@@ -760,10 +758,7 @@
           { name: "Golden State Warriors", home: "KSFO" },
           { name: "Los Angeles Lakers", home: "KLAX" },
           { name: "Phoenix Suns", home: "KPHX" },
-          { name: "Dallas Mavericks", home: "KDFW" },
-          { name: "Miami Heat", home: "KFLL" },
-          { name: "Houston Rockets", home: "KHOU" },
-          { name: "Chicago Bulls", home: "KORD" }
+          { name: "Dallas Mavericks", home: "KDFW" }
         ]
       },
       { 
@@ -773,9 +768,7 @@
           { name: "Detroit Red Wings", home: "KDTW" },
           { name: "Colorado Avalanche", home: "KDEN" },
           { name: "Dallas Stars", home: "KDFW" },
-          { name: "Vegas Golden Knights", home: "KLAS" },
-          { name: "Tampa Bay Lightning", home: "KTPA" },
-          { name: "Boston Bruins", home: "KBOS" }
+          { name: "Vegas Golden Knights", home: "KLAS" }
         ]
       },
       { 
@@ -784,10 +777,7 @@
           { name: "Chicago White Sox", home: "KORD" },
           { name: "Detroit Tigers", home: "KDTW" },
           { name: "Kansas City Royals", home: "KOMA" },
-          { name: "New York Yankees", home: "KJFK" },
-          { name: "Boston Red Sox", home: "KBOS" },
-          { name: "Los Angeles Dodgers", home: "KLAX" },
-          { name: "Houston Astros", home: "KHOU" }
+          { name: "New York Yankees", home: "KJFK" }
         ]
       }
     ];
@@ -810,35 +800,56 @@
       { id: "wsu", name: "Wichita State Shockers", league: "AAC", home: "KICT", icon: "🌾", months: [10,11,12,1,2,3,4,5] }
     ];
 
-    const MONACO_VIP_HUBS = ["LFMN", "LFPB", "EGLL", "LSZH", "LIMC", "KJFK", "KLAS", "KLAX", "KFLL"];
+    const ACJ_VIP_HUBS = ["LFMN", "LFPB", "EGLL", "LSZH", "LIMC", "KJFK", "KLAS", "KLAX", "KMSP", "KFLL"];
 
-    const OTHER_CHARTERS = {
-      MONACO_GP_VIP: [
-        { name: "Monaco Grand Prix Paddock Club VIPs", icon: "🏎️" },
-        { name: "Scuderia Ferrari Executive Delegation", icon: "🏎️" },
-        { name: "Aston Martin F1 VIP Sponsor Guests", icon: "🏎️" }
+    const CATEGORY_SUBGROUPS = {
+      SPORTS: [
+        { id: "AUTO_ROTATION", name: "⭐ Auto-Anchor Teams to Selection / Home Airfield", icon: "⭐" },
+        ...MN_PRO_TEAMS.map(t => ({ id: t.id, name: `${t.name} (${t.league})`, icon: t.icon })),
+        ...AAC_TEAMS.map(t => ({ id: t.id, name: `${t.name} (AAC)`, icon: t.icon }))
       ],
       CORPORATE: [
-        { name: "Apple Executive Envoy", icon: "💼" },
-        { name: "Microsoft Cloud Summit Team", icon: "💻" },
-        { name: "Target Corp Board of Directors", icon: "🎯" }
+        { id: "AUTO", name: "🔄 Auto-Rotation Corporate Delegations", icon: "💼" },
+        { id: "apple", name: "Apple Inc. Global Leadership Retreat", icon: "🍏" },
+        { id: "microsoft", name: "Microsoft Cloud Summit Executive Envoy", icon: "💻" },
+        { id: "target", name: "Target Corp Board of Directors & Officers", icon: "🎯" },
+        { id: "goldman", name: "Goldman Sachs Managing Directors Summit", icon: "🏦" },
+        { id: "amazon", name: "Amazon Global Operations Executive Tour", icon: "📦" }
       ],
-      CONCERT_FILM: [
-        { name: "Coldplay Music World Tour Cast", icon: "🎸" },
-        { name: "Universal Pictures Production Unit", icon: "🎬" },
-        { name: "Marvel Studios Stunt & Camera Crew", icon: "🎥" }
+      ACJ320_VIP: [
+        { id: "AUTO", name: "🔄 Auto-Rotation ACJ320 VIP Envoys", icon: "👑" },
+        { id: "monaco_f1", name: "Monaco Grand Prix Paddock Suite VIPs", icon: "🏎️" },
+        { id: "head_of_state", name: "Head-of-State Diplomatic Presidential Suite", icon: "🏛️" },
+        { id: "royal_family", name: "Royal Family Private Sovereign Travel", icon: "👑" },
+        { id: "hnw_estate", name: "High-Net-Worth Intercontinental Delegation", icon: "💎" }
       ],
-      DIPLOMATIC: [
-        { name: "UN General Assembly Peace Delegation", icon: "🏛️" },
-        { name: "US Department of State Diplomatic Envoy", icon: "🦅" }
+      ENTERTAINMENT: [
+        { id: "AUTO", name: "🔄 Auto-Rotation Entertainment Tours", icon: "🎸" },
+        { id: "stadium_tour", name: "World Stadium Concert Tour & Production", icon: "🎸" },
+        { id: "film_unit", name: "Universal Pictures Film Cast & Stunt Crew", icon: "🎬" },
+        { id: "symphony", name: "Philharmonic Symphony Orchestra & Instruments", icon: "🎻" },
+        { id: "festival", name: "Global Music Festival Headliner Entourage", icon: "🎤" }
       ],
-      EMERGENCY: [
-        { name: "Red Cross Disaster Relief Taskforce", icon: "🚑" },
-        { name: "FEMA First Responders Tactical Unit", icon: "🚨" }
+      TOUR_OPERATOR: [
+        { id: "AUTO", name: "🔄 Auto-Rotation Tour Operator Groups", icon: "🏝️" },
+        { id: "cruise_shuttle", name: "Royal Caribbean Port Passenger Shuttle", icon: "🚢" },
+        { id: "alpine_ski", name: "Swiss Alps Express Luxury Ski Charter", icon: "⛷️" },
+        { id: "caribbean_resort", name: "Punta Cana All-Inclusive Seasonal Run", icon: "🏖️" },
+        { id: "peak_holiday", name: "Peak Holiday Riviera Resort Transfer", icon: "✈️" }
       ],
-      AEROSPACE: [
-        { name: "SpaceX Launch Engineering Logistics", icon: "🚀" },
-        { name: "NASA Goddard Space Systems Crew", icon: "🛰️" }
+      GOVERNMENT: [
+        { id: "AUTO", name: "🔄 Auto-Rotation Government & Relief Missions", icon: "🏛️" },
+        { id: "un_peace", name: "UN Peacekeeping Envoy & Staff Airlift", icon: "🇺🇳" },
+        { id: "us_state", name: "US Department of State Foreign Service", icon: "🦅" },
+        { id: "red_cross", name: "Red Cross Disaster Relief Taskforce", icon: "🚑" },
+        { id: "fema_first", name: "FEMA First Responders Emergency Logistics", icon: "🚨" }
+      ],
+      ACMI_LEASE: [
+        { id: "AUTO", name: "🔄 Auto-Rotation ACMI Airline Sub-Service", icon: "✈️" },
+        { id: "delta_aog", name: "Delta Air Lines AOG Replacement Charter", icon: "🔺" },
+        { id: "breeze_sub", name: "Breeze Airways Peak Schedule Sub-Service", icon: "🌊" },
+        { id: "allegiant_sub", name: "Allegiant Air Seasonal Route Cover", icon: "☀️" },
+        { id: "intl_acmi", name: "Euro-Carrier Long-Haul ACMI Wet Lease", icon: "🌍" }
       ]
     };
 
@@ -854,7 +865,7 @@
       try {
         initZuluClock();
         populateAirportDropdown();
-        updateTeamOptions();
+        updateSubGroupOptions();
         initMap();
         handleGenerateDispatch();
       } catch (err) {
@@ -891,13 +902,13 @@
       });
     }
 
-    function updateTeamOptions() {
+    function updateSubGroupOptions() {
       const catSelect = document.getElementById('charterCategory');
-      const teamSelect = document.getElementById('targetTeam');
+      const subSelect = document.getElementById('targetSubGroup');
       const dateInput = document.getElementById('dispatchDate');
       const seasonEl = document.getElementById('seasonIndicator');
 
-      if (!catSelect || !teamSelect) return;
+      if (!catSelect || !subSelect) return;
 
       const category = catSelect.value;
       const selectedDate = new Date(dateInput.value || Date.now());
@@ -911,42 +922,14 @@
         seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Pre-Season Training Camps)";
       }
 
-      teamSelect.innerHTML = '';
+      subSelect.innerHTML = '';
+      const list = CATEGORY_SUBGROUPS[category] || CATEGORY_SUBGROUPS.SPORTS;
 
-      let availableTeams = [];
-      if (category === 'INTEGRATED_SPORTS') {
-        availableTeams = [...MN_PRO_TEAMS, ...AAC_TEAMS];
-      } else if (category === 'MN_PRO_ONLY') {
-        availableTeams = MN_PRO_TEAMS;
-      } else if (category === 'AAC_NCAA_ONLY') {
-        availableTeams = AAC_TEAMS;
-      } else {
-        const list = OTHER_CHARTERS[category] || OTHER_CHARTERS.MONACO_GP_VIP;
-        const optAll = document.createElement('option');
-        optAll.value = "ALL";
-        optAll.textContent = "🔄 Multi-Leg Mission Sequence";
-        teamSelect.appendChild(optAll);
-
-        list.forEach(item => {
-          const opt = document.createElement('option');
-          opt.value = item.name;
-          opt.textContent = `${item.icon} ${item.name}`;
-          teamSelect.appendChild(opt);
-        });
-        return;
-      }
-
-      const activeTeams = availableTeams.filter(t => t.months.includes(month));
-      const optAuto = document.createElement('option');
-      optAuto.value = "AUTO_ROTATION";
-      optAuto.textContent = "⭐ Auto-Anchor Teams to Selection / Home Airfield";
-      teamSelect.appendChild(optAuto);
-
-      activeTeams.forEach(team => {
+      list.forEach(item => {
         const opt = document.createElement('option');
-        opt.value = team.id;
-        opt.textContent = `${team.icon} ${team.name} (${team.league})`;
-        teamSelect.appendChild(opt);
+        opt.value = item.id;
+        opt.textContent = `${item.icon} ${item.name}`;
+        subSelect.appendChild(opt);
       });
     }
 
@@ -965,13 +948,13 @@
     }
 
     /* =========================================================================
-       5. REALISTIC TEAM & OPPONENT ANCHORED DISPATCH GENERATOR ENGINE (CALLSIGN BCJ)
+       5. DISPATCH GENERATOR ENGINE FOR ALL 7 CATEGORIES (CALLSIGN BCJ)
        ========================================================================= */
     function handleGenerateDispatch() {
       const originICAO = document.getElementById('originAirportSelect').value || 'KMSP';
       const rangeProfile = document.getElementById('rangeProfile').value;
       const category = document.getElementById('charterCategory').value;
-      const targetTeamId = document.getElementById('targetTeam').value;
+      const subGroupId = document.getElementById('targetSubGroup').value;
       const dateStr = document.getElementById('dispatchDate').value;
       const legCount = parseInt(document.getElementById('legCount').value) || 4;
 
@@ -983,7 +966,7 @@
 
       let currentAirport = AIRPORTS.find(a => a.icao === originICAO) || AIRPORTS[0];
 
-      // Track teams that have ALREADY flown on this day to prevent same-day return loops
+      // Track teams used on this daily dispatch to enforce single-day movement rule
       const usedTeamIds = new Set();
 
       for (let i = 1; i <= legCount; i++) {
@@ -993,38 +976,20 @@
         let paragraphSummary = "";
         const legCallsign = `BCJ361${i}`;
 
-        if (category === 'MONACO_GP_VIP') {
-          // MONACO / F1 VIPs STRICTLY FLY BETWEEN LUXURY HUBS
-          let vipCandidateICAOs = MONACO_VIP_HUBS.filter(icao => icao !== currentAirport.icao);
-          let chosenICAO = vipCandidateICAOs[Math.floor(Math.random() * vipCandidateICAOs.length)];
-          destAirport = AIRPORTS.find(a => a.icao === chosenICAO) || AIRPORTS.find(a => a.icao === 'LFMN');
-
-          const list = OTHER_CHARTERS.MONACO_GP_VIP;
-          legEntity = list[(i - 1) % list.length];
-          matchupTitle = `${legEntity.icon} ${legEntity.name} (Monaco GP Luxury Envoy)`;
-          
-          paragraphSummary = `Leg ${i} (${legCallsign}) operates a high-priority Monaco Grand Prix luxury charter airlifting F1 team principals, paddock suite executives, and VIP sponsors from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). Onboard service features elite VIP layout with bespoke catering, while Holds 1 & 2 transport sealed AKH containers containing team hospitality displays and luxury luggage. Dedicated ramp handling and VIP customs clearance are pre-arranged at ${destAirport.icao}.`;
-        }
-        else if (category.includes("SPORTS") || category.includes("PRO") || category.includes("AAC")) {
-          // STRICT SINGLE-DAY SPORTS ENGINE
-          let pool = [];
-          if (category === 'MN_PRO_ONLY') pool = MN_PRO_TEAMS;
-          else if (category === 'AAC_NCAA_ONLY') pool = AAC_TEAMS;
-          else pool = [...MN_PRO_TEAMS, ...AAC_TEAMS];
-
+        if (category === 'SPORTS') {
+          // 1. SPORTS TEAM & FRANCHISE CHARTERS
+          let pool = [...MN_PRO_TEAMS, ...AAC_TEAMS];
           const activePool = pool.filter(t => t.months.includes(month));
           const availablePool = (activePool.length > 0 ? activePool : pool).filter(t => !usedTeamIds.has(t.id));
 
-          // Check if current airport is a home base for an unused team
           let homeTeam = availablePool.find(t => t.home === currentAirport.icao);
 
-          if (i === 1 && targetTeamId && targetTeamId !== 'AUTO_ROTATION') {
-            const requested = pool.find(t => t.id === targetTeamId);
+          if (i === 1 && subGroupId && subGroupId !== 'AUTO_ROTATION') {
+            const requested = pool.find(t => t.id === subGroupId);
             if (requested && !usedTeamIds.has(requested.id)) homeTeam = requested;
           }
 
           if (homeTeam) {
-            // Team at current airport flies to their away opponent
             usedTeamIds.add(homeTeam.id);
             legEntity = homeTeam;
 
@@ -1033,47 +998,55 @@
               const chosenOpp = oppAAC[Math.floor(Math.random() * oppAAC.length)];
               destAirport = AIRPORTS.find(a => a.icao === chosenOpp.home) || AIRPORTS[0];
               matchupTitle = `${homeTeam.icon} ${homeTeam.name} vs. ${chosenOpp.name}`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} football traveling party from their home airfield at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for an away AAC fixture against the ${chosenOpp.name}. The charter carries 174 roster athletes and coaching staff. Holds 1 & 2 load containerized uniform hampers and film gear, with mobile belt loaders pre-staged at ${destAirport.icao}.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} athletic traveling party from their home base at ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) for an away AAC fixture against the ${chosenOpp.name}. Aircraft N361VA transports 174 roster athletes and coaching staff. Holds 1 & 2 load containerized uniform hampers and video equipment, with mobile belt loaders pre-staged at ${destAirport.icao}.`;
             } else {
               const oppObj = homeTeam.opponents[Math.floor(Math.random() * homeTeam.opponents.length)];
               destAirport = AIRPORTS.find(a => a.icao === oppObj.home) || AIRPORTS[0];
               matchupTitle = `${homeTeam.icon} ${homeTeam.name} vs. ${oppObj.name}`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} from their base at ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) for an away road fixture against the ${oppObj.name}. Onboard layout accommodates roster players, coaches, and training staff, with Holds 1 & 2 loaded with AKH uniform hampers and equipment trunks.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} from their base at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for an away road game against the ${oppObj.name}. Onboard seating accommodates players, trainers, and media staff, with Holds 1 & 2 carrying AKH uniform hampers and trainer tables.`;
             }
           }
           else if (availablePool.length > 0) {
-            // No unused team based at currentAirport -> Check if positioning ferry or corporate pickup is appropriate
             if (Math.random() < 0.5) {
-              // Option A: Fly BCJ Operational Ferry Flight from B to C (where C is home to a new team)
               const nextTeam = availablePool[Math.floor(Math.random() * availablePool.length)];
               destAirport = AIRPORTS.find(a => a.icao === nextTeam.home) || AIRPORTS[0];
               legEntity = { name: "BCJ Operational Positioning Ferry", icon: "✈️" };
               matchupTitle = `✈️ BCJ Positioning Ferry (${currentAirport.icao} → ${destAirport.icao})`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) operates a BCJ Operational Ferry flight positioning aircraft N361VA from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) in preparation to pick up the ${nextTeam.name} for their upcoming charter rotation. Flight operates with crew only and minimal ballast payload.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) operates a BCJ Operational Ferry sector positioning aircraft N361VA from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) to stage for the upcoming ${nextTeam.name} charter pickup. Flight operates with crew only and minimal ballast weight.`;
             } else {
-              // Option B: Unused team flies out from C
               const chosenTeam = availablePool[Math.floor(Math.random() * availablePool.length)];
               usedTeamIds.add(chosenTeam.id);
               legEntity = chosenTeam;
               destAirport = AIRPORTS.find(a => a.icao === chosenTeam.home) || AIRPORTS[0];
               matchupTitle = `${chosenTeam.icon} ${chosenTeam.name} Charter Leg`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) executes a dedicated sports charter airlifting the ${chosenTeam.name} delegation from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Payload includes players, training staff, and full lower deck athletic equipment.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) executes a dedicated team charter airlifting the ${chosenTeam.name} delegation from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Payload includes players, technical staff, and full lower deck equipment loading.`;
             }
-          } 
-          else {
-            // All teams used -> BCJ Ferry or Corporate leg
-            let candidateAirports = AIRPORTS.filter(a => a.icao !== currentAirport.icao);
-            destAirport = candidateAirports[Math.floor(Math.random() * candidateAirports.length)];
-            legEntity = { name: "BCJ Fleet Positioning Flight", icon: "✈️" };
+          } else {
+            let candidates = AIRPORTS.filter(a => a.icao !== currentAirport.icao);
+            destAirport = candidates[Math.floor(Math.random() * candidates.length)];
+            legEntity = { name: "BCJ Fleet Ferry Flight", icon: "✈️" };
             matchupTitle = `✈️ BCJ Fleet Positioning (${currentAirport.icao} → ${destAirport.icao})`;
             paragraphSummary = `Leg ${i} (${legCallsign}) operates a fleet positioning sector moving N361VA from ${currentAirport.name} to ${destAirport.name} for scheduled maintenance and next-day charter staging.`;
           }
-        } 
+        }
+        else if (category === 'ACJ320_VIP') {
+          // 3. VIP, EXECUTIVE & HEAD-OF-STATE CHARTERS (ACJ320)
+          let vipCandidates = ACJ_VIP_HUBS.filter(icao => icao !== currentAirport.icao);
+          let chosenICAO = vipCandidates[Math.floor(Math.random() * vipCandidates.length)];
+          destAirport = AIRPORTS.find(a => a.icao === chosenICAO) || AIRPORTS.find(a => a.icao === 'LFMN');
+
+          const subList = CATEGORY_SUBGROUPS.ACJ320_VIP;
+          const chosenSub = subList.find(s => s.id === subGroupId) || subList[1 + ((i - 1) % (subList.length - 1))];
+          legEntity = { name: chosenSub.name, icon: chosenSub.icon };
+
+          matchupTitle = `${legEntity.icon} ${legEntity.name}`;
+          paragraphSummary = `Leg ${i} (${legCallsign}) operates a premium ACJ320 Head-of-State / VIP charter airlifting the ${legEntity.name} delegation from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). The cabin is configured with a high-end master suite, dining tables, and diplomatic conferencing facilities. Holds 1 & 2 transport sealed AKH containers carrying diplomatic pouches, armored valet trunks, and state gifts. Priority apron security is activated at ${destAirport.icao}.`;
+        }
         else {
-          // CORPORATE / CONCERT / DIPLOMATIC / EMERGENCY / AEROSPACE
-          let list = OTHER_CHARTERS[category] || OTHER_CHARTERS.CORPORATE;
-          let entityObj = list[(i - 1) % list.length];
-          legEntity = { name: entityObj.name, icon: entityObj.icon };
+          // 2. CORPORATE, 4. ENTERTAINMENT, 5. TOUR OPERATOR, 6. GOVERNMENT, 7. ACMI LEASE
+          const subList = CATEGORY_SUBGROUPS[category] || CATEGORY_SUBGROUPS.CORPORATE;
+          const chosenSub = subList.find(s => s.id === subGroupId) || subList[1 + ((i - 1) % (subList.length - 1))];
+          legEntity = { name: chosenSub.name, icon: chosenSub.icon };
 
           let candidateAirports = AIRPORTS.filter(a => a.icao !== currentAirport.icao);
           candidateAirports = candidateAirports.map(dest => ({
@@ -1092,9 +1065,20 @@
             }));
           }
 
-          destAirport = candidateAirports[Math.floor(Math.random() * Math.min(candidateAirports.length, 6))];
-          matchupTitle = `${legEntity.icon} ${legEntity.name} Mission`;
-          paragraphSummary = `Leg ${i} (${legCallsign}) executes a specialized ${category.replace(/_/g, ' ')} charter airlifting the ${legEntity.name} delegation from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Aircraft lower deck belly holds are loaded with specialized mission equipment, and priority handling has been arranged with airfield operations at ${destAirport.icao}.`;
+          destAirport = candidateAirports[Math.floor(Math.random() * Math.min(candidateAirports.length, 8))];
+          matchupTitle = `${legEntity.icon} ${legEntity.name}`;
+
+          if (category === 'CORPORATE') {
+            paragraphSummary = `Leg ${i} (${legCallsign}) dispatches a corporate group charter airlifting 160 executives and key personnel for ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). The flight keeps the entire corporate delegation together on a single schedule, with Holds 1 & 2 carrying custom keynote AV equipment, branded display racks, and executive luggage.`;
+          } else if (category === 'ENTERTAINMENT') {
+            paragraphSummary = `Leg ${i} (${legCallsign}) operates a multi-city concert and tour charter carrying the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Onboard cabin seats stage crew, production leads, and musicians, while Holds 1 & 2 are packed with AKH containers containing soundboards, lighting rigs, and wardrobe trunks.`;
+          } else if (category === 'TOUR_OPERATOR') {
+            paragraphSummary = `Leg ${i} (${legCallsign}) provides ad-hoc seasonal charter capacity moving 180 resort passengers for ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). This flight supplies direct non-stop vacation capacity during peak holiday demand, with Holds 3 & 4 loaded to capacity with passenger baggage.`;
+          } else if (category === 'GOVERNMENT') {
+            paragraphSummary = `Leg ${i} (${legCallsign}) executes an official government humanitarian airlift transporting the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Aircraft N361VA carries diplomatic envoys, medical staff, and emergency relief supplies in lower deck Holds 1 & 2.`;
+          } else { // ACMI_LEASE
+            paragraphSummary = `Leg ${i} (${legCallsign}) operates under an ACMI wet lease sub-service agreement for ${legEntity.name}, covering schedule gaps between ${currentAirport.name} (${currentAirport.city}) and ${destAirport.name} (${destAirport.city}). Bowman Air provides turnkey aircraft, crew, maintenance, and insurance replacement capacity seamlessly integrated into the partner airline network.`;
+          }
         }
 
         const distance = getDistanceNM(currentAirport.lat, currentAirport.lng, destAirport.lat, destAirport.lng);
@@ -1120,7 +1104,7 @@
           cargoLbs: 12800 + (i * 750)
         });
 
-        // Continuous chain rule: arrival becomes next departure
+        // Continuous leg chaining rule
         currentAirport = destAirport;
       }
 
@@ -1236,7 +1220,7 @@
     }
 
     /* =========================================================================
-       8. RENDER CONTINUOUS LEG CARDS WITH PARAGRAPH BRIEFINGS (BCJ CALLSIGN)
+       8. RENDER CONTINUOUS LEG CARDS WITH BRIEFINGS (CALLSIGN BCJ)
        ========================================================================= */
     function renderLegCards() {
       const container = document.getElementById('legCardsContainer');
@@ -1259,7 +1243,7 @@
                 <div class="flex items-center space-x-2">
                   <h4 class="font-bold text-slate-100 text-sm font-mono">${leg.flightNo}</h4>
                   <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded font-mono">
-                    ✓ CONFIRMED CHARTER
+                    ✓ RELEASED CHARTER
                   </span>
                 </div>
                 <p class="text-xs text-amber-400 font-semibold">${leg.matchupTitle}</p>
@@ -1377,70 +1361,91 @@
 
     function openSeatModal(seatCode, rowNum) {
       const currentLeg = currentLegsData[activeLegIndex] || currentLegsData[0] || { 
-        entity: { name: "Charter Delegation" }, categoryType: "INTEGRATED_SPORTS" 
+        entity: { name: "Charter Delegation" }, categoryType: "SPORTS" 
       };
       const groupName = currentLeg.entity.name || "Charter Delegation";
       const cat = currentLeg.categoryType || "";
 
       document.getElementById('modalSeatNum').textContent = `SEAT ${seatCode}`;
       
-      if (cat.includes("SPORTS") || cat.includes("PRO") || cat.includes("AAC")) {
+      if (cat === 'SPORTS') {
         if (rowNum <= 4) {
-          document.getElementById('modalPaxName').textContent = `Starting Captain / Star Athlete`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Key Player / Team Captain`;
-          document.getElementById('modalLuggage').textContent = "2 Large Equipment Trunks + 1 Personal Carry-On (60 lbs)";
-          document.getElementById('modalCatering').textContent = "High-Protein Athletic Recovery Meal & Isotonic Smoothies";
-          document.getElementById('modalNotes').textContent = "Priority Extra Legroom & Taping Storage";
-        } else if (rowNum >= 5 && rowNum <= 12) {
+          document.getElementById('modalPaxName').textContent = `Star Player / Team Captain`;
+          document.getElementById('modalPaxRole').textContent = `${groupName} - Key Athlete`;
+          document.getElementById('modalLuggage').textContent = "2 Equipment Trunks + 1 Duffel (55 lbs)";
+          document.getElementById('modalCatering').textContent = "High-Protein Recovery Meal & Electrolytes";
+          document.getElementById('modalNotes').textContent = "Priority Legroom & Trainer Taping Space";
+        } else if (rowNum <= 12) {
           document.getElementById('modalPaxName').textContent = `Active Roster Athlete`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Active Team Roster`;
-          document.getElementById('modalLuggage').textContent = "1 Uniform Duffel + 1 Travel Bag (45 lbs)";
-          document.getElementById('modalCatering').textContent = "Standard Athletic Prep Catering & Energy Electrolytes";
-          document.getElementById('modalNotes').textContent = "Mid-Cabin Overhead Storage Assigned";
+          document.getElementById('modalPaxRole').textContent = `${groupName} - Team Roster`;
+          document.getElementById('modalLuggage').textContent = "1 Uniform Duffel + 1 Carry-On (40 lbs)";
+          document.getElementById('modalCatering').textContent = "Athletic Prep Meal & Hydration";
+          document.getElementById('modalNotes').textContent = "Mid-Cabin Overhead Storage";
         } else {
-          document.getElementById('modalPaxName').textContent = `Coaching & Technical Staff`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Head Coach / Athletic Trainer`;
-          document.getElementById('modalLuggage').textContent = "1 Travel Bag + Video Analysis Tech Case (50 lbs)";
-          document.getElementById('modalCatering').textContent = "Standard Envoy In-Flight Catering";
-          document.getElementById('modalNotes').textContent = "Aft Operations Section";
+          document.getElementById('modalPaxName').textContent = `Coaching & Support Staff`;
+          document.getElementById('modalPaxRole').textContent = `${groupName} - Coaching Staff`;
+          document.getElementById('modalLuggage').textContent = "1 Travel Bag + Video Tech Case (45 lbs)";
+          document.getElementById('modalCatering').textContent = "Standard Envoy Catering";
+          document.getElementById('modalNotes').textContent = "Aft Operations Seating";
         }
       } 
-      else if (cat === 'MONACO_GP_VIP') {
+      else if (cat === 'ACJ320_VIP') {
         if (rowNum <= 4) {
-          document.getElementById('modalPaxName').textContent = `Paddock Suite Executive`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Principal VIP Guest`;
-          document.getElementById('modalLuggage').textContent = "2 Rimowa Aluminum Cases + Garment Bag (65 lbs)";
-          document.getElementById('modalCatering').textContent = "Dom Pérignon Champagne, Caviar Service & Wagyu Filet";
-          document.getElementById('modalNotes').textContent = "VIP First Class Recline & Private Valet Handling";
+          document.getElementById('modalPaxName').textContent = `State Delegate / Sovereign VIP`;
+          document.getElementById('modalPaxRole').textContent = `${groupName} - Principal VIP`;
+          document.getElementById('modalLuggage').textContent = "2 Rimowa Cases + Diplomatic Pouches (60 lbs)";
+          document.getElementById('modalCatering').textContent = "Dom Pérignon & Gourmet Caviar Service";
+          document.getElementById('modalNotes').textContent = "ACJ Master Suite Recline & Security";
         } else {
-          document.getElementById('modalPaxName').textContent = `F1 Team Sponsor / Entourage`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Guest VIP Delegation`;
-          document.getElementById('modalLuggage').textContent = "1 Luxury Suiter + 1 Designer Carry-On (40 lbs)";
-          document.getElementById('modalCatering').textContent = "Premium European Wine & Gourmet Charcuterie";
-          document.getElementById('modalNotes').textContent = "Priority Deboarding at VIP Apron";
+          document.getElementById('modalPaxName').textContent = `Diplomatic Attaché / VIP Guest`;
+          document.getElementById('modalPaxRole').textContent = `${groupName} - VIP Entourage`;
+          document.getElementById('modalLuggage').textContent = "1 Designer Suiter + 1 Carry-On (40 lbs)";
+          document.getElementById('modalCatering').textContent = "Premium European Wine & Fine Dining";
+          document.getElementById('modalNotes').textContent = "Priority VIP Apron Deboarding";
         }
       }
       else if (cat === 'CORPORATE') {
         if (rowNum <= 4) {
-          document.getElementById('modalPaxName').textContent = `Chief Executive Officer / VP`;
+          document.getElementById('modalPaxName').textContent = `Executive Vice President`;
           document.getElementById('modalPaxRole').textContent = `${groupName} - Executive Officer`;
           document.getElementById('modalLuggage').textContent = "1 Briefcase + 1 Roller Suite (35 lbs)";
-          document.getElementById('modalCatering').textContent = "Executive Cold-Pressed Juice & Organic Bistro Box";
-          document.getElementById('modalNotes').textContent = "In-Flight Wi-Fi Workstation Enabled";
+          document.getElementById('modalCatering').textContent = "Executive Cold-Pressed Juice & Bistro Box";
+          document.getElementById('modalNotes').textContent = "In-Flight Wi-Fi Workstation";
         } else {
-          document.getElementById('modalPaxName').textContent = `Senior Managing Director`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Corporate Delegate`;
-          document.getElementById('modalLuggage').textContent = "1 Tech Backpack + 1 Carry-On (30 lbs)";
-          document.getElementById('modalCatering').textContent = "Artisanal Coffee & Healthy Snack Tray";
-          document.getElementById('modalNotes').textContent = "Forward Cabin Seating";
+          document.getElementById('modalPaxName').textContent = `Corporate Delegate`;
+          document.getElementById('modalPaxRole').textContent = `${groupName} - Senior Staff`;
+          document.getElementById('modalLuggage').textContent = "1 Laptop Backpack + 1 Carry-On (30 lbs)";
+          document.getElementById('modalCatering').textContent = "Artisanal Coffee & Snack Tray";
+          document.getElementById('modalNotes').textContent = "Forward Main Cabin Seating";
         }
       }
-      else {
-        document.getElementById('modalPaxName').textContent = `Delegation Specialist`;
-        document.getElementById('modalPaxRole').textContent = `${groupName} - Designated Specialist`;
-        document.getElementById('modalLuggage').textContent = "1 Mission Gear Case + 1 Luggage Duffel (45 lbs)";
-        document.getElementById('modalCatering').textContent = "Standard In-Flight Mission Catering";
-        document.getElementById('modalNotes').textContent = "Row Seat Assignment Verified";
+      else if (cat === 'ENTERTAINMENT') {
+        document.getElementById('modalPaxName').textContent = `Tour Musician / Production Crew`;
+        document.getElementById('modalPaxRole').textContent = `${groupName} - Tour Unit`;
+        document.getElementById('modalLuggage').textContent = "1 Instrument Case + 1 Tour Duffel (50 lbs)";
+        document.getElementById('modalCatering').textContent = "Bespoke Tour Rider Catering & Beverages";
+        document.getElementById('modalNotes').textContent = "Stage Crew Seating Block";
+      }
+      else if (cat === 'TOUR_OPERATOR') {
+        document.getElementById('modalPaxName').textContent = `Resort Passenger`;
+        document.getElementById('modalPaxRole').textContent = `${groupName} - Vacation Group`;
+        document.getElementById('modalLuggage').textContent = "2 Checked Suitcases (50 lbs)";
+        document.getElementById('modalCatering').textContent = "Standard Resort Beverage & Snack Service";
+        document.getElementById('modalNotes').textContent = "Main Economy Seating";
+      }
+      else if (cat === 'GOVERNMENT') {
+        document.getElementById('modalPaxName').textContent = `Government / Relief Specialist`;
+        document.getElementById('modalPaxRole').textContent = `${groupName} - Mission Staff`;
+        document.getElementById('modalLuggage').textContent = "1 Tactical Gear Bag + 1 Field Duffel (45 lbs)";
+        document.getElementById('modalCatering').textContent = "Government Operational MRE & Hydration";
+        document.getElementById('modalNotes').textContent = "Field Mission Seating";
+      }
+      else { // ACMI_LEASE
+        document.getElementById('modalPaxName').textContent = `Airline Commercial Passenger`;
+        document.getElementById('modalPaxRole').textContent = `${groupName} - Sub-Service Passenger`;
+        document.getElementById('modalLuggage').textContent = "1 Standard Roller + 1 Personal Item (35 lbs)";
+        document.getElementById('modalCatering').textContent = "Standard Commercial Flight Service";
+        document.getElementById('modalNotes').textContent = "ACMI Partner Passenger List";
       }
 
       document.getElementById('seatModal').classList.remove('hidden');
@@ -1455,7 +1460,7 @@
        ========================================================================= */
     function renderCargoSection() {
       const currentLeg = currentLegsData[activeLegIndex] || currentLegsData[0] || {
-        cargoLbs: 15400, entity: { name: "Charter Group" }, categoryType: "INTEGRATED_SPORTS"
+        cargoLbs: 15400, entity: { name: "Charter Group" }, categoryType: "SPORTS"
       };
 
       const cat = currentLeg.categoryType || "";
@@ -1477,12 +1482,12 @@
       const holdBulkTitle = document.getElementById('holdBulkTitle');
       const holdBulkManifest = document.getElementById('holdBulkManifest');
 
-      if (cat.includes("SPORTS") || cat.includes("PRO") || cat.includes("AAC")) {
+      if (cat === 'SPORTS') {
         holdFwdTitle.textContent = `${groupName} - ULD Team Gear`;
         holdFwdManifest.innerHTML = `
-          <div>• 4x AKH Sealed Containers</div>
+          <div>• 4x AKH Sealed ULD Containers</div>
           <div>• Team Uniform Hampers</div>
-          <div>• Tactical Video Racks</div>
+          <div>• Video Racks & Tech Equipment</div>
         `;
         holdAftTitle.textContent = `${groupName} - Beltloader Luggage`;
         holdAftManifest.innerHTML = `
@@ -1490,41 +1495,53 @@
           <div>• Medical & Taping Tables</div>
           <div>• Training Hydration Coolers</div>
         `;
-      } else if (cat === 'MONACO_GP_VIP') {
-        holdFwdTitle.textContent = `Monaco GP Hospitality ULDs`;
+      } else if (cat === 'ACJ320_VIP') {
+        holdFwdTitle.textContent = `ACJ320 Diplomatic ULDs`;
         holdFwdManifest.innerHTML = `
           <div>• 4x AKH Sealed ULD Containers</div>
-          <div>• F1 Sponsor Paddock Displays</div>
+          <div>• State Gifts & Armored Pouches</div>
           <div>• VIP Catering Hardware Trunks</div>
         `;
-        holdAftTitle.textContent = `Designer VIP Valet Luggage`;
+        holdAftTitle.textContent = `Valet Designer Suitcases`;
         holdAftManifest.innerHTML = `
           <div>• 180 Luxury Designer Wardrobe Cases</div>
-          <div>• VIP Personal Suitcases</div>
+          <div>• Personal Escort Baggage</div>
           <div>• Executive Gift Hampers</div>
         `;
       } else if (cat === 'CORPORATE') {
-        holdFwdTitle.textContent = `Tech Server & Demo Trunks`;
+        holdFwdTitle.textContent = `Keynote & Server Hardware`;
         holdFwdManifest.innerHTML = `
           <div>• 3x AKH Sealed Containers</div>
-          <div>• Enterprise Server Rack Flightcases</div>
-          <div>• Keynote Display Hardware</div>
+          <div>• Enterprise Server Rack Cases</div>
+          <div>• Keynote Display Electronics</div>
         `;
-        holdAftTitle.textContent = `Executive Business Luggage`;
+        holdAftTitle.textContent = `Executive Business Rollers`;
         holdAftManifest.innerHTML = `
           <div>• 180 Executive Carry-On Rollers</div>
-          <div>• Corporate Presentation Kits</div>
+          <div>• Corporate Branding Material</div>
+        `;
+      } else if (cat === 'ENTERTAINMENT') {
+        holdFwdTitle.textContent = `Stage & Audio Equipment`;
+        holdFwdManifest.innerHTML = `
+          <div>• 4x AKH Containers with AV Gear</div>
+          <div>• Amplifier Flightcases & Lighting</div>
+          <div>• Musician Instrument Trunks</div>
+        `;
+        holdAftTitle.textContent = `Wardrobe & Crew Luggage`;
+        holdAftManifest.innerHTML = `
+          <div>• Stage Costume Wardrobe Trunks</div>
+          <div>• Production Crew Travel Duffels</div>
         `;
       } else {
-        holdFwdTitle.textContent = `Mission Equipment Containers`;
+        holdFwdTitle.textContent = `Mission Cargo Containers`;
         holdFwdManifest.innerHTML = `
-          <div>• 4x AKH Sealed Containers</div>
-          <div>• Tactical Mission Hardware</div>
+          <div>• 4x AKH Containerized Loads</div>
+          <div>• High-Density Mission Hardware</div>
         `;
-        holdAftTitle.textContent = `Specialized Gear & Duffels`;
+        holdAftTitle.textContent = `Passenger Luggage Holds`;
         holdAftManifest.innerHTML = `
-          <div>• 180 Personnel Luggage Duffels</div>
-          <div>• Field Logistics Kits</div>
+          <div>• 180 Standard Passenger Luggage</div>
+          <div>• Logistics Field Equipment</div>
         `;
       }
 
