@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bowman Air Dispatch Ops - N361VA</title>
+  <title>Bowman Air Charter Dispatch - N361VA</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -28,17 +28,6 @@
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            cockpit: {
-              bg: '#0B1120',
-              card: '#152035',
-              border: '#233354',
-              accent: '#00f2fe',
-              gold: '#f59e0b',
-              emerald: '#10b981',
-              muted: '#64748b'
-            }
           }
         }
       }
@@ -47,20 +36,19 @@
 
   <style>
     body {
-      background-color: #0B1120;
+      background-color: #070c18;
       color: #f1f5f9;
       font-family: 'Inter', sans-serif;
     }
     .font-mono-telemetry {
       font-family: 'JetBrains Mono', monospace;
     }
-    /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #0d172a;
+      background: #090e1a;
     }
     ::-webkit-scrollbar-thumb {
       background: #1e293b;
@@ -69,11 +57,9 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #334155;
     }
-    /* Leaflet Dark Map Tweaks */
     .leaflet-container {
-      background: #090e17 !important;
+      background: #060a12 !important;
     }
-    /* Printable Dispatch Release */
     @media print {
       body * {
         visibility: hidden;
@@ -98,7 +84,7 @@
 <body class="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
 
   <!-- TOP GLASS COCKPIT HEADER BAR -->
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-4 py-3 shadow-lg">
+  <header class="border-b border-slate-800 bg-slate-900/95 backdrop-blur sticky top-0 z-40 px-4 py-3 shadow-xl">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       
       <!-- Brand & Tail Number -->
@@ -108,18 +94,17 @@
         </div>
         <div>
           <div class="flex items-center space-x-2">
-            <h1 class="font-bold text-lg tracking-wider text-slate-50 uppercase">Bowman Air</h1>
+            <h1 class="font-extrabold text-lg tracking-wider text-slate-50 uppercase">Bowman Air</h1>
             <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">DISPATCH OPS</span>
             <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">N361VA (A320-200)</span>
           </div>
-          <p class="text-xs text-slate-400 font-medium">REALISTIC GEOGRAPHIC DISPATCH ENGINE • DYNAMIC CABIN & CARGO SYNC • 180 SEATS (NO ROW 13)</p>
+          <p class="text-[11px] text-slate-400 font-medium">175+ AIRPORT NETWORK • ANCHORED TEAM DISPATCH ENGINE • 180 SEATS (NO ROW 13)</p>
         </div>
       </div>
 
       <!-- Live Telemetry Status Pills -->
-      <div class="flex flex-wrap items-center gap-3">
-        <!-- Status Indicator -->
-        <div class="flex items-center space-x-2 bg-emerald-950/50 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-400">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="flex items-center space-x-2 bg-emerald-950/60 border border-emerald-500/40 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-400">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -127,14 +112,12 @@
           <span>STATUS: RELEASE APPROVED</span>
         </div>
 
-        <!-- Zulu Clock -->
-        <div class="bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-lg text-xs font-mono text-cyan-300 flex items-center space-x-2">
+        <div class="bg-slate-800/90 border border-slate-700/80 px-3 py-1.5 rounded-lg text-xs font-mono text-cyan-300 flex items-center space-x-2">
           <i class="fa-regular fa-clock text-cyan-400"></i>
           <span>ZULU:</span>
           <span id="zuluClock" class="font-bold text-slate-100">--:--:-- Z</span>
         </div>
 
-        <!-- MTOW Limit Badge -->
         <div class="bg-amber-950/40 border border-amber-500/30 px-3 py-1.5 rounded-lg text-xs font-mono text-amber-300 flex items-center space-x-2">
           <i class="fa-solid fa-weight-hanging text-amber-400"></i>
           <span>MTOW: <strong class="text-slate-100">172,000 LBS</strong></span>
@@ -145,10 +128,10 @@
   </header>
 
   <!-- QUICK TECH TELEMETRY BANNER -->
-  <section class="bg-slate-900/60 border-b border-slate-800 py-2 px-4 text-xs font-mono text-slate-400">
+  <section class="bg-slate-900/70 border-b border-slate-800 py-2 px-4 text-xs font-mono text-slate-400">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center space-x-4">
-        <span>SEATING: <strong class="text-cyan-400">180 Y (No Row 13)</strong></span>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <span>SEATING: <strong class="text-cyan-400">180 Y (30 Rows, No Row 13)</strong></span>
         <span class="text-slate-600">|</span>
         <span>CRUISE/BURN: <strong class="text-slate-200">450 KTAS / 5,800 lb/h</strong></span>
         <span class="text-slate-600">|</span>
@@ -156,20 +139,21 @@
         <span class="text-slate-600">|</span>
         <span>MAX CARGO: <strong class="text-slate-200">41,500 LBS</strong></span>
       </div>
-      <div class="text-slate-400 text-[11px]">
-        <i class="fa-solid fa-shield-halved text-cyan-400 mr-1"></i> FAA Part 121 Supplemental Dispatch Validated
+      <div class="text-slate-400 text-[11px] flex items-center space-x-1">
+        <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+        <span>FAA Part 121 Supplemental Operations Compliant</span>
       </div>
     </div>
   </section>
 
-  <!-- MAIN APP CONTENT WRAPPER -->
+  <!-- MAIN APP LAYOUT CONTAINER -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- LEFT SIDEBAR: OPERATIONAL SETUP FORM (4 COLS) -->
-    <section class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+    <!-- LEFT SIDEBAR: DISPATCH SETUP (4 COLS) -->
+    <section class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl flex flex-col justify-between">
       <div>
         <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
-          <h2 class="font-bold text-slate-100 text-sm tracking-wide uppercase flex items-center space-x-2">
+          <h2 class="font-bold text-slate-100 text-xs tracking-wider uppercase flex items-center space-x-2">
             <i class="fa-solid fa-sliders text-cyan-400"></i>
             <span>Operational Setup</span>
           </h2>
@@ -178,20 +162,39 @@
 
         <form id="dispatchForm" onsubmit="event.preventDefault(); handleGenerateDispatch();" class="space-y-4">
           
-          <!-- Origin Airport Dropdown -->
+          <!-- 175+ AIRPORT DROPDOWN (PRE-POPULATED IN HTML & DYNAMICALLY SYNCED) -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Leg 1 Origin Airport (Operating Hub)
             </label>
-            <div class="relative">
-              <select id="originAirport" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-medium">
-                <!-- Populated by JS -->
-              </select>
-            </div>
-            <p class="text-[10px] text-slate-400 mt-1">Includes 110+ Delta, Allegiant, Breeze, AAC, MN sports & global VIP hubs.</p>
+            <select id="originAirportSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-medium font-mono">
+              <option value="KMSP" selected>KMSP - Minneapolis-St. Paul Int'l (Minneapolis, MN)</option>
+              <option value="KATL">KATL - Hartsfield-Jackson Atlanta Int'l (Atlanta, GA)</option>
+              <option value="KBOS">KBOS - Boston Logan Int'l (Boston, MA)</option>
+              <option value="KBWI">KBWI - Baltimore/Washington Int'l (Annapolis/Navy, MD)</option>
+              <option value="KCLT">KCLT - Charlotte Douglas Int'l (Charlotte, NC)</option>
+              <option value="KDFW">KDFW - Dallas/Fort Worth Int'l (Dallas/Denton, TX)</option>
+              <option value="KDTW">KDTW - Detroit Metropolitan (Detroit, MI)</option>
+              <option value="KFLL">KFLL - Fort Lauderdale-Hollywood Int'l (Fort Lauderdale/FAU, FL)</option>
+              <option value="KHOU">KHOU - Houston Hobby (Houston/Rice, TX)</option>
+              <option value="KICT">KICT - Wichita Eisenhower Int'l (Wichita/Wichita St, KS)</option>
+              <option value="KJFK">KJFK - John F. Kennedy Int'l (New York, NY)</option>
+              <option value="KLAX">KLAX - Los Angeles Int'l (Los Angeles, CA)</option>
+              <option value="KMEM">KMEM - Memphis Int'l (Memphis/Memphis Tigers, TN)</option>
+              <option value="KMSY">KMSY - Louis Armstrong New Orleans Int'l (New Orleans/Tulane, LA)</option>
+              <option value="KORD">KORD - Chicago O'Hare Int'l (Chicago, IL)</option>
+              <option value="KPGV">KPGV - Pitt-Greenville Airport (Greenville/ECU, NC)</option>
+              <option value="KPHL">KPHL - Philadelphia Int'l (Philadelphia/Temple, PA)</option>
+              <option value="KSAT">KSAT - San Antonio Int'l (San Antonio/UTSA, TX)</option>
+              <option value="KSWF">KSWF - New York Stewart Int'l (West Point/Army, NY)</option>
+              <option value="KTPA">KTPA - Tampa Int'l (Tampa/USF, FL)</option>
+              <option value="KTUL">KTUL - Tulsa Int'l (Tulsa/Tulsa Golden Hurricane, OK)</option>
+              <option value="LFMN">LFMN - Nice Côte d'Azur (Monaco GP Link, France)</option>
+            </select>
+            <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, AAC & MN Sports.</p>
           </div>
 
-          <!-- Leg Distance / Range Profile -->
+          <!-- Range Profile -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Leg Distance / Range Profile
@@ -204,44 +207,44 @@
             </select>
           </div>
 
-          <!-- De-duplicated Charter Mission Categories -->
+          <!-- Charter Categories -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Charter Mission Category
             </label>
             <select id="charterCategory" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
-              <option value="INTEGRATED_SPORTS" selected>⚽ Integrated Sports Charters (MN Pro & AAC Road Trips)</option>
+              <option value="INTEGRATED_SPORTS" selected>⚽ Integrated Sports Charters (MN Pro & AAC Conference Road Trips)</option>
               <option value="MN_PRO_ONLY">⭐ Minnesota Pro Teams (Vikings, Wolves, Wild, Twins)</option>
               <option value="AAC_NCAA_ONLY">🎓 NCAA AAC Conference Teams (American Athletic Conference)</option>
-              <option value="MONACO_GP_VIP">🏎️ Monaco Grand Prix & Formula 1 VIP Logistics</option>
-              <option value="CORPORATE">💼 Corporate Tech & Executive Envoys</option>
-              <option value="CONCERT_FILM">🎸 World Concert Tours & Film Cast</option>
-              <option value="DIPLOMATIC">🏛️ Diplomatic & UN Government Envoys</option>
-              <option value="EMERGENCY">🚑 Emergency & Medical Humanitarian Logistics</option>
-              <option value="AEROSPACE">🚀 Aerospace & Scientific Engineering Missions</option>
+              <option value="MONACO_GP_VIP">🏎️ Monaco Grand Prix & Formula 1 Luxury VIP Envoy</option>
+              <option value="CORPORATE">💼 Corporate Tech & Executive Delegations</option>
+              <option value="CONCERT_FILM">🎸 World Concert Tours & Film Production Unit</option>
+              <option value="DIPLOMATIC">🏛️ Diplomatic & UN Government Missions</option>
+              <option value="EMERGENCY">🚑 Emergency & Medical Humanitarian Airlift</option>
+              <option value="AEROSPACE">🚀 Aerospace & Launch Engineering Teams</option>
             </select>
           </div>
 
-          <!-- Target Charter Team / Sub-group -->
+          <!-- Target Charter Team / Sub-Group -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Target Charter Team / Sub-Group
             </label>
             <select id="targetTeam" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
-              <option value="AUTO_ROTATION" selected>⭐ Auto-Rotate Unique Sports Teams (No Duplicates)</option>
+              <option value="AUTO_ROTATION" selected>⭐ Auto-Anchor Teams to Selection / Home Airfield</option>
             </select>
           </div>
 
-          <!-- Dispatch Date Picker (Controls Seasonality) -->
+          <!-- Operating Date (Controls Seasonality) -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Dispatch Operating Date (Controls Seasonality)
             </label>
             <input type="date" id="dispatchDate" value="2026-11-07" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-            <p id="seasonIndicator" class="text-[10px] text-amber-400 font-semibold mt-1">SEASON: FALL (NFL Vikings / College Football Active)</p>
+            <p id="seasonIndicator" class="text-[10px] text-amber-400 font-semibold mt-1">SEASON: FALL (NFL Vikings, NBA Timberwolves & AAC Football Active)</p>
           </div>
 
-          <!-- Sequential Continuous Leg Chain Count -->
+          <!-- Sequential Leg Chain Count -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Sequential Leg Chain Count (A → B → C → D)
@@ -252,10 +255,10 @@
               <option value="3">3 Continuous Legs (A → B → C → D)</option>
               <option value="4" selected>4 Continuous Legs (A → B → C → D → E)</option>
             </select>
-            <p class="text-[10px] text-emerald-400 mt-1">✓ Realistic Routing: AAC/Pro Teams route home/away; VIPs route luxury hubs.</p>
+            <p class="text-[10px] text-emerald-400 mt-1">✓ Anchored Routing: Teams depart or arrive at home or opponent venues.</p>
           </div>
 
-          <!-- Main Submit Button -->
+          <!-- Submit Button -->
           <div class="pt-2">
             <button type="submit" class="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center space-x-2 border border-amber-400/40">
               <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
@@ -266,13 +269,13 @@
         </form>
       </div>
 
-      <!-- Quick Aircraft Info footer in sidebar -->
+      <!-- Quick Tech specs footer -->
       <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
         <span class="flex items-center space-x-1">
           <i class="fa-solid fa-plane text-cyan-400"></i>
           <span>Airbus A320-200</span>
         </span>
-        <span class="font-mono">MTOW 172k lbs</span>
+        <span class="font-mono">MTOW 172,000 lbs</span>
       </div>
     </section>
 
@@ -329,7 +332,7 @@
 
       </div>
 
-      <!-- TAB 2: INTERACTIVE 180-SEAT CABIN INSPECTOR -->
+      <!-- TAB 2: INTERACTIVE 180-SEAT CABIN INSPECTOR (NO ROW 13) -->
       <div id="tab-cabin" class="hidden space-y-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
           
@@ -338,7 +341,7 @@
               <div class="flex items-center space-x-2">
                 <h3 class="font-bold text-sm uppercase tracking-wide text-slate-100 flex items-center space-x-2">
                   <i class="fa-solid fa-chair text-cyan-400"></i>
-                  <span>A320 Cabin Layout (180 Seats - NO Row 13)</span>
+                  <span>A320 Cabin Layout (180 Economy Seats - NO Row 13)</span>
                 </h3>
                 <span id="activeLegCabinBadge" class="bg-cyan-950 text-cyan-400 border border-cyan-500/30 text-[10px] px-2 py-0.5 rounded font-mono font-bold">
                   LEG 1: BMN3611
@@ -480,12 +483,12 @@
             <div>
               <span class="text-xs text-slate-400 uppercase block">Zero Fuel Weight (ZFW)</span>
               <strong id="zfwVal" class="text-lg text-cyan-400">143,100 LBS</strong>
-              <span class="text-[10px] text-emerald-400 block">(Max 134.4k LBS Norm / W&B OK)</span>
+              <span class="text-[10px] text-emerald-400 block">(CG % MAC Envelope Nominal)</span>
             </div>
             <div>
               <span class="text-xs text-slate-400 uppercase block">Total Ramp Weight</span>
               <strong id="rampWeightVal" class="text-lg text-amber-400">168,500 LBS</strong>
-              <span class="text-[10px] text-emerald-400 block">(Below 172k MTOW Limit)</span>
+              <span class="text-[10px] text-emerald-400 block">(Below 172,000 lbs MTOW)</span>
             </div>
           </div>
 
@@ -502,7 +505,7 @@
             </h3>
             <p class="text-xs text-slate-400">Printable official dispatch documentation for N361VA operational legs.</p>
           </div>
-          <button onclick="printDispatchRelease()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center space-x-2 transition-all">
+          <button onclick="printDispatchRelease()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center space-x-2 transition-all shadow-md">
             <i class="fa-solid fa-print"></i>
             <span>Print Release</span>
           </button>
@@ -561,7 +564,7 @@
   <!-- JAVASCRIPT DISPATCH ENGINE & DATASETS -->
   <script>
     /* =========================================================================
-       1. COMPLETE AIRPORT DATABASE (DELTA, ALLEGIANT, BREEZE, AAC, MN & VIP HUBS)
+       1. 175+ COMPREHENSIVE AIRPORT NETWORK (DELTA, ALLEGIANT, BREEZE, AAC, MN, VIP)
        ========================================================================= */
     const AIRPORTS_RAW = [
       // MINNESOTA & MN PRO TEAM HOMES
@@ -569,25 +572,25 @@
       { icao: "KRST", iata: "RST", name: "Rochester International", city: "Rochester, MN", lat: 43.9088, lng: -92.4979 },
       { icao: "KDLH", iata: "DLH", name: "Duluth International", city: "Duluth, MN", lat: 46.8421, lng: -92.1936 },
 
-      // AMERICAN ATHLETIC CONFERENCE (AAC) HOME AIRPORTS
-      { icao: "KSWF", iata: "SWF", name: "New York Stewart Int'l", city: "West Point/Newburgh, NY", lat: 41.5041, lng: -74.1048 },
-      { icao: "KBWI", iata: "BWI", name: "Baltimore/Washington Int'l", city: "Annapolis/Baltimore, MD", lat: 39.1754, lng: -76.6683 },
-      { icao: "KBHM", iata: "BHM", name: "Birmingham-Shuttlesworth Int'l", city: "Birmingham, AL", lat: 33.5629, lng: -86.7535 },
-      { icao: "KCLT", iata: "CLT", name: "Charlotte Douglas Int'l", city: "Charlotte, NC", lat: 35.2140, lng: -80.9431 },
-      { icao: "KPGV", iata: "PGV", name: "Pitt-Greenville Airport", city: "Greenville, NC", lat: 35.6353, lng: -77.3853 },
-      { icao: "KFLL", iata: "FLL", name: "Fort Lauderdale-Hollywood Int'l", city: "Fort Lauderdale, FL", lat: 26.0726, lng: -80.1527 },
-      { icao: "KMEM", iata: "MEM", name: "Memphis Int'l", city: "Memphis, TN", lat: 35.0424, lng: -89.9767 },
-      { icao: "KDFW", iata: "DFW", name: "Dallas/Fort Worth Int'l", city: "Dallas/Denton, TX", lat: 32.8998, lng: -97.0403 },
-      { icao: "KHOU", iata: "HOU", name: "Houston Hobby Airport", city: "Houston, TX", lat: 29.6454, lng: -95.2789 },
-      { icao: "KTPA", iata: "TPA", name: "Tampa Int'l", city: "Tampa, FL", lat: 27.9755, lng: -82.5332 },
-      { icao: "KPHL", iata: "PHL", name: "Philadelphia Int'l", city: "Philadelphia, PA", lat: 39.8721, lng: -75.2411 },
-      { icao: "KSAT", iata: "SAT", name: "San Antonio Int'l", city: "San Antonio, TX", lat: 29.5337, lng: -98.4698 },
-      { icao: "KMSY", iata: "MSY", name: "Louis Armstrong New Orleans Int'l", city: "New Orleans, LA", lat: 29.9934, lng: -90.2580 },
-      { icao: "KTUL", iata: "TUL", name: "Tulsa Int'l", city: "Tulsa, OK", lat: 36.1984, lng: -95.8881 },
-      { icao: "KICT", iata: "ICT", name: "Wichita Eisenhower Int'l", city: "Wichita, KS", lat: 37.6499, lng: -97.4331 },
+      // ALL 15 AMERICAN ATHLETIC CONFERENCE (AAC) HOME AIRPORTS
+      { icao: "KSWF", iata: "SWF", name: "New York Stewart Int'l", city: "West Point/Army, NY", lat: 41.5041, lng: -74.1048 },
+      { icao: "KBWI", iata: "BWI", name: "Baltimore/Washington Int'l", city: "Annapolis/Navy, MD", lat: 39.1754, lng: -76.6683 },
+      { icao: "KBHM", iata: "BHM", name: "Birmingham-Shuttlesworth Int'l", city: "Birmingham/UAB, AL", lat: 33.5629, lng: -86.7535 },
+      { icao: "KCLT", iata: "CLT", name: "Charlotte Douglas Int'l", city: "Charlotte/Charlotte 49ers, NC", lat: 35.2140, lng: -80.9431 },
+      { icao: "KPGV", iata: "PGV", name: "Pitt-Greenville Airport", city: "Greenville/ECU Pirates, NC", lat: 35.6353, lng: -77.3853 },
+      { icao: "KFLL", iata: "FLL", name: "Fort Lauderdale-Hollywood Int'l", city: "Fort Lauderdale/FAU Owls, FL", lat: 26.0726, lng: -80.1527 },
+      { icao: "KMEM", iata: "MEM", name: "Memphis Int'l", city: "Memphis/Memphis Tigers, TN", lat: 35.0424, lng: -89.9767 },
+      { icao: "KDFW", iata: "DFW", name: "Dallas/Fort Worth Int'l", city: "Dallas/Denton/North Texas, TX", lat: 32.8998, lng: -97.0403 },
+      { icao: "KHOU", iata: "HOU", name: "Houston Hobby Airport", city: "Houston/Rice Owls, TX", lat: 29.6454, lng: -95.2789 },
+      { icao: "KTPA", iata: "TPA", name: "Tampa Int'l", city: "Tampa/USF Bulls, FL", lat: 27.9755, lng: -82.5332 },
+      { icao: "KPHL", iata: "PHL", name: "Philadelphia Int'l", city: "Philadelphia/Temple Owls, PA", lat: 39.8721, lng: -75.2411 },
+      { icao: "KSAT", iata: "SAT", name: "San Antonio Int'l", city: "San Antonio/UTSA, TX", lat: 29.5337, lng: -98.4698 },
+      { icao: "KMSY", iata: "MSY", name: "Louis Armstrong New Orleans Int'l", city: "New Orleans/Tulane, LA", lat: 29.9934, lng: -90.2580 },
+      { icao: "KTUL", iata: "TUL", name: "Tulsa Int'l", city: "Tulsa/Tulsa Golden Hurricane, OK", lat: 36.1984, lng: -95.8881 },
+      { icao: "KICT", iata: "ICT", name: "Wichita Eisenhower Int'l", city: "Wichita/Wichita St, KS", lat: 37.6499, lng: -97.4331 },
 
       // DELTA AIR LINES MAJOR HUBS & SPOKES
-      { icao: "KATL", iata: "ATL", name: "Hartsfield-Jackson Atlanta", city: "Atlanta, GA", lat: 33.6407, lng: -84.4277 },
+      { icao: "KATL", iata: "ATL", name: "Hartsfield-Jackson Atlanta Int'l", city: "Atlanta, GA", lat: 33.6407, lng: -84.4277 },
       { icao: "KDTW", iata: "DTW", name: "Detroit Metropolitan", city: "Detroit, MI", lat: 42.2124, lng: -83.3534 },
       { icao: "KSLC", iata: "SLC", name: "Salt Lake City Int'l", city: "Salt Lake City, UT", lat: 40.7884, lng: -111.9778 },
       { icao: "KSEA", iata: "SEA", name: "Seattle-Tacoma Int'l", city: "Seattle, WA", lat: 47.4502, lng: -122.3088 },
@@ -603,31 +606,127 @@
       { icao: "KDCA", iata: "DCA", name: "Ronald Reagan Washington National", city: "Washington, DC", lat: 38.8512, lng: -77.0377 },
       { icao: "KGRB", iata: "GRB", name: "Green Bay Austin Straubel", city: "Green Bay, WI", lat: 44.4851, lng: -88.1296 },
       { icao: "KBNA", iata: "BNA", name: "Nashville Int'l", city: "Nashville, TN", lat: 36.1263, lng: -86.6774 },
-
-      // ALLEGIANT & BREEZE NETWORK DESTINATIONS
-      { icao: "KSFB", iata: "SFB", name: "Orlando Sanford Int'l", city: "Sanford/Orlando, FL", lat: 28.7776, lng: -81.2375 },
-      { icao: "KPIE", iata: "PIE", name: "St. Pete-Clearwater Int'l", city: "St. Petersburg, FL", lat: 27.9102, lng: -82.6874 },
-      { icao: "KPGD", iata: "PGD", name: "Punta Gorda Airport", city: "Punta Gorda, FL", lat: 26.9175, lng: -82.0006 },
-      { icao: "KAZA", iata: "AZA", name: "Phoenix-Mesa Gateway", city: "Mesa/Phoenix, AZ", lat: 33.3078, lng: -111.6550 },
-      { icao: "KGRR", iata: "GRR", name: "Gerald R. Ford Int'l", city: "Grand Rapids, MI", lat: 42.8808, lng: -85.5228 },
-      { icao: "KFAR", iata: "FAR", name: "Hector International", city: "Fargo, ND", lat: 46.9193, lng: -96.8158 },
-      { icao: "KFSD", iata: "FSD", name: "Sioux Falls Regional", city: "Sioux Falls, SD", lat: 43.5819, lng: -96.7417 },
-      { icao: "KOMA", iata: "OMA", name: "Eppley Airfield", city: "Omaha, NE", lat: 41.3025, lng: -95.8942 },
-      { icao: "KPVD", iata: "PVD", name: "Rhode Island T.F. Green", city: "Providence, RI", lat: 41.7240, lng: -71.4282 },
+      { icao: "KCVG", iata: "CVG", name: "Cincinnati/Northern Kentucky Int'l", city: "Cincinnati, OH", lat: 39.0461, lng: -84.6622 },
+      { icao: "KRDU", iata: "RDU", name: "Raleigh-Durham Int'l", city: "Raleigh, NC", lat: 35.8776, lng: -78.7875 },
+      { icao: "KSFO", iata: "SFO", name: "San Francisco Int'l", city: "San Francisco, CA", lat: 37.6213, lng: -122.3790 },
+      { icao: "KSAN", iata: "SAN", name: "San Diego Int'l", city: "San Diego, CA", lat: 32.7336, lng: -117.1897 },
+      { icao: "KPDX", iata: "PDX", name: "Portland Int'l", city: "Portland, OR", lat: 45.5898, lng: -122.5951 },
+      { icao: "KMDW", iata: "MDW", name: "Chicago Midway Int'l", city: "Chicago, IL", lat: 41.7868, lng: -87.7522 },
+      { icao: "KMKE", iata: "MKE", name: "Milwaukee Mitchell Int'l", city: "Milwaukee, WI", lat: 42.9472, lng: -87.8966 },
+      { icao: "KIND", iata: "IND", name: "Indianapolis Int'l", city: "Indianapolis, IN", lat: 39.7173, lng: -86.2944 },
+      { icao: "KCMH", iata: "CMH", name: "John Glenn Columbus Int'l", city: "Columbus, OH", lat: 39.9980, lng: -82.8919 },
+      { icao: "KPIT", iata: "PIT", name: "Pittsburgh Int'l", city: "Pittsburgh, PA", lat: 40.4915, lng: -80.2329 },
+      { icao: "KCLE", iata: "CLE", name: "Cleveland Hopkins Int'l", city: "Cleveland, OH", lat: 41.4107, lng: -81.8494 },
+      { icao: "KAUS", iata: "AUS", name: "Austin-Bergstrom Int'l", city: "Austin, TX", lat: 30.1945, lng: -97.6699 },
+      { icao: "KMCI", iata: "MCI", name: "Kansas City Int'l", city: "Kansas City, MO", lat: 39.2976, lng: -94.7139 },
+      { icao: "KSTL", iata: "STL", name: "St. Louis Lambert Int'l", city: "St. Louis, MO", lat: 38.7472, lng: -90.3599 },
+      { icao: "KMIA", iata: "MIA", name: "Miami Int'l", city: "Miami, FL", lat: 25.7959, lng: -80.2870 },
+      { icao: "KRSW", iata: "RSW", name: "Southwest Florida Int'l", city: "Fort Myers, FL", lat: 26.5362, lng: -81.7552 },
+      { icao: "KPBI", iata: "PBI", name: "Palm Beach Int'l", city: "West Palm Beach, FL", lat: 26.6832, lng: -80.0956 },
+      { icao: "KJAX", iata: "JAX", name: "Jacksonville Int'l", city: "Jacksonville, FL", lat: 30.4941, lng: -81.6879 },
+      { icao: "KSAV", iata: "SAV", name: "Savannah/Hilton Head Int'l", city: "Savannah, GA", lat: 32.1276, lng: -81.2021 },
       { icao: "KCHS", iata: "CHS", name: "Charleston Int'l", city: "Charleston, SC", lat: 32.8986, lng: -80.0405 },
+      { icao: "KRIC", iata: "RIC", name: "Richmond Int'l", city: "Richmond, VA", lat: 37.5052, lng: -77.3197 },
+      { icao: "KIAD", iata: "IAD", name: "Washington Dulles Int'l", city: "Washington, DC", lat: 38.9531, lng: -77.4565 },
+      { icao: "KBUF", iata: "BUF", name: "Buffalo Niagara Int'l", city: "Buffalo, NY", lat: 42.9405, lng: -78.7322 },
+      { icao: "KROC", iata: "ROC", name: "Greater Rochester Int'l", city: "Rochester, NY", lat: 43.1189, lng: -77.6724 },
+      { icao: "KSYR", iata: "SYR", name: "Syracuse Hancock Int'l", city: "Syracuse, NY", lat: 43.1112, lng: -76.1063 },
+      { icao: "KALB", iata: "ALB", name: "Albany International", city: "Albany, NY", lat: 42.7483, lng: -73.8017 },
+      { icao: "KPWM", iata: "PWM", name: "Portland International Jetport", city: "Portland, ME", lat: 43.6462, lng: -70.3088 },
+      { icao: "KBGR", iata: "BGR", name: "Bangor International", city: "Bangor, ME", lat: 44.8074, lng: -68.8281 },
+      { icao: "KGRR", iata: "GRR", name: "Gerald R. Ford Int'l", city: "Grand Rapids, MI", lat: 42.8808, lng: -85.5228 },
 
-      // INTERNATIONAL & MONACO GRAND PRIX / LUXURY VIP HUBS
+      // ALLEGIANT & BREEZE NETWORK AIRPORTS
+      { icao: "KABE", iata: "ABE", name: "Lehigh Valley Int'l", city: "Allentown, PA", lat: 40.6524, lng: -75.4404 },
+      { icao: "KACY", iata: "ACY", name: "Atlantic City Int'l", city: "Atlantic City, NJ", lat: 39.4576, lng: -74.5772 },
+      { icao: "KATW", iata: "ATW", name: "Appleton International", city: "Appleton/Green Bay, WI", lat: 44.2574, lng: -88.5191 },
+      { icao: "KAVL", iata: "AVL", name: "Asheville Regional", city: "Asheville, NC", lat: 35.4362, lng: -82.5418 },
+      { icao: "KAZA", iata: "AZA", name: "Phoenix-Mesa Gateway", city: "Mesa/Phoenix, AZ", lat: 33.3078, lng: -111.6550 },
+      { icao: "KBIL", iata: "BIL", name: "Billings Logan Int'l", city: "Billings, MT", lat: 45.8077, lng: -108.5429 },
+      { icao: "KBLI", iata: "BLI", name: "Bellingham Int'l", city: "Bellingham, WA", lat: 48.7927, lng: -122.5375 },
+      { icao: "KBLV", iata: "BLV", name: "MidAmerica St. Louis", city: "Belleville/St. Louis, IL", lat: 38.5452, lng: -89.8352 },
+      { icao: "KBMI", iata: "BMI", name: "Central Illinois Regional", city: "Bloomington, IL", lat: 40.4771, lng: -88.9159 },
+      { icao: "KBOI", iata: "BOI", name: "Boise Airport", city: "Boise, ID", lat: 43.5644, lng: -116.2228 },
+      { icao: "KBZN", iata: "BZN", name: "Bozeman Yellowstone Int'l", city: "Bozeman, MT", lat: 45.7775, lng: -111.1530 },
+      { icao: "KCAK", iata: "CAK", name: "Akron-Canton Airport", city: "Akron/Canton, OH", lat: 40.9161, lng: -81.4422 },
+      { icao: "KCID", iata: "CID", name: "Eastern Iowa Airport", city: "Cedar Rapids, IA", lat: 41.8847, lng: -91.7108 },
+      { icao: "KCKB", iata: "CKB", name: "North Central West Virginia", city: "Clarksburg, WV", lat: 39.2966, lng: -80.2281 },
+      { icao: "KCOU", iata: "COU", name: "Columbia Regional", city: "Columbia, MO", lat: 38.8181, lng: -92.2196 },
+      { icao: "KCPR", iata: "CPR", name: "Casper/Natrona County Int'l", city: "Casper, WY", lat: 42.9080, lng: -106.4644 },
+      { icao: "KDAY", iata: "DAY", name: "Dayton International", city: "Dayton, OH", lat: 39.9024, lng: -84.2194 },
+      { icao: "KDSM", iata: "DSM", name: "Des Moines Int'l", city: "Des Moines, IA", lat: 41.5340, lng: -93.6631 },
+      { icao: "KELM", iata: "ELM", name: "Elmira/Corning Regional", city: "Elmira, NY", lat: 42.1599, lng: -76.8914 },
+      { icao: "KEUG", iata: "EUG", name: "Eugene Airport", city: "Eugene, OR", lat: 44.1233, lng: -123.2186 },
+      { icao: "KEVV", iata: "EVV", name: "Evansville Regional", city: "Evansville, IN", lat: 38.0383, lng: -87.5306 },
+      { icao: "KEYW", iata: "EYW", name: "Key West Int'l", city: "Key West, FL", lat: 24.5556, lng: -81.7596 },
+      { icao: "KFAR", iata: "FAR", name: "Hector International", city: "Fargo, ND", lat: 46.9193, lng: -96.8158 },
+      { icao: "KFAT", iata: "FAT", name: "Fresno Yosemite Int'l", city: "Fresno, CA", lat: 36.7762, lng: -119.7181 },
+      { icao: "KFCA", iata: "FCA", name: "Glacier Park Int'l", city: "Kalispell, MT", lat: 48.3114, lng: -114.2550 },
+      { icao: "KFNT", iata: "FNT", name: "Bishop International", city: "Flint, MI", lat: 42.9654, lng: -83.7436 },
+      { icao: "KFSD", iata: "FSD", name: "Sioux Falls Regional", city: "Sioux Falls, SD", lat: 43.5819, lng: -96.7417 },
+      { icao: "KFWA", iata: "FWA", name: "Fort Wayne Int'l", city: "Fort Wayne, IN", lat: 40.9785, lng: -85.1951 },
+      { icao: "KGFK", iata: "GFK", name: "Grand Forks Int'l", city: "Grand Forks, ND", lat: 47.9493, lng: -97.1761 },
+      { icao: "KGPT", iata: "GPT", name: "Gulfport-Biloxi Int'l", city: "Gulfport, MS", lat: 30.4073, lng: -89.0701 },
+      { icao: "KGRI", iata: "GRI", name: "Central Nebraska Regional", city: "Grand Island, NE", lat: 40.9675, lng: -98.3097 },
+      { icao: "KGSP", iata: "GSP", name: "Greenville-Spartanburg Int'l", city: "Greenville, SC", lat: 34.8956, lng: -82.2189 },
+      { icao: "KGTF", iata: "GTF", name: "Great Falls Int'l", city: "Great Falls, MT", lat: 47.4820, lng: -111.3707 },
+      { icao: "KHTS", iata: "HTS", name: "Tri-State Airport", city: "Huntington, WV", lat: 38.3667, lng: -82.5580 },
+      { icao: "KIDA", iata: "IDA", name: "Idaho Falls Regional", city: "Idaho Falls, ID", lat: 43.5146, lng: -112.0702 },
+      { icao: "KLCK", iata: "LCK", name: "Rickenbacker Int'l", city: "Columbus, OH", lat: 39.8138, lng: -82.9278 },
+      { icao: "KLEX", iata: "LEX", name: "Blue Grass Airport", city: "Lexington, KY", lat: 38.0364, lng: -84.6059 },
+      { icao: "KLFT", iata: "LFT", name: "Lafayette Regional", city: "Lafayette, LA", lat: 30.2053, lng: -91.9876 },
+      { icao: "KLNK", iata: "LNK", name: "Lincoln Airport", city: "Lincoln, NE", lat: 40.8509, lng: -96.7592 },
+      { icao: "KLSE", iata: "LSE", name: "La Crosse Regional", city: "La Crosse, WI", lat: 43.8790, lng: -91.2560 },
+      { icao: "KMDT", iata: "MDT", name: "Harrisburg Int'l", city: "Harrisburg, PA", lat: 40.1935, lng: -76.7634 },
+      { icao: "KMLB", iata: "MLB", name: "Melbourne Orlando Int'l", city: "Melbourne, FL", lat: 28.1028, lng: -80.6453 },
+      { icao: "KMFR", iata: "MFR", name: "Rogue Valley Int'l", city: "Medford, OR", lat: 42.3742, lng: -122.8735 },
+      { icao: "KMOT", iata: "MOT", name: "Minot International", city: "Minot, ND", lat: 48.2594, lng: -101.2803 },
+      { icao: "KMSO", iata: "MSO", name: "Missoula Montana Airport", city: "Missoula, MT", lat: 46.9163, lng: -114.0906 },
+      { icao: "KMYR", iata: "MYR", name: "Myrtle Beach Int'l", city: "Myrtle Beach, SC", lat: 33.6797, lng: -78.9283 },
+      { icao: "KOAK", iata: "OAK", name: "Oakland San Francisco Bay", city: "Oakland, CA", lat: 37.7213, lng: -122.2207 },
+      { icao: "KOMA", iata: "OMA", name: "Eppley Airfield", city: "Omaha, NE", lat: 41.3025, lng: -95.8942 },
+      { icao: "KPGD", iata: "PGD", name: "Punta Gorda Airport", city: "Punta Gorda, FL", lat: 26.9175, lng: -82.0006 },
+      { icao: "KPIA", iata: "PIA", name: "General Wayne A. Downing", city: "Peoria, IL", lat: 40.6642, lng: -89.6933 },
+      { icao: "KPIE", iata: "PIE", name: "St. Pete-Clearwater Int'l", city: "St. Petersburg, FL", lat: 27.9102, lng: -82.6874 },
+      { icao: "KPSC", iata: "PSC", name: "Tri-Cities Airport", city: "Pasco, WA", lat: 46.2647, lng: -119.1190 },
+      { icao: "KPSM", iata: "PSM", name: "Portsmouth International", city: "Portsmouth, NH", lat: 43.0779, lng: -70.8233 },
+      { icao: "KPVU", iata: "PVU", name: "Provo Municipal", city: "Provo, UT", lat: 40.2192, lng: -111.7234 },
+      { icao: "KRAP", iata: "RAP", name: "Rapid City Regional", city: "Rapid City, SD", lat: 44.0453, lng: -103.0574 },
+      { icao: "KRFD", iata: "RFD", name: "Chicago Rockford Int'l", city: "Rockford, IL", lat: 42.1954, lng: -89.0972 },
+      { icao: "KROA", iata: "ROA", name: "Roanoke-Blacksburg Regional", city: "Roanoke, VA", lat: 37.3255, lng: -79.9754 },
+      { icao: "KSCK", iata: "SCK", name: "Stockton Metropolitan", city: "Stockton, CA", lat: 37.8942, lng: -121.2383 },
+      { icao: "KSFB", iata: "SFB", name: "Orlando Sanford Int'l", city: "Sanford/Orlando, FL", lat: 28.7776, lng: -81.2375 },
+      { icao: "KSHV", iata: "SHV", name: "Shreveport Regional", city: "Shreveport, LA", lat: 32.4466, lng: -93.8256 },
+      { icao: "KSRQ", iata: "SRQ", name: "Sarasota-Bradenton Int'l", city: "Sarasota, FL", lat: 27.3954, lng: -82.5544 },
+      { icao: "KTRI", iata: "TRI", name: "Tri-Cities Airport", city: "Blountville/Bristol, TN", lat: 36.4752, lng: -82.4074 },
+      { icao: "KTVC", iata: "TVC", name: "Cherry Capital Airport", city: "Traverse City, MI", lat: 44.7414, lng: -85.5822 },
+      { icao: "KTYS", iata: "TYS", name: "McGhee Tyson Airport", city: "Knoxville, TN", lat: 35.8110, lng: -83.9940 },
+      { icao: "KVPS", iata: "VPS", name: "Destin-Fort Walton Beach", city: "Fort Walton Beach, FL", lat: 30.4832, lng: -86.5254 },
+      { icao: "KXNA", iata: "XNA", name: "Northwest Arkansas National", city: "Fayetteville/Bentonville, AR", lat: 36.2818, lng: -94.3068 },
+      { icao: "KPNS", iata: "PNS", name: "Pensacola International", city: "Pensacola, FL", lat: 30.4734, lng: -87.1866 },
+      { icao: "KBTR", iata: "BTR", name: "Baton Rouge Metropolitan", city: "Baton Rouge, LA", lat: 30.5329, lng: -91.1496 },
+      { icao: "KHSV", iata: "HSV", name: "Huntsville International", city: "Huntsville, AL", lat: 34.6404, lng: -86.7731 },
+      { icao: "KMOB", iata: "MOB", name: "Mobile Regional", city: "Mobile, AL", lat: 30.6914, lng: -88.2428 },
+      { icao: "KBDL", iata: "BDL", name: "Bradley International", city: "Hartford, CT", lat: 41.9389, lng: -72.6832 },
+      { icao: "KPVD", iata: "PVD", name: "Rhode Island T.F. Green", city: "Providence, RI", lat: 41.7240, lng: -71.4282 },
+      { icao: "KISP", iata: "ISP", name: "Long Island MacArthur", city: "Islip, NY", lat: 40.7952, lng: -73.1002 },
+      { icao: "KORF", iata: "ORF", name: "Norfolk International", city: "Norfolk, VA", lat: 36.8946, lng: -76.2012 },
+      { icao: "KSDF", iata: "SDF", name: "Louisville Muhammad Ali Int'l", city: "Louisville, KY", lat: 38.1744, lng: -85.7360 },
+
+      // INTERNATIONAL MONACO GP & LUXURY VIP HUBS
       { icao: "LFMN", iata: "NCE", name: "Nice Côte d'Azur (Monaco Link)", city: "Nice/Monaco, France", lat: 43.6584, lng: 7.2159 },
       { icao: "LFPB", iata: "LBG", name: "Paris Le Bourget Executive", city: "Paris, France", lat: 48.9694, lng: 2.4414 },
       { icao: "EGLL", iata: "LHR", name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543 },
+      { icao: "EGGW", iata: "LTN", name: "London Luton Airport", city: "London, UK", lat: 51.8747, lng: -0.3683 },
       { icao: "LSGG", iata: "GVA", name: "Geneva Airport", city: "Geneva, Switzerland", lat: 46.2381, lng: 6.1090 },
       { icao: "LSZH", iata: "ZRH", name: "Zurich Airport", city: "Zurich, Switzerland", lat: 47.4647, lng: 8.5492 },
       { icao: "LIMC", iata: "MXP", name: "Milan Malpensa", city: "Milan, Italy", lat: 45.6306, lng: 8.7281 },
       { icao: "MMUN", iata: "CUN", name: "Cancun International", city: "Cancun, Mexico", lat: 21.0365, lng: -86.8771 },
-      { icao: "MDPC", iata: "PUJ", name: "Punta Cana Int'l", city: "Punta Cana, Dominican Rep.", lat: 18.5674, lng: -68.3634 }
+      { icao: "MDPC", iata: "PUJ", name: "Punta Cana Int'l", city: "Punta Cana, Dominican Rep.", lat: 18.5674, lng: -68.3634 },
+      { icao: "MYNN", iata: "NAS", name: "Lynden Pindling Int'l", city: "Nassau, Bahamas", lat: 25.0390, lng: -77.4662 }
     ];
 
-    // Deduplicate AIRPORTS cleanly
+    // Clean Deduplicated Airport List (Alphabetical by ICAO)
     const AIRPORT_MAP = new Map();
     AIRPORTS_RAW.forEach(ap => {
       if (!AIRPORT_MAP.has(ap.icao)) AIRPORT_MAP.set(ap.icao, ap);
@@ -635,24 +734,61 @@
     const AIRPORTS = Array.from(AIRPORT_MAP.values()).sort((a,b) => a.icao.localeCompare(b.icao));
 
     /* =========================================================================
-       2. SPORTS TEAMS & REALISTIC MATCHUP MAPS
+       2. ANCHORED TEAMS & OPPONENTS DATABASE
        ========================================================================= */
     const MN_PRO_TEAMS = [
       { 
         id: "vikings", name: "Minnesota Vikings", league: "NFL", home: "KMSP", icon: "🏈", months: [8,9,10,11,12,1,2],
-        opponents: ["KORD", "KGRB", "KDTW", "KDFW", "KPHL", "KATL", "KTPA", "KSEA", "KLAX"]
+        opponents: [
+          { name: "Green Bay Packers", home: "KGRB" },
+          { name: "Chicago Bears", home: "KORD" },
+          { name: "Detroit Lions", home: "KDTW" },
+          { name: "Dallas Cowboys", home: "KDFW" },
+          { name: "Philadelphia Eagles", home: "KPHL" },
+          { name: "Atlanta Falcons", home: "KATL" },
+          { name: "Tampa Bay Buccaneers", home: "KTPA" },
+          { name: "Seattle Seahawks", home: "KSEA" },
+          { name: "Los Angeles Rams", home: "KLAX" }
+        ]
       },
       { 
         id: "timberwolves", name: "Minnesota Timberwolves", league: "NBA", home: "KMSP", icon: "🏀", months: [10,11,12,1,2,3,4,5,6],
-        opponents: ["KBOS", "KDEN", "KSFO", "KLAX", "KPHX", "KMEM", "KFLL", "KDFW"]
+        opponents: [
+          { name: "Memphis Grizzlies", home: "KMEM" },
+          { name: "Boston Celtics", home: "KBOS" },
+          { name: "Denver Nuggets", home: "KDEN" },
+          { name: "Golden State Warriors", home: "KSFO" },
+          { name: "Los Angeles Lakers", home: "KLAX" },
+          { name: "Phoenix Suns", home: "KPHX" },
+          { name: "Dallas Mavericks", home: "KDFW" },
+          { name: "Miami Heat", home: "KFLL" },
+          { name: "Houston Rockets", home: "KHOU" },
+          { name: "Chicago Bulls", home: "KORD" }
+        ]
       },
       { 
         id: "wild", name: "Minnesota Wild", league: "NHL", home: "KMSP", icon: "🏒", months: [10,11,12,1,2,3,4,5,6],
-        opponents: ["KORD", "KDTW", "KDEN", "KDFW", "KLAS", "KTPA", "KBOS"]
+        opponents: [
+          { name: "Chicago Blackhawks", home: "KORD" },
+          { name: "Detroit Red Wings", home: "KDTW" },
+          { name: "Colorado Avalanche", home: "KDEN" },
+          { name: "Dallas Stars", home: "KDFW" },
+          { name: "Vegas Golden Knights", home: "KLAS" },
+          { name: "Tampa Bay Lightning", home: "KTPA" },
+          { name: "Boston Bruins", home: "KBOS" }
+        ]
       },
       { 
         id: "twins", name: "Minnesota Twins", league: "MLB", home: "KMSP", icon: "⚾", months: [3,4,5,6,7,8,9,10],
-        opponents: ["KORD", "KDTW", "KOMA", "KJFK", "KBOS", "KLAX", "KHOU"]
+        opponents: [
+          { name: "Chicago White Sox", home: "KORD" },
+          { name: "Detroit Tigers", home: "KDTW" },
+          { name: "Kansas City Royals", home: "KOMA" },
+          { name: "New York Yankees", home: "KJFK" },
+          { name: "Boston Red Sox", home: "KBOS" },
+          { name: "Los Angeles Dodgers", home: "KLAX" },
+          { name: "Houston Astros", home: "KHOU" }
+        ]
       }
     ];
 
@@ -679,12 +815,12 @@
     const OTHER_CHARTERS = {
       MONACO_GP_VIP: [
         { name: "Monaco Grand Prix Paddock Club VIPs", icon: "🏎️" },
-        { name: "Scuderia Ferrari Executive Sponsor Delegation", icon: "🏎️" },
-        { name: "Aston Martin F1 VIP High-Yield Guests", icon: "🏎️" }
+        { name: "Scuderia Ferrari Executive Delegation", icon: "🏎️" },
+        { name: "Aston Martin F1 VIP Sponsor Guests", icon: "🏎️" }
       ],
       CORPORATE: [
         { name: "Apple Executive Envoy", icon: "💼" },
-        { name: "Microsoft Global Cloud Summit Team", icon: "💻" },
+        { name: "Microsoft Cloud Summit Team", icon: "💻" },
         { name: "Target Corp Board of Directors", icon: "🎯" }
       ],
       CONCERT_FILM: [
@@ -701,18 +837,18 @@
         { name: "FEMA First Responders Tactical Unit", icon: "🚨" }
       ],
       AEROSPACE: [
-        { name: "SpaceX Launch Engineering Logistics Team", icon: "🚀" },
+        { name: "SpaceX Launch Engineering Logistics", icon: "🚀" },
         { name: "NASA Goddard Space Systems Crew", icon: "🛰️" }
       ]
     };
 
     /* =========================================================================
-       3. GLOBAL APP STATE & ACTIVE LEG TRACKING
+       3. GLOBAL STATE & INITIALIZATION
        ========================================================================= */
     let leafletMap = null;
     let mapLayersGroup = null;
     let currentLegsData = [];
-    let activeLegIndex = 0; // 0..legs.length-1
+    let activeLegIndex = 0;
 
     window.addEventListener('DOMContentLoaded', () => {
       try {
@@ -722,7 +858,7 @@
         initMap();
         handleGenerateDispatch();
       } catch (err) {
-        console.error("Initialization error:", err);
+        console.error("Init Error:", err);
       }
     });
 
@@ -740,16 +876,18 @@
     }
 
     function populateAirportDropdown() {
-      const originSelect = document.getElementById('originAirport');
-      if (!originSelect) return;
-
-      originSelect.innerHTML = '';
+      const select = document.getElementById('originAirportSelect');
+      if (!select) return;
+      
+      const currentSelected = select.value || 'KMSP';
+      select.innerHTML = '';
+      
       AIRPORTS.forEach(ap => {
         const opt = document.createElement('option');
         opt.value = ap.icao;
         opt.textContent = `${ap.icao} - ${ap.name} (${ap.city})`;
-        if (ap.icao === 'KMSP') opt.selected = true;
-        originSelect.appendChild(opt);
+        if (ap.icao === currentSelected) opt.selected = true;
+        select.appendChild(opt);
       });
     }
 
@@ -763,14 +901,14 @@
 
       const category = catSelect.value;
       const selectedDate = new Date(dateInput.value || Date.now());
-      const month = selectedDate.getMonth() + 1; // 1-12
+      const month = selectedDate.getMonth() + 1;
 
       if (month >= 8 || month <= 2) {
-        seasonEl.textContent = "SEASON: FALL / WINTER (NFL Vikings & AAC Football Active)";
+        seasonEl.textContent = "SEASON: FALL / WINTER (NFL Vikings, NBA Timberwolves & AAC Football Active)";
       } else if (month >= 3 && month <= 6) {
-        seasonEl.textContent = "SEASON: SPRING (MLB Twins & AAC Spring Sports)";
+        seasonEl.textContent = "SEASON: SPRING (MLB Twins & AAC Spring Sports Active)";
       } else {
-        seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Pre-Season Camps)";
+        seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Pre-Season Training Camps)";
       }
 
       teamSelect.innerHTML = '';
@@ -801,7 +939,7 @@
       const activeTeams = availableTeams.filter(t => t.months.includes(month));
       const optAuto = document.createElement('option');
       optAuto.value = "AUTO_ROTATION";
-      optAuto.textContent = "⭐ Auto-Rotate Unique Sports Teams (No Duplicates)";
+      optAuto.textContent = "⭐ Auto-Anchor Teams to Selection / Home Airfield";
       teamSelect.appendChild(optAuto);
 
       activeTeams.forEach(team => {
@@ -813,7 +951,7 @@
     }
 
     /* =========================================================================
-       4. HAVERSINE & REALISTIC DISPATCH GENERATOR
+       4. HAVERSINE DISTANCE CALCULATOR
        ========================================================================= */
     function getDistanceNM(lat1, lon1, lat2, lon2) {
       const R = 3440.065;
@@ -826,8 +964,11 @@
       return Math.round(R * c);
     }
 
+    /* =========================================================================
+       5. REALISTIC TEAM & OPPONENT ANCHORED DISPATCH GENERATOR ENGINE
+       ========================================================================= */
     function handleGenerateDispatch() {
-      const originICAO = document.getElementById('originAirport').value || 'KMSP';
+      const originICAO = document.getElementById('originAirportSelect').value || 'KMSP';
       const rangeProfile = document.getElementById('rangeProfile').value;
       const category = document.getElementById('charterCategory').value;
       const targetTeamId = document.getElementById('targetTeam').value;
@@ -837,20 +978,21 @@
       const selectedDate = new Date(dateStr || Date.now());
       const month = selectedDate.getMonth() + 1;
 
-      const usedTeamsInDispatch = new Set();
       currentLegsData = [];
       activeLegIndex = 0;
 
       let currentAirport = AIRPORTS.find(a => a.icao === originICAO) || AIRPORTS[0];
+
+      // Track team state for continuous chaining ($A \to B \to C \to D \to E$)
+      let activeTravelingTeam = null; // Team currently on the aircraft
 
       for (let i = 1; i <= legCount; i++) {
         let destAirport = null;
         let legEntity = null;
         let matchupTitle = "";
         let paragraphSummary = "";
-        let categoryType = category;
+        let opponentName = "";
 
-        // GEOGRAPHIC & CHARTER REALISM RULES
         if (category === 'MONACO_GP_VIP') {
           // MONACO / F1 VIPs STRICTLY FLY BETWEEN LUXURY HUBS
           let vipCandidateICAOs = MONACO_VIP_HUBS.filter(icao => icao !== currentAirport.icao);
@@ -864,57 +1006,131 @@
           paragraphSummary = `Leg ${i} operates a high-priority Monaco Grand Prix luxury charter airlifting F1 team principals, paddock suite executives, and VIP sponsors from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). Onboard service features elite first-class VIP layout with bespoke catering, while Holds 1 & 2 transport sealed AKH containers containing team hospitality displays and luxury luggage. Dedicated ramp handling and VIP customs clearance are pre-arranged at ${destAirport.icao}.`;
         }
         else if (category.includes("SPORTS") || category.includes("PRO") || category.includes("AAC")) {
+          // ANCHORED SPORTS ENGINE
           let pool = [];
           if (category === 'MN_PRO_ONLY') pool = MN_PRO_TEAMS;
           else if (category === 'AAC_NCAA_ONLY') pool = AAC_TEAMS;
           else pool = [...MN_PRO_TEAMS, ...AAC_TEAMS];
 
-          let availablePool = pool.filter(t => t.months.includes(month) && !usedTeamsInDispatch.has(t.id));
-          if (availablePool.length === 0) availablePool = pool.filter(t => !usedTeamsInDispatch.has(t.id));
-          if (availablePool.length === 0) availablePool = pool;
+          const activePool = pool.filter(t => t.months.includes(month));
+          const sportsPool = activePool.length > 0 ? activePool : pool;
 
-          if (i === 1 && targetTeamId && targetTeamId !== 'AUTO_ROTATION') {
-            const requested = pool.find(t => t.id === targetTeamId);
-            if (requested) legEntity = requested;
-          }
-          if (!legEntity) {
-            legEntity = availablePool[Math.floor(Math.random() * availablePool.length)];
-          }
+          if (i === 1) {
+            // Check if current origin airport matches a team's home base
+            let homeTeam = sportsPool.find(t => t.home === currentAirport.icao);
 
-          usedTeamsInDispatch.add(legEntity.id);
-
-          // DESTINATION REALISM FOR SPORTS TEAMS
-          if (legEntity.league === 'AAC') {
-            // AAC teams fly from home to AAC opponent home or return home
-            let opponentAAC = AAC_TEAMS.filter(t => t.id !== legEntity.id && t.home !== currentAirport.icao);
-            let chosenOpponent = opponentAAC[Math.floor(Math.random() * opponentAAC.length)];
-            
-            if (currentAirport.icao !== legEntity.home && Math.random() > 0.4) {
-              // Return leg back to home base
-              destAirport = AIRPORTS.find(a => a.icao === legEntity.home) || AIRPORTS.find(a => a.icao === chosenOpponent.home);
-              matchupTitle = `${legEntity.icon} ${legEntity.name} Return to Base`;
-              paragraphSummary = `Leg ${i} airlifts the ${legEntity.name} roster and athletic department staff back to their home base at ${destAirport.name} (${destAirport.city}) following a road conference series. Aircraft holds 3 & 4 are loaded with player gear trunks and medical taping stations, with fast-track apron deboarding coordinated with home athletic transport.`;
-            } else {
-              destAirport = AIRPORTS.find(a => a.icao === chosenOpponent.home) || AIRPORTS[0];
-              matchupTitle = `${legEntity.icon} ${legEntity.name} @ ${chosenOpponent.name}`;
-              paragraphSummary = `Leg ${i} airlifts the ${legEntity.name} football and athletic traveling party from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for a major AAC conference matchup against the ${chosenOpponent.name}. The payload includes 174 roster athletes and coaching staff, with Holds 1 & 2 loaded with AKH ULD containers containing uniform hampers and tactical film gear. Ramp handlers at ${destAirport.icao} have pre-positioned mobile beltloaders and team bus charter staging.`;
+            if (targetTeamId && targetTeamId !== 'AUTO_ROTATION') {
+              homeTeam = sportsPool.find(t => t.id === targetTeamId) || homeTeam;
             }
-          } else {
-            // Minnesota Pro Team Matchup
-            let oppICAOs = legEntity.opponents || ["KORD", "KBOS", "KDEN", "KDFW"];
-            if (currentAirport.icao !== 'KMSP' && Math.random() > 0.3) {
-              destAirport = AIRPORTS.find(a => a.icao === 'KMSP');
-              matchupTitle = `${legEntity.icon} ${legEntity.name} Return to Minneapolis`;
-              paragraphSummary = `Leg ${i} executes a return charter flight carrying the ${legEntity.name} back home to Minneapolis-St. Paul Int'l (${destAirport.icao}) following an away road trip series. Aircraft payload consists of active roster players, training staff, and broadcast crew, with specialized gear trunks stowed in the lower deck belly holds.`;
+
+            if (!homeTeam) {
+              // If origin is not a home base, select a team and set origin to their home or make origin their opponent's home
+              homeTeam = sportsPool[Math.floor(Math.random() * sportsPool.length)];
+            }
+
+            activeTravelingTeam = homeTeam;
+            legEntity = homeTeam;
+
+            if (homeTeam.league === 'AAC') {
+              // Pick an AAC opponent
+              const opponentsAAC = AAC_TEAMS.filter(t => t.id !== homeTeam.id);
+              const chosenOpponent = opponentsAAC[Math.floor(Math.random() * opponentsAAC.length)];
+              opponentName = chosenOpponent.name;
+
+              if (currentAirport.icao === homeTeam.home) {
+                destAirport = AIRPORTS.find(a => a.icao === chosenOpponent.home) || AIRPORTS[0];
+                matchupTitle = `${homeTeam.icon} ${homeTeam.name} vs. ${chosenOpponent.name}`;
+                paragraphSummary = `Leg ${i} dispatches the ${homeTeam.name} football and traveling party from their home airfield at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for an away AAC matchup against the ${chosenOpponent.name}. The charter carries 174 roster athletes and coaching staff. Holds 1 & 2 load containerized uniform hampers and film gear, with mobile belt loaders pre-staged at ${destAirport.icao}.`;
+              } else {
+                destAirport = AIRPORTS.find(a => a.icao === homeTeam.home) || AIRPORTS[0];
+                matchupTitle = `${homeTeam.icon} ${homeTeam.name} Return to ${destAirport.city}`;
+                paragraphSummary = `Leg ${i} airlifts the ${homeTeam.name} roster from ${currentAirport.name} (${currentAirport.city}) back home to ${destAirport.name} (${destAirport.city}) after a road game against ${chosenOpponent.name}. Holds 3 & 4 carry player gear trunks and medical taping stations for fast-track home deboarding.`;
+              }
             } else {
-              let targetICAO = oppICAOs[Math.floor(Math.random() * oppICAOs.length)];
+              // Minnesota Pro Team Matchup
+              const oppObj = homeTeam.opponents[Math.floor(Math.random() * homeTeam.opponents.length)];
+              opponentName = oppObj.name;
+
+              if (currentAirport.icao === homeTeam.home) {
+                destAirport = AIRPORTS.find(a => a.icao === oppObj.home) || AIRPORTS[0];
+                matchupTitle = `${homeTeam.icon} ${homeTeam.name} vs. ${oppObj.name}`;
+                paragraphSummary = `Leg ${i} dispatches the ${homeTeam.name} from their Minneapolis base at ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) for an away road fixture against the ${oppObj.name}. Onboard layout accommodates roster players, coaches, and training staff, with Holds 1 & 2 loaded with uniform hampers and equipment trunks.`;
+              } else {
+                destAirport = AIRPORTS.find(a => a.icao === homeTeam.home) || AIRPORTS[0];
+                matchupTitle = `${homeTeam.icon} ${homeTeam.name} Return Home to Minneapolis`;
+                paragraphSummary = `Leg ${i} executes a return charter flight carrying the ${homeTeam.name} from ${currentAirport.name} back to Minneapolis-St. Paul Int'l (${destAirport.icao}) following their road trip against the ${oppObj.name}. Payload includes roster players, training staff, and media crew.`;
+              }
+            }
+          } 
+          else {
+            // LEGS 2, 3, 4: CONTINUOUS ANCHORED LOGIC ($B \to C \to D \to E$)
+            // Current airport is B (where previous leg landed).
+            // Option A: Active traveling team continues multi-game road trip from B to C vs. Opponent 2.
+            // Option B: Active traveling team returns home to base.
+            // Option C: Local team based at B departs for away game at C vs. new Opponent.
+
+            const localTeamAtB = sportsPool.find(t => t.home === currentAirport.icao);
+
+            if (activeTravelingTeam && currentAirport.icao !== activeTravelingTeam.home && Math.random() < 0.6) {
+              // Traveling team continues road trip or returns home
+              if (Math.random() < 0.5) {
+                // Return home
+                destAirport = AIRPORTS.find(a => a.icao === activeTravelingTeam.home) || AIRPORTS[0];
+                legEntity = activeTravelingTeam;
+                matchupTitle = `${legEntity.icon} ${legEntity.name} Return Home to Base`;
+                paragraphSummary = `Leg ${i} airlifts the ${legEntity.name} traveling party from ${currentAirport.name} (${currentAirport.city}) back to their home base at ${destAirport.name} (${destAirport.city}). Roster players deboard directly to team buses with Holds 3 & 4 unloading gear hampers and medical trunks.`;
+              } else {
+                // Multi-game road trip to Opponent 2
+                let nextOpponentName = "";
+                if (activeTravelingTeam.league === 'AAC') {
+                  const oppAAC = AAC_TEAMS.filter(t => t.id !== activeTravelingTeam.id && t.home !== currentAirport.icao);
+                  const chosenOpp = oppAAC[Math.floor(Math.random() * oppAAC.length)];
+                  nextOpponentName = chosenOpp.name;
+                  destAirport = AIRPORTS.find(a => a.icao === chosenOpp.home) || AIRPORTS[0];
+                } else {
+                  const oppObj = activeTravelingTeam.opponents.find(o => o.home !== currentAirport.icao) || activeTravelingTeam.opponents[0];
+                  nextOpponentName = oppObj.name;
+                  destAirport = AIRPORTS.find(a => a.icao === oppObj.home) || AIRPORTS[0];
+                }
+                legEntity = activeTravelingTeam;
+                matchupTitle = `${legEntity.icon} ${legEntity.name} Road Trip vs. ${nextOpponentName}`;
+                paragraphSummary = `Leg ${i} continues the multi-game road trip for the ${legEntity.name}, departing ${currentAirport.name} (${currentAirport.city}) for ${destAirport.name} (${destAirport.city}) to take on the ${nextOpponentName}. The charter transports the full 176-person traveling roster and coaching staff, with equipment hampers stowed in Holds 1 & 2.`;
+              }
+            } 
+            else if (localTeamAtB) {
+              // Local team based at B departs for away game
+              activeTravelingTeam = localTeamAtB;
+              legEntity = localTeamAtB;
+
+              if (localTeamAtB.league === 'AAC') {
+                const oppAAC = AAC_TEAMS.filter(t => t.id !== localTeamAtB.id);
+                const chosenOpp = oppAAC[Math.floor(Math.random() * oppAAC.length)];
+                destAirport = AIRPORTS.find(a => a.icao === chosenOpp.home) || AIRPORTS[0];
+                matchupTitle = `${legEntity.icon} ${legEntity.name} vs. ${chosenOpp.name}`;
+                paragraphSummary = `Leg ${i} dispatches the ${legEntity.name} from their home airfield at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for a conference matchup against the ${chosenOpp.name}. Aircraft holds carry team gear trunks and video breakdown stations.`;
+              } else {
+                const oppObj = localTeamAtB.opponents[Math.floor(Math.random() * localTeamAtB.opponents.length)];
+                destAirport = AIRPORTS.find(a => a.icao === oppObj.home) || AIRPORTS[0];
+                matchupTitle = `${legEntity.icon} ${legEntity.name} vs. ${oppObj.name}`;
+                paragraphSummary = `Leg ${i} airlifts the ${legEntity.name} from their home base at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) to face the ${oppObj.name}. Holds 1 & 2 transport AKH containerized gear hampers with belt loaders handling player duffels at ${destAirport.icao}.`;
+              }
+            } 
+            else {
+              // Pick any active team and set route
+              legEntity = sportsPool[Math.floor(Math.random() * sportsPool.length)];
+              activeTravelingTeam = legEntity;
+              let targetICAO = legEntity.home;
+              if (currentAirport.icao === legEntity.home) {
+                targetICAO = (legEntity.opponents && legEntity.opponents[0]) ? legEntity.opponents[0].home : 'KBOS';
+              }
               destAirport = AIRPORTS.find(a => a.icao === targetICAO) || AIRPORTS[0];
-              matchupTitle = `${legEntity.icon} ${legEntity.name} Road Trip @ ${destAirport.city}`;
-              paragraphSummary = `Leg ${i} dispatches the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) for an away fixture. Onboard configuration provides full athletic seating for players and staff, with Holds 1 & 2 loaded with containerized uniform hampers and Hold 3 carrying player duffel bags and trainer tables.`;
+              matchupTitle = `${legEntity.icon} ${legEntity.name} Charter Flight`;
+              paragraphSummary = `Leg ${i} operates a dedicated sports charter for the ${legEntity.name} flying from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Onboard services provide full athletic catering and recovery drinks, with equipment loaded across lower deck belly holds.`;
             }
           }
-        } else {
-          // CORPORATE / DIPLOMATIC / EMERGENCY / AEROSPACE
+        } 
+        else {
+          // CORPORATE / CONCERT / DIPLOMATIC / EMERGENCY / AEROSPACE
           let list = OTHER_CHARTERS[category] || OTHER_CHARTERS.CORPORATE;
           let entityObj = list[(i - 1) % list.length];
           legEntity = { name: entityObj.name, icon: entityObj.icon };
@@ -936,9 +1152,9 @@
             }));
           }
 
-          destAirport = candidateAirports[Math.floor(Math.random() * Math.min(candidateAirports.length, 5))];
+          destAirport = candidateAirports[Math.floor(Math.random() * Math.min(candidateAirports.length, 6))];
           matchupTitle = `${legEntity.icon} ${legEntity.name} Mission`;
-          paragraphSummary = `Leg ${i} executes a specialized ${category.replace('_', ' ')} charter airlifting the ${legEntity.name} delegation from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Aircraft lower deck belly holds are loaded with specialized mission cargo, and priority handling has been coordinated with local airfield operations at ${destAirport.icao}.`;
+          paragraphSummary = `Leg ${i} executes a specialized ${category.replace(/_/g, ' ')} charter airlifting the ${legEntity.name} delegation from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Aircraft lower deck belly holds are loaded with specialized mission equipment, and priority handling has been arranged with airfield operations at ${destAirport.icao}.`;
         }
 
         const distance = getDistanceNM(currentAirport.lat, currentAirport.lng, destAirport.lat, destAirport.lng);
@@ -965,7 +1181,7 @@
           cargoLbs: 12800 + (i * 750)
         });
 
-        // CONTINUOUS CHAIN RULE
+        // Continuous chain rule: arrival becomes next departure
         currentAirport = destAirport;
       }
 
@@ -977,7 +1193,7 @@
     }
 
     /* =========================================================================
-       5. ACTIVE LEG SELECTOR BAR & SYNCHRONIZATION
+       6. ACTIVE LEG SELECTOR BAR & SYNCHRONIZATION
        ========================================================================= */
     function renderLegSelectorButtons() {
       const container = document.getElementById('legSelectorButtons');
@@ -1009,7 +1225,6 @@
       const currentLeg = currentLegsData[activeLegIndex] || currentLegsData[0];
       if (!currentLeg) return;
 
-      // Update Badges
       const cabinBadge = document.getElementById('activeLegCabinBadge');
       const cargoBadge = document.getElementById('activeLegCargoBadge');
       if (cabinBadge) cabinBadge.textContent = `LEG ${currentLeg.legIndex}: ${currentLeg.flightNo} (${currentLeg.entity.name})`;
@@ -1020,7 +1235,7 @@
     }
 
     /* =========================================================================
-       6. LEAFLET MAP VISUALIZATION ENGINE
+       7. LEAFLET MAP ENGINE
        ========================================================================= */
     function initMap() {
       if (leafletMap) return;
@@ -1035,7 +1250,7 @@
 
         mapLayersGroup = L.layerGroup().addTo(leafletMap);
       } catch (e) {
-        console.error("Map load error:", e);
+        console.error("Map init error:", e);
       }
     }
 
@@ -1082,7 +1297,7 @@
     }
 
     /* =========================================================================
-       7. RENDER CONTINUOUS LEG CARDS WITH DETAILED PARAGRAPHS
+       8. RENDER CONTINUOUS LEG CARDS WITH PARAGRAPH BRIEFINGS
        ========================================================================= */
     function renderLegCards() {
       const container = document.getElementById('legCardsContainer');
@@ -1143,7 +1358,7 @@
             </div>
           </div>
 
-          <!-- DETAILED OPERATIONAL PARAGRAPH SUMMARY -->
+          <!-- PARAGRAPH MISSION BRIEFING -->
           <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300 leading-relaxed font-sans">
             <div class="text-[10px] font-mono font-bold text-cyan-400 uppercase mb-1">
               <i class="fa-solid fa-align-left mr-1"></i> Flight Operational Mission Briefing:
@@ -1156,7 +1371,7 @@
     }
 
     /* =========================================================================
-       8. DYNAMIC CABIN SEATING LAYOUT ENGINE (180 SEATS - NO ROW 13)
+       9. CABIN SEATING GRID ENGINE (180 SEATS - NO ROW 13)
        ========================================================================= */
     function renderCabinGrid() {
       const cabinEl = document.getElementById('cabinGrid');
@@ -1230,7 +1445,6 @@
 
       document.getElementById('modalSeatNum').textContent = `SEAT ${seatCode}`;
       
-      // DYNAMIC PASSENGER ROLE & MANIFEST SYNCHRONIZATION
       if (cat.includes("SPORTS") || cat.includes("PRO") || cat.includes("AAC")) {
         if (rowNum <= 4) {
           document.getElementById('modalPaxName').textContent = `Starting Captain / Star Athlete`;
@@ -1283,7 +1497,6 @@
         }
       }
       else {
-        // Concert, Diplomatic, Emergency, Aerospace
         document.getElementById('modalPaxName').textContent = `Delegation Specialist`;
         document.getElementById('modalPaxRole').textContent = `${groupName} - Designated Specialist`;
         document.getElementById('modalLuggage').textContent = "1 Mission Gear Case + 1 Luggage Duffel (45 lbs)";
@@ -1299,7 +1512,7 @@
     }
 
     /* =========================================================================
-       9. BELLY CARGO RENDERER & DYNAMIC MANIFEST SYNC
+       10. BELLY CARGO SCHEMATIC & TELEMETRY
        ========================================================================= */
     function renderCargoSection() {
       const currentLeg = currentLegsData[activeLegIndex] || currentLegsData[0] || {
@@ -1325,7 +1538,6 @@
       const holdBulkTitle = document.getElementById('holdBulkTitle');
       const holdBulkManifest = document.getElementById('holdBulkManifest');
 
-      // DYNAMIC CARGO MANIFEST SYNCHRONIZATION
       if (cat.includes("SPORTS") || cat.includes("PRO") || cat.includes("AAC")) {
         holdFwdTitle.textContent = `${groupName} - ULD Team Gear`;
         holdFwdManifest.innerHTML = `
@@ -1396,7 +1608,7 @@
     }
 
     /* =========================================================================
-       10. FAA DISPATCH RELEASE FORM GENERATOR
+       11. OFFICIAL FAA DISPATCH RELEASE GENERATOR
        ========================================================================= */
     function renderFAARelease() {
       const releaseEl = document.getElementById('print-modal-content');
@@ -1451,7 +1663,7 @@
               ${currentLegsData.map(l => `
                 <tr class="border-b border-slate-800/60">
                   <td class="py-2 text-cyan-400 font-bold">${l.flightNo}</td>
-                  <td class="py-2 text-slate-200">${l.entity.name}</td>
+                  <td class="py-2 text-slate-200">${l.matchupTitle}</td>
                   <td class="py-2 text-amber-400">${l.origin.icao}</td>
                   <td class="py-2 text-emerald-400">${l.destination.icao}</td>
                   <td class="py-2">${l.distanceNM} NM</td>
@@ -1502,7 +1714,7 @@
     }
 
     /* =========================================================================
-       11. TAB NAVIGATION HANDLER
+       12. TAB SWITCHING HANDLER
        ========================================================================= */
     function switchTab(tabId) {
       ['tab-route', 'tab-cabin', 'tab-cargo', 'tab-release'].forEach(id => {
