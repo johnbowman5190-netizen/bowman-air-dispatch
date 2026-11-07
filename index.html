@@ -131,7 +131,7 @@
                         <span class="px-2 py-0.5 text-xs font-semibold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">DISPATCH OPS</span>
                         <span class="px-2 py-0.5 text-xs font-bold font-mono rounded bg-gold-500/20 text-gold-400 border border-gold-500/40">N361VA (A320-200)</span>
                     </div>
-                    <p class="text-xs text-slate-400 font-mono">DELTA NETWORK & GLOBAL CHARTER ENGINE • 180 SEATS (ROWS 1-12 & 14-31)</p>
+                    <p class="text-xs text-slate-400 font-mono">CONTINUOUS LEG ENGINE • MINNESOTA PRO & NCAA SPORTS • 180 SEATS (NO ROW 13)</p>
                 </div>
             </div>
 
@@ -210,7 +210,7 @@
 
                     <!-- BASE / ORIGIN AIRPORT SELECTOR -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Aircraft Origin Airport (Delta Route Network)</label>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Leg 1 Origin Airport (Starting Hub)</label>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-2">
                                 <select id="select-location-preset" onchange="handleLocationPresetChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 focus:ring-2 focus:ring-gold-500 font-mono">
@@ -218,20 +218,10 @@
                                 </select>
                             </div>
                             <div>
-                                <input type="text" id="input-custom-icao" placeholder="e.g. KATL" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KATL">
+                                <input type="text" id="input-custom-icao" placeholder="e.g. KMSP" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KMSP">
                             </div>
                         </div>
-                        <p class="text-[10px] text-slate-500 mt-1">160+ Delta network airports or custom ICAO lookup.</p>
-                    </div>
-
-                    <!-- ROUTE PATTERN BUILDER -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Flight Routing Pattern</label>
-                        <select id="select-route-pattern" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                            <option value="PROGRESSIVE" selected>➔ Continuous Progressive (A ➔ B ➔ C ➔ D)</option>
-                            <option value="SHUTTLE">🔄 Hub Shuttle / Out & Back (A ➔ B ➔ A ➔ C)</option>
-                            <option value="CIRCUIT">🔺 Loop Circuit (A ➔ B ➔ C ➔ A)</option>
-                        </select>
+                        <p class="text-[10px] text-slate-500 mt-1">Select from 180+ global airports or enter custom ICAO.</p>
                     </div>
 
                     <!-- EXPLICIT RANGE PROFILE SELECTOR -->
@@ -248,15 +238,24 @@
                     <!-- CHARTER MISSION CATEGORY SELECTOR -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">Charter Mission Category</label>
-                        <select id="select-mission-type" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                            <option value="SPORTS" selected>🏆 NCAA & Pro Seasonal Sports Charters (Linked Airports)</option>
+                        <select id="select-mission-type" onchange="handleMissionTypeChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
+                            <option value="MN_PRO" selected>⭐ Exclusive Minnesota Pro Teams (Vikings, Wolves, Wild, Twins)</option>
+                            <option value="NCAA">🎓 NCAA College Sports (American Conferences)</option>
                             <option value="CORPORATE">💼 Corporate & Tech Executive Envoys</option>
                             <option value="ENTERTAINMENT">🎸 World Concert Tours & Film Cast</option>
                             <option value="GOVERNMENT">🏛️ Diplomatic & UN Government Missions</option>
                             <option value="MEDICAL">🚑 Emergency & Medical Humanitarian</option>
-                            <option value="AEROSPACE">🚀 Aerospace & SpaceX Tech Logistics</option>
+                            <option value="AEROSPACE">🚀 Aerospace & Scientific Logistics</option>
                             <option value="VIP">💎 Private Luxury VIP & Wealth Summits</option>
-                            <option value="ALL">⚡ Random Mixed Missions</option>
+                            <option value="ALL">⚡ Random Mixed Operations</option>
+                        </select>
+                    </div>
+
+                    <!-- SPECIFIC SUB-TEAM SELECTOR (FOR MINNESOTA PRO & NCAA) -->
+                    <div id="sub-team-container">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Target Charter Team / Sub-Group</label>
+                        <select id="select-sub-team" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
+                            <!-- Populated dynamically based on category -->
                         </select>
                     </div>
 
@@ -264,18 +263,18 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">Dispatch Operating Date (Controls Seasonality)</label>
                         <input type="date" id="input-dispatch-date" onchange="handleDateChange()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                        <p id="season-badge-preview" class="text-[10px] text-gold-400 mt-1 font-mono">SEASON: FALL (NCAA Football & NFL Matchups)</p>
+                        <p id="season-badge-preview" class="text-[10px] text-gold-400 mt-1 font-mono">SEASON: FALL (NFL Vikings / College Football)</p>
                     </div>
 
                     <!-- NUMBER OF LEGS -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Number of Sequential Legs Assigned</label>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Sequential Leg Chain Count (A ➔ B ➔ C ➔ D)</label>
                         <select id="select-leg-count" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono">
-                            <option value="AUTO" selected>Auto (2 to 4 Legs)</option>
+                            <option value="AUTO" selected>Auto Chain (2 to 4 Legs)</option>
                             <option value="1">1 Leg (Direct Charter)</option>
-                            <option value="2">2 Legs (Continuous)</option>
-                            <option value="3">3 Legs (Continuous)</option>
-                            <option value="4">4 Legs (Full Schedule)</option>
+                            <option value="2">2 Continuous Legs (A➔B➔C)</option>
+                            <option value="3">3 Continuous Legs (A➔B➔C➔D)</option>
+                            <option value="4">4 Continuous Legs (A➔B➔C➔D➔E)</option>
                         </select>
                     </div>
 
@@ -322,7 +321,7 @@
                     <button onclick="openPrintModal()" class="flex-1 py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center justify-center gap-1.5 font-mono">
                         <i class="fa-solid fa-print text-gold-400"></i> FAA Dispatch Release
                     </button>
-                    <button onclick="addCustomLegModal()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center justify-center gap-1.5 font-mono" title="Append Custom Flight Leg">
+                    <button onclick="addCustomLegModal()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center justify-center gap-1.5 font-mono" title="Append Continuous Leg">
                         <i class="fa-solid fa-plus text-emerald-400"></i> Add Leg
                     </button>
                 </div>
@@ -422,7 +421,7 @@
         <div class="hud-card border border-slate-700 rounded-xl max-w-md w-full p-5 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 class="text-sm font-bold text-slate-200 uppercase font-mono flex items-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-emerald-400"></i> Append Progressive Leg (N361VA)
+                    <i class="fa-solid fa-plus-circle text-emerald-400"></i> Append Continuous Leg (N361VA)
                 </h3>
                 <button onclick="closeAddLegModal()" class="text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark text-base"></i>
@@ -431,7 +430,7 @@
 
             <div class="space-y-3 font-mono">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Departure Airport ICAO</label>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Departure Airport (Current Location)</label>
                     <input type="text" id="custom-leg-dep" readonly class="w-full bg-slate-950 border border-slate-800 text-gold-400 text-xs rounded p-2 font-mono uppercase font-bold">
                 </div>
                 <div>
@@ -481,7 +480,7 @@
 
     <!-- FOOTER -->
     <footer class="mt-auto border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500 font-mono">
-        <p>Bowman Air Dispatch Operations Engine &copy; 2026 | Aircraft N361VA (Airbus A320-200 High-Capacity Airliner) | Part 121 / 135 Compliant</p>
+        <p>Bowman Air Dispatch Operations Engine &copy; 2026 | Aircraft N361VA (Airbus A320-200) | Part 121 / 135 Compliant</p>
     </footer>
 
     <!-- MAIN JAVASCRIPT LOGIC -->
@@ -500,20 +499,20 @@
             seatLayout: "3x3 Economy (30 Rows: 1-12 & 14-31)",
             cruiseKtas: 450,
             ceiling: "FL390",
-            dow: 94000, // Dry Operating Weight (lbs)
-            mzfw: 138000, // Max Zero Fuel Weight (lbs)
-            mtow: 172000, // Max Takeoff Weight (lbs)
-            mlw: 142000, // Max Landing Weight (lbs)
-            maxPayload: 41500, // Max payload (lbs)
-            maxFuel: 42000, // Max fuel (lbs)
-            fuelBurnPerHour: 5800 // Avg fuel burn lbs/hr
+            dow: 94000,
+            mzfw: 138000,
+            mtow: 172000,
+            mlw: 142000,
+            maxPayload: 41500,
+            maxFuel: 42000,
+            fuelBurnPerHour: 5800
         };
 
-        /* COMPLETE DELTA AIR LINES ROUTE NETWORK DATABASE (NO DUPLICATES) */
+        /* 180+ GLOBAL AIRPORT DATABASE INCLUDING DELTA, ALLEGIANT & PRO SPORTS CITIES */
         const AIRPORTS = {
+            "KMSP": { name: "Minneapolis-St. Paul Intl", city: "Minneapolis, MN, USA", lat: 44.8848, lng: -93.2223, elev: 841, rwy: "12L/30R (10,000 ft)", alt: "KMKE", tag: "mn-hub" },
             "KATL": { name: "Hartsfield-Jackson Atlanta Intl", city: "Atlanta, GA, USA", lat: 33.6407, lng: -84.4277, elev: 1026, rwy: "08L/26R (9,000 ft)", alt: "KCLT", tag: "hub" },
             "KDTW": { name: "Detroit Metropolitan Wayne Co", city: "Detroit, MI, USA", lat: 42.2124, lng: -83.3534, elev: 645, rwy: "04L/22R (12,000 ft)", alt: "KCLE", tag: "hub" },
-            "KMSP": { name: "Minneapolis-St. Paul Intl", city: "Minneapolis, MN, USA", lat: 44.8848, lng: -93.2223, elev: 841, rwy: "12L/30R (10,000 ft)", alt: "KMKE", tag: "hub" },
             "KSLC": { name: "Salt Lake City Intl", city: "Salt Lake City, UT, USA", lat: 40.7884, lng: -111.9778, elev: 4227, rwy: "16L/34R (12,003 ft)", alt: "KPVU", tag: "hub" },
             "KSEA": { name: "Seattle-Tacoma Intl", city: "Seattle, WA, USA", lat: 47.4502, lng: -122.3088, elev: 433, rwy: "16L/34R (11,901 ft)", alt: "KPDX", tag: "hub" },
             "KJFK": { name: "John F. Kennedy Intl", city: "New York, NY, USA", lat: 40.6397, lng: -73.7789, elev: 13, rwy: "13L/31R (14,511 ft)", alt: "EWR", tag: "hub" },
@@ -521,319 +520,234 @@
             "KBOS": { name: "Boston Logan Intl", city: "Boston, MA, USA", lat: 42.3656, lng: -71.0096, elev: 19, rwy: "33L/15R (10,083 ft)", alt: "KPVD", tag: "hub" },
             "KLAX": { name: "Los Angeles Intl", city: "Los Angeles, CA, USA", lat: 33.9425, lng: -118.4081, elev: 128, rwy: "25L/07R (12,091 ft)", alt: "KONT", tag: "hub" },
             "KSFO": { name: "San Francisco Intl", city: "San Francisco, CA, USA", lat: 37.6213, lng: -122.3790, elev: 13, rwy: "28R/10L (11,870 ft)", alt: "KSJC", tag: "hub" },
-            "KCVG": { name: "Cincinnati/Northern Kentucky Intl", city: "Cincinnati, OH, USA", lat: 39.0461, lng: -84.6621, elev: 896, rwy: "18C/36C (10,000 ft)", alt: "KCMH", tag: "focus" },
-            "KRDU": { name: "Raleigh-Durham Intl", city: "Raleigh, NC, USA", lat: 35.8776, lng: -78.7875, elev: 435, rwy: "05L/23R (10,000 ft)", alt: "KCLT", tag: "focus" },
-            "KBNA": { name: "Nashville Intl", city: "Nashville, TN, USA", lat: 36.1245, lng: -86.6782, elev: 599, rwy: "02L/20R (11,030 ft)", alt: "KMEM", tag: "focus" },
-            "KSAN": { name: "San Diego Intl", city: "San Diego, CA, USA", lat: 32.7338, lng: -117.1933, elev: 17, rwy: "09/27 (9,400 ft)", alt: "KLAX", tag: "spoke" },
-            "KPDX": { name: "Portland Intl", city: "Portland, OR, USA", lat: 45.5898, lng: -122.5951, elev: 31, rwy: "10L/28R (9,825 ft)", alt: "KSEA", tag: "spoke" },
-            "KPHX": { name: "Phoenix Sky Harbor Intl", city: "Phoenix, AZ, USA", lat: 33.4352, lng: -112.0101, elev: 1135, rwy: "08/26 (11,489 ft)", alt: "KIWA", tag: "spoke" },
-            "KLAS": { name: "Harry Reid Intl", city: "Las Vegas, NV, USA", lat: 36.0840, lng: -115.1537, elev: 2181, rwy: "26L/08R (14,510 ft)", alt: "KONT", tag: "spoke" },
-            "KDEN": { name: "Denver Intl", city: "Denver, CO, USA", lat: 39.8561, lng: -104.6737, elev: 5431, rwy: "16R/34L (16,000 ft)", alt: "KCOS", tag: "spoke" },
-            "KIAH": { name: "George Bush Intercontinental", city: "Houston, TX, USA", lat: 29.9902, lng: -95.3368, elev: 97, rwy: "15L/33R (12,001 ft)", alt: "KHOU", tag: "spoke" },
-            "KHOU": { name: "William P. Hobby", city: "Houston, TX, USA", lat: 29.6454, lng: -95.2789, elev: 46, rwy: "13R/31L (7,602 ft)", alt: "KIAH", tag: "spoke" },
-            "KDFW": { name: "Dallas/Fort Worth Intl", city: "Dallas, TX, USA", lat: 32.8998, lng: -97.0403, elev: 607, rwy: "17R/35L (13,401 ft)", alt: "KAUS", tag: "spoke" },
-            "KDAL": { name: "Dallas Love Field", city: "Dallas, TX, USA", lat: 32.8471, lng: -96.8518, elev: 487, rwy: "13R/31L (8,800 ft)", alt: "KDFW", tag: "spoke" },
-            "KORD": { name: "Chicago O'Hare Intl", city: "Chicago, IL, USA", lat: 41.9742, lng: -87.9073, elev: 668, rwy: "10L/28R (13,000 ft)", alt: "KMKE", tag: "spoke" },
-            "KMDW": { name: "Chicago Midway Intl", city: "Chicago, IL, USA", lat: 41.7868, lng: -87.7522, elev: 620, rwy: "13C/31C (6,522 ft)", alt: "KORD", tag: "spoke" },
-            "KPHL": { name: "Philadelphia Intl", city: "Philadelphia, PA, USA", lat: 39.8719, lng: -75.2411, elev: 36, rwy: "09R/27L (12,000 ft)", alt: "KBWI", tag: "spoke" },
-            "EWR":  { name: "Newark Liberty Intl", city: "Newark, NJ, USA", lat: 40.6925, lng: -74.1687, elev: 18, rwy: "04L/22R (10,000 ft)", alt: "KJFK", tag: "spoke" },
-            "KMIA": { name: "Miami Intl", city: "Miami, FL, USA", lat: 25.7959, lng: -80.2870, elev: 8, rwy: "08L/26R (13,016 ft)", alt: "KFLL", tag: "spoke" },
-            "KFLL": { name: "Fort Lauderdale-Hollywood Intl", city: "Fort Lauderdale, FL, USA", lat: 26.0726, lng: -80.1527, elev: 9, rwy: "10L/28R (9,000 ft)", alt: "KMIA", tag: "spoke" },
-            "KTPA": { name: "Tampa Intl", city: "Tampa, FL, USA", lat: 27.9755, lng: -82.5332, elev: 26, rwy: "01L/19R (11,002 ft)", alt: "KMCO", tag: "spoke" },
-            "KRSW": { name: "Southwest Florida Intl", city: "Fort Myers, FL, USA", lat: 26.5362, lng: -81.7552, elev: 30, rwy: "06/24 (12,000 ft)", alt: "KTPA", tag: "spoke" },
-            "KJAN": { name: "Jackson-Medgar Wiley Evers", city: "Jackson, MS, USA", lat: 32.3112, lng: -90.0759, elev: 346, rwy: "16L/34R (8,500 ft)", alt: "KMSY", tag: "spoke" },
-            "KMSY": { name: "Louis Armstrong New Orleans", city: "New Orleans, LA, USA", lat: 29.9934, lng: -90.2580, elev: 4, rwy: "11/29 (10,104 ft)", alt: "KBTR", tag: "spoke" },
-            "KSTL": { name: "St. Louis Lambert Intl", city: "St. Louis, MO, USA", lat: 38.7499, lng: -90.3600, elev: 605, rwy: "12R/30L (11,020 ft)", alt: "KIND", tag: "spoke" },
-            "KPIT": { name: "Pittsburgh Intl", city: "Pittsburgh, PA, USA", lat: 40.4915, lng: -80.2329, elev: 1203, rwy: "10L/28R (11,500 ft)", alt: "KCLE", tag: "spoke" },
-            "KCMH": { name: "John Glenn Columbus Intl", city: "Columbus, OH, USA", lat: 39.9980, lng: -82.8919, elev: 815, rwy: "10L/28R (10,113 ft)", alt: "KCLE", tag: "spoke" },
-            "KIND": { name: "Indianapolis Intl", city: "Indianapolis, IN, USA", lat: 39.7173, lng: -86.2944, elev: 797, rwy: "05L/23R (11,200 ft)", alt: "KCVG", tag: "spoke" },
-            "KORF": { name: "Norfolk Intl", city: "Norfolk, VA, USA", lat: 36.8946, lng: -76.2012, elev: 27, rwy: "05/23 (9,001 ft)", alt: "KRIC", tag: "spoke" },
-            "KRIC": { name: "Richmond Intl", city: "Richmond, VA, USA", lat: 37.5052, lng: -77.3197, elev: 168, rwy: "16/34 (9,003 ft)", alt: "KIAD", tag: "spoke" },
-            "KPVD": { name: "Rhode Island T.F. Green Intl", city: "Providence, RI, USA", lat: 41.7240, lng: -71.4282, elev: 55, rwy: "05/23 (8,700 ft)", alt: "KBOS", tag: "spoke" },
-            "KPWM": { name: "Portland Intl Jetport", city: "Portland, ME, USA", lat: 43.6462, lng: -70.3093, elev: 76, rwy: "11/29 (7,200 ft)", alt: "KBOS", tag: "spoke" },
-            "KBGR": { name: "Bangor Intl", city: "Bangor, ME, USA", lat: 44.8074, lng: -68.8281, elev: 192, rwy: "15/33 (11,440 ft)", alt: "KPWM", tag: "spoke" },
-            "KBTV": { name: "Patrick Leahy Burlington Intl", city: "Burlington, VT, USA", lat: 44.4719, lng: -73.1533, elev: 335, rwy: "15/33 (8,320 ft)", alt: "KALB", tag: "spoke" },
-            "KSYR": { name: "Syracuse Hancock Intl", city: "Syracuse, NY, USA", lat: 43.1112, lng: -76.1063, elev: 421, rwy: "10/28 (9,000 ft)", alt: "KALB", tag: "spoke" },
-            "KROC": { name: "Greater Rochester Intl", city: "Rochester, NY, USA", lat: 43.1189, lng: -77.6724, elev: 559, rwy: "04/22 (8,001 ft)", alt: "KSYR", tag: "spoke" },
-            "KBUF": { name: "Buffalo Niagara Intl", city: "Buffalo, NY, USA", lat: 42.9405, lng: -78.7322, elev: 728, rwy: "05/23 (8,829 ft)", alt: "KROC", tag: "spoke" },
-            "KCHO": { name: "Charlottesville-Albemarle", city: "Charlottesville, VA, USA", lat: 38.1386, lng: -78.4529, elev: 640, rwy: "03/21 (6,801 ft)", alt: "KRIC", tag: "spoke" },
-            "KROA": { name: "Roanoke-Blacksburg Regional", city: "Roanoke, VA, USA", lat: 37.3255, lng: -79.9754, elev: 1175, rwy: "06/24 (6,800 ft)", alt: "KRIC", tag: "spoke" },
-            "KCAE": { name: "Columbia Metropolitan", city: "Columbia, SC, USA", lat: 33.9388, lng: -81.1195, elev: 236, rwy: "11/29 (8,601 ft)", alt: "KCLT", tag: "spoke" },
-            "KCHS": { name: "Charleston Intl", city: "Charleston, SC, USA", lat: 32.8986, lng: -80.0405, elev: 46, rwy: "15/33 (9,001 ft)", alt: "KSAV", tag: "spoke" },
-            "KSAV": { name: "Savannah/Hilton Head Intl", city: "Savannah, GA, USA", lat: 32.1276, lng: -81.2021, elev: 50, rwy: "10/28 (9,350 ft)", alt: "KCHS", tag: "spoke" },
-            "KAGS": { name: "Augusta Regional", city: "Augusta, GA, USA", lat: 33.3699, lng: -81.9645, elev: 144, rwy: "17/35 (8,000 ft)", alt: "KATL", tag: "spoke" },
-            "KMYR": { name: "Myrtle Beach Intl", city: "Myrtle Beach, SC, USA", lat: 33.6797, lng: -78.9283, elev: 25, rwy: "18/36 (9,503 ft)", alt: "KCHS", tag: "spoke" },
-            "KGSP": { name: "Greenville-Spartanburg Intl", city: "Greenville, SC, USA", lat: 34.8956, lng: -82.2189, elev: 964, rwy: "04/22 (11,001 ft)", alt: "KCLT", tag: "spoke" },
-            "KTYS": { name: "McGhee Tyson Airport", city: "Knoxville, TN, USA", lat: 35.8110, lng: -83.9940, elev: 981, rwy: "05L/23R (9,000 ft)", alt: "KBNA", tag: "spoke" },
-            "KCHA": { name: "Chattanooga Metropolitan", city: "Chattanooga, TN, USA", lat: 35.0353, lng: -85.2038, elev: 683, rwy: "02/20 (7,400 ft)", alt: "KATL", tag: "spoke" },
-            "KBHM": { name: "Birmingham-Shuttlesworth Intl", city: "Birmingham, AL, USA", lat: 33.5629, lng: -86.7535, elev: 650, rwy: "06/24 (12,007 ft)", alt: "KATL", tag: "spoke" },
-            "KHSV": { name: "Huntsville Intl", city: "Huntsville, AL, USA", lat: 34.6404, lng: -86.7731, elev: 629, rwy: "18L/36R (12,600 ft)", alt: "KBHM", tag: "spoke" },
-            "KMGM": { name: "Montgomery Regional", city: "Montgomery, AL, USA", lat: 32.3006, lng: -86.3940, elev: 221, rwy: "10/28 (9,020 ft)", alt: "KBHM", tag: "spoke" },
-            "KMOB": { name: "Mobile Regional", city: "Mobile, AL, USA", lat: 30.6914, lng: -88.2428, elev: 219, rwy: "15/33 (8,502 ft)", alt: "KPNS", tag: "spoke" },
-            "KGPT": { name: "Gulfport-Biloxi Intl", city: "Gulfport, MS, USA", lat: 30.4073, lng: -89.0701, elev: 28, rwy: "14/32 (9,000 ft)", alt: "KMSY", tag: "spoke" },
-            "KPNS": { name: "Pensacola Intl", city: "Pensacola, FL, USA", lat: 30.4734, lng: -87.1866, elev: 121, rwy: "17/35 (7,004 ft)", alt: "KVPS", tag: "spoke" },
-            "KVPS": { name: "Destin-Fort Walton Beach", city: "Valparaiso, FL, USA", lat: 30.4832, lng: -86.5254, elev: 87, rwy: "12/30 (12,005 ft)", alt: "KPNS", tag: "spoke" },
-            "KECP": { name: "Northwest Florida Beaches Intl", city: "Panama City, FL, USA", lat: 30.3571, lng: -85.7954, elev: 69, rwy: "16/34 (10,000 ft)", alt: "KTLH", tag: "spoke" },
-            "KTLH": { name: "Tallahassee Intl", city: "Tallahassee, FL, USA", lat: 30.3965, lng: -84.3503, elev: 81, rwy: "09/27 (8,000 ft)", alt: "KJAX", tag: "spoke" },
-            "KJAX": { name: "Jacksonville Intl", city: "Jacksonville, FL, USA", lat: 30.4941, lng: -81.6879, elev: 30, rwy: "08/26 (10,000 ft)", alt: "KMCO", tag: "spoke" },
-            "KDAB": { name: "Daytona Beach Intl", city: "Daytona Beach, FL, USA", lat: 29.1799, lng: -81.0580, elev: 34, rwy: "07L/25R (10,500 ft)", alt: "KMCO", tag: "spoke" },
-            "KMLB": { name: "Melbourne Orlando Intl", city: "Melbourne, FL, USA", lat: 28.1028, lng: -80.6453, elev: 33, rwy: "09R/27L (10,181 ft)", alt: "KMCO", tag: "spoke" },
-            "KPBI": { name: "Palm Beach Intl", city: "West Palm Beach, FL, USA", lat: 26.6832, lng: -80.0956, elev: 19, rwy: "10L/28R (10,000 ft)", alt: "KMIA", tag: "spoke" },
-            "KEYW": { name: "Key West Intl", city: "Key West, FL, USA", lat: 24.5556, lng: -81.7596, elev: 3, rwy: "09/27 (5,076 ft)", alt: "KMIA", tag: "spoke" },
-            "KSRQ": { name: "Sarasota-Bradenton Intl", city: "Sarasota, FL, USA", lat: 27.3954, lng: -82.5544, elev: 30, rwy: "14/32 (9,500 ft)", alt: "KTPA", tag: "spoke" },
-            "KGNV": { name: "Gainesville Regional", city: "Gainesville, FL, USA", lat: 29.6901, lng: -82.2718, elev: 152, rwy: "11/29 (7,504 ft)", alt: "KJAX", tag: "spoke" },
-            "KVLD": { name: "Valdosta Regional", city: "Valdosta, GA, USA", lat: 30.7825, lng: -83.2759, elev: 203, rwy: "17/35 (8,002 ft)", alt: "KTLH", tag: "spoke" },
-            "KEVV": { name: "Evansville Regional", city: "Evansville, IN, USA", lat: 38.0380, lng: -87.5324, elev: 418, rwy: "04/22 (8,021 ft)", alt: "KSDF", tag: "spoke" },
-            "KSBN": { name: "South Bend Intl", city: "South Bend, IN, USA", lat: 41.7087, lng: -86.3173, elev: 799, rwy: "09R/27L (8,400 ft)", alt: "KORD", tag: "spoke" },
-            "KFWA": { name: "Fort Wayne Intl", city: "Fort Wayne, IN, USA", lat: 40.9785, lng: -85.1951, elev: 814, rwy: "05/23 (11,981 ft)", alt: "KIND", tag: "spoke" },
-            "KPIA": { name: "General Downing Peoria Intl", city: "Peoria, IL, USA", lat: 40.6642, lng: -89.6933, elev: 661, rwy: "13/31 (10,104 ft)", alt: "KORD", tag: "spoke" },
-            "KBMI": { name: "Central Illinois Regional", city: "Bloomington, IL, USA", lat: 40.4771, lng: -88.9159, elev: 871, rwy: "02/20 (8,000 ft)", alt: "KPIA", tag: "spoke" },
-            "KMLI": { name: "Quad Cities Intl", city: "Moline, IL, USA", lat: 41.4485, lng: -90.5075, elev: 590, rwy: "09/27 (10,002 ft)", alt: "KPIA", tag: "spoke" },
-            "KRFD": { name: "Chicago Rockford Intl", city: "Rockford, IL, USA", lat: 42.1954, lng: -89.0972, elev: 742, rwy: "01/19 (10,000 ft)", alt: "KORD", tag: "spoke" },
-            "KCAK": { name: "Akron-Canton Airport", city: "Akron/Canton, OH, USA", lat: 40.9161, lng: -81.4422, elev: 1228, rwy: "05/23 (8,204 ft)", alt: "KCLE", tag: "spoke" },
-            "KABE": { name: "Lehigh Valley Intl", city: "Allentown, PA, USA", lat: 40.6521, lng: -75.4408, elev: 393, rwy: "06/24 (7,600 ft)", alt: "EWR", tag: "spoke" },
-            "KAVP": { name: "Wilkes-Barre/Scranton Intl", city: "Avoca, PA, USA", lat: 41.3385, lng: -75.7234, elev: 962, rwy: "04/22 (7,501 ft)", alt: "EWR", tag: "spoke" },
-            "KITH": { name: "Ithaca Tompkins Intl", city: "Ithaca, NY, USA", lat: 42.4913, lng: -76.4584, elev: 1099, rwy: "14/32 (6,977 ft)", alt: "KSYR", tag: "spoke" },
-            "KELM": { name: "Elmira/Corning Regional", city: "Elmira, NY, USA", lat: 42.1599, lng: -76.8914, elev: 954, rwy: "06/24 (8,000 ft)", alt: "KSYR", tag: "spoke" },
-            "KUNV": { name: "University Park Airport", city: "State College, PA, USA", lat: 40.8493, lng: -77.8487, elev: 1239, rwy: "06/24 (6,701 ft)", alt: "MDT", tag: "spoke" },
-            "KBTR": { name: "Baton Rouge Metropolitan", city: "Baton Rouge, LA, USA", lat: 30.5329, lng: -91.1496, elev: 70, rwy: "13/31 (7,005 ft)", alt: "KMSY", tag: "spoke" },
-            "KLFT": { name: "Lafayette Regional", city: "Lafayette, LA, USA", lat: 30.2053, lng: -91.9876, elev: 42, rwy: "04L/22R (8,000 ft)", alt: "KBTR", tag: "spoke" },
-            "KSHV": { name: "Shreveport Regional", city: "Shreveport, LA, USA", lat: 32.4466, lng: -93.8256, elev: 258, rwy: "14/32 (8,350 ft)", alt: "KLFT", tag: "spoke" },
-            "KXNA": { name: "Northwest Arkansas National", city: "Bentonville, AR, USA", lat: 36.2818, lng: -94.3068, elev: 1287, rwy: "16/34 (8,800 ft)", alt: "KLIT", tag: "spoke" },
-            "KLIT": { name: "Bill and Hillary Clinton National", city: "Little Rock, AR, USA", lat: 34.7294, lng: -92.2243, elev: 262, rwy: "04L/22R (8,273 ft)", alt: "KXNA", tag: "spoke" },
-            "KOKC": { name: "Will Rogers World", city: "Oklahoma City, OK, USA", lat: 35.3931, lng: -97.6007, elev: 1295, rwy: "17L/35R (9,802 ft)", alt: "KTUL", tag: "spoke" },
-            "KTUL": { name: "Tulsa Intl", city: "Tulsa, OK, USA", lat: 36.1984, lng: -95.8881, elev: 677, rwy: "18L/36R (10,000 ft)", alt: "KOKC", tag: "spoke" },
-            "KICT": { name: "Wichita Dwight D. Eisenhower", city: "Wichita, KS, USA", lat: 37.6499, lng: -97.4331, elev: 1333, rwy: "01R/19L (10,301 ft)", alt: "KMCI", tag: "spoke" },
-            "KDSM": { name: "Des Moines Intl", city: "Des Moines, IA, USA", lat: 41.5340, lng: -93.6631, elev: 958, rwy: "05/23 (9,004 ft)", alt: "KCID", tag: "spoke" },
-            "KCID": { name: "The Eastern Iowa Airport", city: "Cedar Rapids, IA, USA", lat: 41.8847, lng: -91.7108, elev: 869, rwy: "09/27 (8,600 ft)", alt: "KDSM", tag: "spoke" },
-            "KOMA": { name: "Eppley Airfield", city: "Omaha, NE, USA", lat: 41.3025, lng: -95.8942, elev: 984, rwy: "14L/32R (9,502 ft)", alt: "KLNK", tag: "spoke" },
-            "KLNK": { name: "Lincoln Airport", city: "Lincoln, NE, USA", lat: 40.8509, lng: -96.7592, elev: 1219, rwy: "18/36 (12,901 ft)", alt: "KOMA", tag: "spoke" },
-            "KFAR": { name: "Hector Intl", city: "Fargo, ND, USA", lat: 46.9193, lng: -96.8158, elev: 901, rwy: "18/36 (9,001 ft)", alt: "KFSD", tag: "spoke" },
-            "KBIS": { name: "Bismarck Regional", city: "Bismarck, ND, USA", lat: 46.7727, lng: -100.7460, elev: 1661, rwy: "13/31 (8,788 ft)", alt: "KFAR", tag: "spoke" },
-            "KFSD": { name: "Joe Foss Field", city: "Sioux Falls, SD, USA", lat: 43.5814, lng: -96.7417, elev: 1430, rwy: "03/21 (8,999 ft)", alt: "KOMA", tag: "spoke" },
-            "KRAP": { name: "Rapid City Regional", city: "Rapid City, SD, USA", lat: 44.0453, lng: -103.0573, elev: 3204, rwy: "14/32 (8,701 ft)", alt: "KDEN", tag: "spoke" },
-            "KBZN": { name: "Bozeman Yellowstone Intl", city: "Bozeman, MT, USA", lat: 45.7775, lng: -111.1530, elev: 4473, rwy: "12/30 (9,003 ft)", alt: "KBIL", tag: "spoke" },
-            "KMSO": { name: "Missoula Montana Airport", city: "Missoula, MT, USA", lat: 46.9163, lng: -114.0906, elev: 3206, rwy: "12/30 (9,501 ft)", alt: "KBZN", tag: "spoke" },
-            "KFCA": { name: "Glacier Park Intl", city: "Kalispell, MT, USA", lat: 48.3106, lng: -114.2560, elev: 2977, rwy: "02/20 (9,007 ft)", alt: "KMSO", tag: "spoke" },
-            "KGTF": { name: "Great Falls Intl", city: "Great Falls, MT, USA", lat: 47.4820, lng: -111.3707, elev: 3680, rwy: "03/21 (10,500 ft)", alt: "KBIL", tag: "spoke" },
-            "KBIL": { name: "Billings Logan Intl", city: "Billings, MT, USA", lat: 45.8077, lng: -108.5429, elev: 3652, rwy: "10L/28R (10,518 ft)", alt: "KBZN", tag: "spoke" },
-            "KBOI": { name: "Boise Airport", city: "Boise, ID, USA", lat: 43.5644, lng: -116.2228, elev: 2871, rwy: "10L/28R (10,000 ft)", alt: "KSLC", tag: "spoke" },
-            "KIDA": { name: "Idaho Falls Regional", city: "Idaho Falls, ID, USA", lat: 43.5146, lng: -112.0702, elev: 4744, rwy: "02/20 (9,002 ft)", alt: "KBOI", tag: "spoke" },
-            "KGEG": { name: "Spokane Intl", city: "Spokane, WA, USA", lat: 47.6199, lng: -117.5338, elev: 2376, rwy: "03/21 (11,002 ft)", alt: "KSEA", tag: "spoke" },
-            "KEUG": { name: "Eugene Airport", city: "Eugene, OR, USA", lat: 44.1246, lng: -123.2120, elev: 374, rwy: "16L/34R (8,009 ft)", alt: "KPDX", tag: "spoke" },
-            "KMFR": { name: "Rogue Valley Intl-Medford", city: "Medford, OR, USA", lat: 42.3742, lng: -122.8735, elev: 1335, rwy: "14/32 (8,800 ft)", alt: "KEUG", tag: "spoke" },
-            "KRDD": { name: "Redding Regional", city: "Redding, CA, USA", lat: 40.5090, lng: -122.2934, elev: 505, rwy: "16/34 (7,003 ft)", alt: "KSMF", tag: "spoke" },
-            "KFAT": { name: "Fresno Yosemite Intl", city: "Fresno, CA, USA", lat: 36.7762, lng: -119.7181, elev: 336, rwy: "11L/29R (9,530 ft)", alt: "KSJC", tag: "spoke" },
-            "KSMF": { name: "Sacramento Intl", city: "Sacramento, CA, USA", lat: 38.6954, lng: -121.5908, elev: 27, rwy: "16L/34R (8,600 ft)", alt: "KSFO", tag: "spoke" },
-            "KSJC": { name: "San Jose Mineta Intl", city: "San Jose, CA, USA", lat: 37.3619, lng: -121.9290, elev: 62, rwy: "12L/30R (11,000 ft)", alt: "KSFO", tag: "spoke" },
-            "KOAK": { name: "Oakland San Francisco Bay Intl", city: "Oakland, CA, USA", lat: 37.7213, lng: -122.2207, elev: 9, rwy: "12/30 (10,520 ft)", alt: "KSFO", tag: "spoke" },
-            "KPSP": { name: "Palm Springs Intl", city: "Palm Springs, CA, USA", lat: 33.8297, lng: -116.5067, elev: 477, rwy: "13R/31L (10,000 ft)", alt: "KONT", tag: "spoke" },
-            "KONT": { name: "Ontario Intl", city: "Ontario, CA, USA", lat: 34.0560, lng: -117.6012, elev: 944, rwy: "08L/26R (12,197 ft)", alt: "KLAX", tag: "spoke" },
-            "KBUR": { name: "Hollywood Burbank Airport", city: "Burbank, CA, USA", lat: 34.2007, lng: -118.3587, elev: 778, rwy: "15/33 (6,886 ft)", alt: "KLAX", tag: "spoke" },
-            "KSBA": { name: "Santa Barbara Municipal", city: "Santa Barbara, CA, USA", lat: 34.4262, lng: -119.8404, elev: 10, rwy: "07/25 (6,052 ft)", alt: "KLAX", tag: "spoke" },
-
-            // ADDITIONAL SCHOOL & PRO TEAMS HOME RUNWAY AIRPORTS
+            "KORD": { name: "Chicago O'Hare Intl", city: "Chicago, IL, USA", lat: 41.9742, lng: -87.9073, elev: 668, rwy: "10L/28R (13,000 ft)", alt: "KMKE", tag: "pro" },
+            "KMDW": { name: "Chicago Midway Intl", city: "Chicago, IL, USA", lat: 41.7868, lng: -87.7522, elev: 620, rwy: "13C/31C (6,522 ft)", alt: "KORD", tag: "pro" },
+            "KDFW": { name: "Dallas/Fort Worth Intl", city: "Dallas, TX, USA", lat: 32.8998, lng: -97.0403, elev: 607, rwy: "17R/35L (13,401 ft)", alt: "KAUS", tag: "pro" },
+            "KDAL": { name: "Dallas Love Field", city: "Dallas, TX, USA", lat: 32.8471, lng: -96.8518, elev: 487, rwy: "13R/31L (8,800 ft)", alt: "KDFW", tag: "pro" },
+            "KPHL": { name: "Philadelphia Intl", city: "Philadelphia, PA, USA", lat: 39.8719, lng: -75.2411, elev: 36, rwy: "09R/27L (12,000 ft)", alt: "KBWI", tag: "pro" },
+            "KMIA": { name: "Miami Intl", city: "Miami, FL, USA", lat: 25.7959, lng: -80.2870, elev: 8, rwy: "08L/26R (13,016 ft)", alt: "KFLL", tag: "pro" },
+            "KOPF": { name: "Miami Opa-locka Executive", city: "Miami, FL, USA", lat: 25.9070, lng: -80.2784, elev: 8, rwy: "09L/27R (8,002 ft)", alt: "KMIA", tag: "pro" },
+            "KDEN": { name: "Denver Intl", city: "Denver, CO, USA", lat: 39.8561, lng: -104.6737, elev: 5431, rwy: "16R/34L (16,000 ft)", alt: "KCOS", tag: "pro" },
+            "KPHX": { name: "Phoenix Sky Harbor Intl", city: "Phoenix, AZ, USA", lat: 33.4352, lng: -112.0101, elev: 1135, rwy: "08/26 (11,489 ft)", alt: "KIWA", tag: "pro" },
+            "KGRB": { name: "Green Bay Austin Straubel Intl", city: "Green Bay, WI, USA", lat: 44.4851, lng: -88.1296, elev: 695, rwy: "06/24 (7,700 ft)", alt: "KMKE", tag: "pro" },
+            "KMKE": { name: "Milwaukee Mitchell Intl", city: "Milwaukee, WI, USA", lat: 42.9472, lng: -87.8966, elev: 723, rwy: "01L/19R (9,990 ft)", alt: "KORD", tag: "pro" },
+            "KSTL": { name: "St. Louis Lambert Intl", city: "St. Louis, MO, USA", lat: 38.7499, lng: -90.3600, elev: 605, rwy: "12R/30L (11,020 ft)", alt: "KIND", tag: "pro" },
+            "KPIT": { name: "Pittsburgh Intl", city: "Pittsburgh, PA, USA", lat: 40.4915, lng: -80.2329, elev: 1203, rwy: "10L/28R (11,500 ft)", alt: "KCLE", tag: "pro" },
+            "KBUF": { name: "Buffalo Niagara Intl", city: "Buffalo, NY, USA", lat: 42.9405, lng: -78.7322, elev: 728, rwy: "05/23 (8,829 ft)", alt: "KROC", tag: "pro" },
+            "KCLE": { name: "Cleveland Hopkins Intl", city: "Cleveland, OH, USA", lat: 41.4058, lng: -81.8494, elev: 791, rwy: "06L/24R (9,000 ft)", alt: "KCAK", tag: "pro" },
+            "KCWS": { name: "Chicago Midway (White Sox Alt)", city: "Chicago, IL, USA", lat: 41.7868, lng: -87.7522, elev: 620, rwy: "13C/31C (6,522 ft)", alt: "KORD", tag: "pro" },
+            "KBWI": { name: "Baltimore/Washington Intl", city: "Baltimore, MD, USA", lat: 39.1754, lng: -76.6683, elev: 146, rwy: "10/28 (10,502 ft)", alt: "DCA", tag: "pro" },
+            "DCA":  { name: "Ronald Reagan Washington National", city: "Washington, DC, USA", lat: 38.8512, lng: -77.0377, elev: 15, rwy: "01/19 (7,169 ft)", alt: "KIAD", tag: "pro" },
+            "CYWG": { name: "Winnipeg James Armstrong Richardson", city: "Winnipeg, MB, Canada", lat: 49.9100, lng: -97.2399, elev: 783, rwy: "18/36 (11,000 ft)", alt: "KGFK", tag: "nhl" },
+            "CYVR": { name: "Vancouver Intl", city: "Vancouver, BC, Canada", lat: 49.1967, lng: -123.1815, elev: 14, rwy: "08L/26R (11,500 ft)", alt: "KSEA", tag: "nhl" },
+            "CYYZ": { name: "Toronto Pearson Intl", city: "Toronto, ON, Canada", lat: 43.6777, lng: -79.6248, elev: 569, rwy: "05/23 (11,120 ft)", alt: "KBUF", tag: "nhl" },
+            "KLAS": { name: "Harry Reid Intl", city: "Las Vegas, NV, USA", lat: 36.0840, lng: -115.1537, elev: 2181, rwy: "26L/08R (14,510 ft)", alt: "KONT", tag: "pro" },
+            "KBHM": { name: "Birmingham-Shuttlesworth Intl", city: "Birmingham, AL, USA", lat: 33.5629, lng: -86.7535, elev: 650, rwy: "06/24 (12,007 ft)", alt: "KATL", tag: "college" },
             "KTCL": { name: "Tuscaloosa National", city: "Tuscaloosa, AL, USA", lat: 33.2207, lng: -87.6114, elev: 170, rwy: "04/22 (6,499 ft)", alt: "KBHM", tag: "college" },
             "KAHN": { name: "Athens-Ben Epps Airport", city: "Athens, GA, USA", lat: 33.9486, lng: -83.3262, elev: 808, rwy: "09/27 (6,131 ft)", alt: "KATL", tag: "college" },
+            "KCMH": { name: "John Glenn Columbus Intl", city: "Columbus, OH, USA", lat: 39.9980, lng: -82.8919, elev: 815, rwy: "10L/28R (10,113 ft)", alt: "KCLE", tag: "college" },
             "KYIP": { name: "Willow Run Airport", city: "Ypsilanti/Ann Arbor, MI, USA", lat: 42.2379, lng: -83.5304, elev: 716, rwy: "05R/23L (7,526 ft)", alt: "KDTW", tag: "college" },
-            "KAUS": { name: "Austin-Bergstrom Intl", city: "Austin, TX, USA", lat: 30.1945, lng: -97.6699, elev: 542, rwy: "17L/35R (12,250 ft)", alt: "KSAT", tag: "spoke" },
-            "KMSN": { name: "Dane County Regional", city: "Madison, WI, USA", lat: 43.1399, lng: -89.3375, elev: 887, rwy: "18/36 (9,006 ft)", alt: "KMKE", tag: "spoke" },
+            "KSBN": { name: "South Bend Intl", city: "South Bend, IN, USA", lat: 41.7087, lng: -86.3173, elev: 799, rwy: "09R/27L (8,400 ft)", alt: "KORD", tag: "college" },
+            "KBTR": { name: "Baton Rouge Metropolitan", city: "Baton Rouge, LA, USA", lat: 30.5329, lng: -91.1496, elev: 70, rwy: "13/31 (7,005 ft)", alt: "KMSY", tag: "college" },
+            "KAUS": { name: "Austin-Bergstrom Intl", city: "Austin, TX, USA", lat: 30.1945, lng: -97.6699, elev: 542, rwy: "17L/35R (12,250 ft)", alt: "KSAT", tag: "college" },
+            "KGNV": { name: "Gainesville Regional", city: "Gainesville, FL, USA", lat: 29.6901, lng: -82.2718, elev: 152, rwy: "11/29 (7,504 ft)", alt: "KJAX", tag: "college" },
+            "KTLH": { name: "Tallahassee Intl", city: "Tallahassee, FL, USA", lat: 30.3965, lng: -84.3503, elev: 81, rwy: "09/27 (8,000 ft)", alt: "KJAX", tag: "college" },
+            "KUNV": { name: "University Park Airport", city: "State College, PA, USA", lat: 40.8493, lng: -77.8487, elev: 1239, rwy: "06/24 (6,701 ft)", alt: "MDT", tag: "college" },
+            "KGSP": { name: "Greenville-Spartanburg Intl", city: "Greenville, SC, USA", lat: 34.8956, lng: -82.2189, elev: 964, rwy: "04/22 (11,001 ft)", alt: "KCLT", tag: "college" },
+            "KTYS": { name: "McGhee Tyson Airport", city: "Knoxville, TN, USA", lat: 35.8110, lng: -83.9940, elev: 981, rwy: "05L/23R (9,000 ft)", alt: "KBNA", tag: "college" },
+            "KEUG": { name: "Eugene Airport", city: "Eugene, OR, USA", lat: 44.1246, lng: -123.2120, elev: 374, rwy: "16L/34R (8,009 ft)", alt: "KPDX", tag: "college" },
+            "KMSN": { name: "Dane County Regional", city: "Madison, WI, USA", lat: 43.1399, lng: -89.3375, elev: 887, rwy: "18/36 (9,006 ft)", alt: "KMKE", tag: "college" },
             "KCLL": { name: "Easterwood Airport", city: "College Station, TX, USA", lat: 30.5886, lng: -96.3638, elev: 321, rwy: "16/34 (7,000 ft)", alt: "KIAH", tag: "college" },
-            "KLEX": { name: "Blue Grass Airport", city: "Lexington, KY, USA", lat: 38.0365, lng: -84.6059, elev: 979, rwy: "04/22 (7,004 ft)", alt: "KSDF", tag: "spoke" },
-            "KFOE": { name: "Topeka Regional", city: "Topeka, KS, USA", lat: 38.9509, lng: -95.6636, elev: 1078, rwy: "13/31 (12,803 ft)", alt: "KMCI", tag: "college" },
-            "KMCI": { name: "Kansas City Intl", city: "Kansas City, MO, USA", lat: 39.2976, lng: -94.7139, elev: 1026, rwy: "01L/19R (10,801 ft)", alt: "KOMA", tag: "spoke" },
-            "KUOX": { name: "University-Oxford Airport", city: "Oxford, MS, USA", lat: 34.3844, lng: -89.5367, elev: 452, rwy: "09/27 (5,600 ft)", alt: "KMEM", tag: "college" },
-            "KMEM": { name: "Memphis Intl", city: "Memphis, TN, USA", lat: 35.0424, lng: -89.9767, elev: 341, rwy: "18C/36C (11,120 ft)", alt: "KBNA", tag: "spoke" },
-            "KBJC": { name: "Rocky Mountain Metropolitan", city: "Broomfield, CO, USA", lat: 39.9088, lng: -105.1172, elev: 5673, rwy: "12L/30R (9,000 ft)", alt: "KDEN", tag: "college" },
-            "KLAN": { name: "Capital Region Intl", city: "Lansing, MI, USA", lat: 42.7787, lng: -84.5874, elev: 861, rwy: "10R/28L (8,506 ft)", alt: "KDTW", tag: "college" },
-            "KGRR": { name: "Gerald R. Ford Intl", city: "Grand Rapids, MI, USA", lat: 42.8808, lng: -85.5228, elev: 794, rwy: "08R/26L (10,000 ft)", alt: "KDTW", tag: "spoke" },
-            "KSTJ": { name: "Rosecrans Memorial", city: "St. Joseph, MO, USA", lat: 39.7719, lng: -94.9097, elev: 826, rwy: "17/35 (8,061 ft)", alt: "KMCI", tag: "college" },
-            "KJLN": { name: "Joplin Regional", city: "Joplin, MO, USA", lat: 37.1518, lng: -94.4983, elev: 981, rwy: "13/31 (6,501 ft)", alt: "KTUL", tag: "college" },
-            "KDLH": { name: "Duluth Intl", city: "Duluth, MN, USA", lat: 46.8421, lng: -92.1936, elev: 1428, rwy: "09/27 (10,591 ft)", alt: "KMSP", tag: "college" },
-            "KSJT": { name: "San Angelo Regional", city: "San Angelo, TX, USA", lat: 31.3577, lng: -100.4963, elev: 1919, rwy: "03/21 (8,049 ft)", alt: "KSAT", tag: "college" },
+            "KTPA": { name: "Tampa Intl", city: "Tampa, FL, USA", lat: 27.9755, lng: -82.5332, elev: 26, rwy: "01L/19R (11,002 ft)", alt: "KMCO", tag: "college" },
+            "KMEM": { name: "Memphis Intl", city: "Memphis, TN, USA", lat: 35.0424, lng: -89.9767, elev: 341, rwy: "18C/36C (11,120 ft)", alt: "KBNA", tag: "college" },
+            "KMSY": { name: "Louis Armstrong New Orleans", city: "New Orleans, LA, USA", lat: 29.9934, lng: -90.2580, elev: 4, rwy: "11/29 (10,104 ft)", alt: "KBTR", tag: "college" },
+            "KPGV": { name: "Pitt-Greenville Airport", city: "Greenville, NC, USA", lat: 35.6352, lng: -77.3853, elev: 27, rwy: "02/20 (7,175 ft)", alt: "KRDU", tag: "college" },
+            "KMCO": { name: "Orlando Intl", city: "Orlando, FL, USA", lat: 28.4294, lng: -81.3089, elev: 96, rwy: "18L/36R (12,005 ft)", alt: "KSFB", tag: "college" },
+            "KADW": { name: "Joint Base Andrews", city: "Camp Springs, MD, USA", lat: 38.8108, lng: -76.8670, elev: 280, rwy: "01L/19R (11,300 ft)", alt: "KBWI", tag: "college" },
+            "KSWF": { name: "Newburgh Stewart Intl", city: "Newburgh, NY, USA", lat: 41.5041, lng: -74.1048, elev: 491, rwy: "09/27 (11,817 ft)", alt: "EWR", tag: "college" },
+            "KCOS": { name: "Colorado Springs Airport", city: "Colorado Springs, CO, USA", lat: 38.8058, lng: -104.7008, elev: 6187, rwy: "17L/35R (13,501 ft)", alt: "KDEN", tag: "college" },
+            "KBOI": { name: "Boise Airport", city: "Boise, ID, USA", lat: 43.5644, lng: -116.2228, elev: 2871, rwy: "10L/28R (10,000 ft)", alt: "KSLC", tag: "college" },
             "KHKY": { name: "Hickory Regional", city: "Hickory, NC, USA", lat: 35.7411, lng: -81.3895, elev: 1189, rwy: "06/24 (6,400 ft)", alt: "KCLT", tag: "college" },
-            "KYKM": { name: "Yakima Air Terminal", city: "Yakima, WA, USA", lat: 46.5682, lng: -120.5440, elev: 1099, rwy: "09/27 (7,604 ft)", alt: "KSEA", tag: "college" },
-            "KMBS": { name: "MBS Intl", city: "Saginaw/Midland, MI, USA", lat: 43.5329, lng: -84.0796, elev: 668, rwy: "05/23 (8,002 ft)", alt: "KDTW", tag: "college" },
-            "KGRB": { name: "Green Bay Austin Straubel Intl", city: "Green Bay, WI, USA", lat: 44.4851, lng: -88.1296, elev: 695, rwy: "06/24 (7,700 ft)", alt: "KMKE", tag: "spoke" },
-            "KOPF": { name: "Miami Opa-locka Executive", city: "Miami, FL, USA", lat: 25.9070, lng: -80.2784, elev: 8, rwy: "09L/27R (8,002 ft)", alt: "KMIA", tag: "pro" },
-
-            // DELTA INTERNATIONAL DESTINATIONS
+            "KMYR": { name: "Myrtle Beach Intl", city: "Myrtle Beach, SC, USA", lat: 33.6797, lng: -78.9283, elev: 25, rwy: "18/36 (9,503 ft)", alt: "KCHS", tag: "college" },
+            "KVLD": { name: "Valdosta Regional", city: "Valdosta, GA, USA", lat: 30.7825, lng: -83.2759, elev: 203, rwy: "17/35 (8,002 ft)", alt: "KTLH", tag: "college" },
+            "KGRR": { name: "Gerald R. Ford Intl", city: "Grand Rapids, MI, USA", lat: 42.8808, lng: -85.5228, elev: 794, rwy: "08R/26L (10,000 ft)", alt: "KDTW", tag: "college" },
+            "KMCI": { name: "Kansas City Intl", city: "Kansas City, MO, USA", lat: 39.2976, lng: -94.7139, elev: 1026, rwy: "01L/19R (10,801 ft)", alt: "KOMA", tag: "college" },
+            "KJLN": { name: "Joplin Regional", city: "Joplin, MO, USA", lat: 37.1518, lng: -94.4983, elev: 981, rwy: "13/31 (6,501 ft)", alt: "KTUL", tag: "college" },
+            "KPNS": { name: "Pensacola Intl", city: "Pensacola, FL, USA", lat: 30.4734, lng: -87.1866, elev: 121, rwy: "17/35 (7,004 ft)", alt: "KVPS", tag: "college" },
+            "KDLH": { name: "Duluth Intl", city: "Duluth, MN, USA", lat: 46.8421, lng: -92.1936, elev: 1428, rwy: "09/27 (10,591 ft)", alt: "KMSP", tag: "college" },
+            "KSTC": { name: "St. Cloud Regional", city: "St. Cloud, MN, USA", lat: 45.5466, lng: -94.0600, elev: 1031, rwy: "13/31 (7,000 ft)", alt: "KMSP", tag: "college" },
             "LFPB": { name: "Paris Le Bourget", city: "Paris, France", lat: 48.9694, lng: 2.4414, elev: 218, rwy: "07/25 (9,843 ft)", alt: "LFPG", tag: "intl" },
-            "LFPG": { name: "Paris Charles de Gaulle", city: "Paris, France", lat: 49.0097, lng: 2.5479, elev: 392, rwy: "09L/27R (13,779 ft)", alt: "LFPB", tag: "intl" },
             "EGLL": { name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543, elev: 83, rwy: "09L/27R (12,802 ft)", alt: "EGSS", tag: "intl" },
             "EHAM": { name: "Amsterdam Airport Schiphol", city: "Amsterdam, Netherlands", lat: 52.3105, lng: 4.7683, elev: -11, rwy: "18R/36L (12,467 ft)", alt: "EDDF", tag: "intl" },
-            "EDDF": { name: "Frankfurt Airport", city: "Frankfurt, Germany", lat: 50.0379, lng: 8.5622, elev: 364, rwy: "07L/25R (13,123 ft)", alt: "LSZH", tag: "intl" },
-            "LSZH": { name: "Zurich Airport", city: "Zurich, Switzerland", lat: 47.4582, lng: 8.5554, elev: 1416, rwy: "16/34 (12,139 ft)", alt: "EDDF", tag: "intl" },
-            "LIMC": { name: "Milan Malpensa", city: "Milan, Italy", lat: 45.6301, lng: 8.7255, elev: 768, rwy: "17L/35R (12,861 ft)", alt: "LIRF", tag: "intl" },
-            "LEMD": { name: "Adolfo Suárez Madrid-Barajas", city: "Madrid, Spain", lat: 40.4839, lng: -3.5680, elev: 2000, rwy: "14L/32R (14,236 ft)", alt: "LEBL", tag: "intl" },
-            "LIRF": { name: "Rome Fiumicino Leonardo da Vinci", city: "Rome, Italy", lat: 41.8003, lng: 12.2389, elev: 15, rwy: "16L/34R (12,795 ft)", alt: "LIMC", tag: "intl" },
-            "MMUN": { name: "Cancún Intl", city: "Cancún, Mexico", lat: 21.0365, lng: -86.8770, elev: 20, rwy: "12L/30R (11,483 ft)", alt: "MIDD", tag: "intl" },
-            "MDPC": { name: "Punta Cana Intl", city: "Punta Cana, Dominican Republic", lat: 18.5674, lng: -68.3634, elev: 40, rwy: "08/26 (10,170 ft)", alt: "TJSJ", tag: "intl" },
-            "MPTO": { name: "Tocumen Intl", city: "Panama City, Panama", lat: 9.0714, lng: -79.3835, elev: 135, rwy: "03L/21R (10,007 ft)", alt: "MROC", tag: "intl" },
-            "SKBO": { name: "El Dorado Intl", city: "Bogota, Colombia", lat: 4.7016, lng: -74.1469, elev: 8360, rwy: "13L/31R (12,467 ft)", alt: "SEQM", tag: "intl" },
-            "SPJC": { name: "Jorge Chávez Intl", city: "Lima, Peru", lat: -12.0219, lng: -77.1143, elev: 113, rwy: "16/34 (11,506 ft)", alt: "SKBO", tag: "intl" },
-            "SBGR": { name: "São Paulo/Guarulhos Intl", city: "São Paulo, Brazil", lat: -23.4356, lng: -46.4731, elev: 2459, rwy: "09L/27R (12,139 ft)", alt: "SBRJ", tag: "intl" },
-            "RJTT": { name: "Tokyo Haneda", city: "Tokyo, Japan", lat: 35.5494, lng: 139.7798, elev: 35, rwy: "34L/16R (11,024 ft)", alt: "RJAA", tag: "intl" },
-            "RKSI": { name: "Incheon Intl", city: "Seoul, South Korea", lat: 37.4602, lng: 126.4407, elev: 23, rwy: "15L/33R (12,303 ft)", alt: "RJTT", tag: "intl" },
-            "VHHH": { name: "Hong Kong Intl", city: "Hong Kong", lat: 22.3080, lng: 113.9185, elev: 28, rwy: "07L/25R (12,467 ft)", alt: "RCTP", tag: "intl" },
-            "WSSS": { name: "Singapore Changi", city: "Singapore", lat: 1.3644, lng: 103.9915, elev: 22, rwy: "02L/20R (13,123 ft)", alt: "WMKK", tag: "intl" },
-            "YSSY": { name: "Sydney Kingsford Smith", city: "Sydney, Australia", lat: -33.9461, lng: 151.1772, elev: 21, rwy: "16R/34L (13,000 ft)", alt: "YMML", tag: "intl" }
+            "MMUN": { name: "Cancún Intl", city: "Cancún, Mexico", lat: 21.0365, lng: -86.8770, elev: 20, rwy: "12L/30R (11,483 ft)", alt: "MIDD", tag: "intl" }
         };
 
-        /* ACCURATE SPORTS TEAMS MAPPED TO HOME RUNWAY AIRPORTS */
-        const SPORTS_TEAMS = [
-            // FALL TEAMS (NCAA FOOTBALL & NFL)
-            { name: "Alabama Crimson Tide Football", season: "fall", category: "NCAA D1 Football", home: "KBHM", altHome: "KTCL", desc: "SEC Football Charter" },
-            { name: "Georgia Bulldogs Football", season: "fall", category: "NCAA D1 Football", home: "KATL", altHome: "KAHN", desc: "SEC Football Charter" },
-            { name: "Ohio State Buckeyes Football", season: "fall", category: "NCAA D1 Football", home: "KCMH", desc: "Big Ten Football Charter" },
-            { name: "Michigan Wolverines Football", season: "fall", category: "NCAA D1 Football", home: "KDTW", altHome: "KYIP", desc: "Big Ten Football Charter" },
-            { name: "Notre Dame Fighting Irish Football", season: "fall", category: "NCAA D1 Football", home: "KSBN", desc: "Independent Football Charter" },
-            { name: "LSU Tigers Football", season: "fall", category: "NCAA D1 Football", home: "KBTR", desc: "SEC Football Charter" },
-            { name: "Texas Longhorns Football", season: "fall", category: "NCAA D1 Football", home: "KAUS", desc: "SEC Football Charter" },
-            { name: "Florida Gators Football", season: "fall", category: "NCAA D1 Football", home: "KGNV", desc: "SEC Football Charter" },
-            { name: "Penn State Nittany Lions Football", season: "fall", category: "NCAA D1 Football", home: "KUNV", desc: "Big Ten Football Charter" },
-            { name: "Clemson Tigers Football", season: "fall", category: "NCAA D1 Football", home: "KGSP", desc: "ACC Football Charter" },
-            { name: "Tennessee Volunteers Football", season: "fall", category: "NCAA D1 Football", home: "KTYS", desc: "SEC Football Charter" },
-            { name: "Oregon Ducks Football", season: "fall", category: "NCAA D1 Football", home: "KEUG", desc: "Big Ten Football Charter" },
-            { name: "Washington Huskies Football", season: "fall", category: "NCAA D1 Football", home: "KSEA", desc: "Big Ten Football Charter" },
-            { name: "USC Trojans Football", season: "fall", category: "NCAA D1 Football", home: "KLAX", desc: "Big Ten Football Charter" },
-            { name: "Wisconsin Badgers Football", season: "fall", category: "NCAA D1 Football", home: "KMSN", desc: "Big Ten Football Charter" },
-            { name: "Texas A&M Aggies Football", season: "fall", category: "NCAA D1 Football", home: "KCLL", desc: "SEC Football Charter" },
-            { name: "Florida State Seminoles Football", season: "fall", category: "NCAA D1 Football", home: "KTLH", desc: "ACC Football Charter" },
-            { name: "Ferris State Bulldogs D2 Football", season: "fall", category: "NCAA D2 Football", home: "KGRR", desc: "GLIAC D2 Football Charter" },
-            { name: "Valdosta State Blazers D2 Football", season: "fall", category: "NCAA D2 Football", home: "KVLD", desc: "Gulf South D2 Football Charter" },
-            { name: "Northwest Missouri State Bearcats D2", season: "fall", category: "NCAA D2 Football", home: "KMCI", altHome: "KSTJ", desc: "MIAA D2 Football Charter" },
-            { name: "Colorado School of Mines Orediggers D2", season: "fall", category: "NCAA D2 Football", home: "KDEN", altHome: "KBJC", desc: "RMAC D2 Football Charter" },
-            { name: "Pittsburg State Gorillas D2 Football", season: "fall", category: "NCAA D2 Football", home: "KJLN", desc: "MIAA D2 Football Charter" },
-            { name: "West Florida Argonauts D2 Football", season: "fall", category: "NCAA D2 Football", home: "KPNS", desc: "Gulf South D2 Football Charter" },
-            { name: "Green Bay Packers Pro Football", season: "fall", category: "NFL Pro Football", home: "KGRB", desc: "NFL Away Game Charter" },
-            { name: "Kansas City Chiefs Pro Football", season: "fall", category: "NFL Pro Football", home: "KMCI", desc: "NFL Away Game Charter" },
-            { name: "Buffalo Bills Pro Football", season: "fall", category: "NFL Pro Football", home: "KBUF", desc: "NFL Away Game Charter" },
-            { name: "Pittsburgh Steelers Pro Football", season: "fall", category: "NFL Pro Football", home: "KPIT", desc: "NFL Away Game Charter" },
+        /* EXCLUSIVE MINNESOTA PRO SPORTS CHARTER DEFINITIONS */
+        const MN_PRO_TEAMS = {
+            "vikings": {
+                name: "Minnesota Vikings (NFL Football)",
+                sport: "NFL Football",
+                homeICAO: "KMSP",
+                seasonStartMonth: 8,  // Aug
+                seasonEndMonth: 2,    // Feb
+                opponents: ["KBEH", "KGRB", "KDTW", "KDFW", "KPHL", "KSFO", "KLAX", "KSEA", "KDEN", "KORD"]
+            },
+            "wolves": {
+                name: "Minnesota Timberwolves (NBA Basketball)",
+                sport: "NBA Basketball",
+                homeICAO: "KMSP",
+                seasonStartMonth: 10, // Oct
+                seasonEndMonth: 6,    // June
+                opponents: ["KORD", "KBOS", "KLAX", "KMIA", "KDEN", "KPHX", "KSLC", "KDFW", "KSFO"]
+            },
+            "wild": {
+                name: "Minnesota Wild (NHL Hockey)",
+                sport: "NHL Ice Hockey",
+                homeICAO: "KMSP",
+                seasonStartMonth: 10, // Oct
+                seasonEndMonth: 6,    // June
+                opponents: ["KORD", "KSTL", "KDEN", "KDFW", "CYWG", "CYVR", "CYYZ", "KLAX", "KLAS"]
+            },
+            "twins": {
+                name: "Minnesota Twins (MLB Baseball)",
+                sport: "MLB Baseball",
+                homeICAO: "KMSP",
+                seasonStartMonth: 3,  // March
+                seasonEndMonth: 10,   // Oct
+                opponents: ["KCLE", "KMDW", "KDTW", "KMCI", "KJFK", "KBOS", "KLAX", "KBWI", "KSEA"]
+            }
+        };
 
-            // WINTER TEAMS (BASKETBALL & ICE HOCKEY)
-            { name: "Gonzaga Bulldogs Basketball", season: "winter", category: "NCAA D1 Basketball", home: "KGEG", desc: "WCC Basketball Charter" },
-            { name: "Kansas Jayhawks Basketball", season: "winter", category: "NCAA D1 Basketball", home: "KMCI", altHome: "KFOE", desc: "Big 12 Basketball Charter" },
-            { name: "Kentucky Wildcats Basketball", season: "winter", category: "NCAA D1 Basketball", home: "KLEX", desc: "SEC Basketball Charter" },
-            { name: "Duke Blue Devils Basketball", season: "winter", category: "NCAA D1 Basketball", home: "KRDU", desc: "ACC Basketball Charter" },
-            { name: "North Carolina Tar Heels Basketball", season: "winter", category: "NCAA D1 Basketball", home: "KRDU", desc: "ACC Basketball Charter" },
-            { name: "Minnesota Duluth Bulldogs Ice Hockey", season: "winter", category: "NCAA D1 Ice Hockey", home: "KDLH", desc: "NCHC Hockey Charter" },
-            { name: "Boston Celtics Basketball", season: "winter", category: "NBA Pro Basketball", home: "KBOS", desc: "NBA Road Trip Charter" },
-            { name: "Utah Jazz Basketball", season: "winter", category: "NBA Pro Basketball", home: "KSLC", desc: "NBA Road Trip Charter" },
-            { name: "Miami Heat Basketball", season: "winter", category: "NBA Pro Basketball", home: "KMIA", altHome: "KOPF", desc: "NBA Road Trip Charter" },
-
-            // SPRING TEAMS (MARCH MADNESS, BASEBALL, SOFTBALL)
-            { name: "NCAA Tournament March Madness Contender", season: "spring", category: "NCAA March Madness", home: "KCMH", desc: "Tournament Regional Charter" },
-            { name: "LSU Tigers Baseball", season: "spring", category: "NCAA D1 Baseball", home: "KBTR", desc: "SEC Baseball Championship Charter" },
-            { name: "Florida Gators Baseball", season: "spring", category: "NCAA D1 Baseball", home: "KGNV", desc: "College World Series Charter" },
-            { name: "Tennessee Volunteers Baseball", season: "spring", category: "NCAA D1 Baseball", home: "KTYS", desc: "SEC Baseball Tournament" },
-
-            // SUMMER TEAMS (CAMPS, MLS, FRIENDLIES)
-            { name: "Atlanta United MLS Soccer", season: "summer", category: "MLS Soccer", home: "KATL", desc: "MLS Championship Tour" },
-            { name: "Inter Miami CF MLS Soccer", season: "summer", category: "MLS Soccer", home: "KMIA", altHome: "KOPF", desc: "MLS Away Match Charter" },
-            { name: "Real Salt Lake MLS Soccer", season: "summer", category: "MLS Soccer", home: "KSLC", desc: "MLS Away Match Charter" }
+        /* NCAA AMERICAN CONFERENCE COLLEGE TEAMS MAPPED TO NEAREST RUNWAYS */
+        const COLLEGE_TEAMS = [
+            { name: "Alabama Crimson Tide", conf: "SEC", home: "KBHM", altHome: "KTCL", seasons: ["fall", "spring"] },
+            { name: "Georgia Bulldogs", conf: "SEC", home: "KATL", altHome: "KAHN", seasons: ["fall", "spring"] },
+            { name: "Ohio State Buckeyes", conf: "Big Ten", home: "KCMH", seasons: ["fall", "winter", "spring"] },
+            { name: "Michigan Wolverines", conf: "Big Ten", home: "KDTW", altHome: "KYIP", seasons: ["fall", "winter", "spring"] },
+            { name: "Notre Dame Fighting Irish", conf: "Ind / ACC", home: "KSBN", seasons: ["fall", "winter", "spring"] },
+            { name: "LSU Tigers", conf: "SEC", home: "KBTR", seasons: ["fall", "spring"] },
+            { name: "Texas Longhorns", conf: "SEC", home: "KAUS", seasons: ["fall", "spring"] },
+            { name: "Florida Gators", conf: "SEC", home: "KGNV", seasons: ["fall", "spring"] },
+            { name: "Florida State Seminoles", conf: "ACC", home: "KTLH", seasons: ["fall", "spring"] },
+            { name: "Penn State Nittany Lions", conf: "Big Ten", home: "KUNV", seasons: ["fall", "winter"] },
+            { name: "Clemson Tigers", conf: "ACC", home: "KGSP", seasons: ["fall", "spring"] },
+            { name: "Tennessee Volunteers", conf: "SEC", home: "KTYS", seasons: ["fall", "spring"] },
+            { name: "Oregon Ducks", conf: "Big Ten", home: "KEUG", seasons: ["fall", "spring"] },
+            { name: "Wisconsin Badgers", conf: "Big Ten", home: "KMSN", seasons: ["fall", "winter"] },
+            { name: "USF Bulls", conf: "AAC", home: "KTPA", seasons: ["fall", "spring"] },
+            { name: "Memphis Tigers", conf: "AAC", home: "KMEM", seasons: ["fall", "winter"] },
+            { name: "Tulane Green Wave", conf: "AAC", home: "KMSY", seasons: ["fall", "spring"] },
+            { name: "Temple Owls", conf: "AAC", home: "KPHL", seasons: ["fall", "winter"] },
+            { name: "East Carolina Pirates", conf: "AAC", home: "KPGV", seasons: ["fall", "spring"] },
+            { name: "Navy Midshipmen", conf: "AAC", home: "KBWI", altHome: "KADW", seasons: ["fall", "spring"] },
+            { name: "Valdosta State Blazers D2", conf: "Gulf South D2", home: "KVLD", seasons: ["fall", "spring"] },
+            { name: "Ferris State Bulldogs D2", conf: "GLIAC D2", home: "KGRR", seasons: ["fall", "winter"] },
+            { name: "Minnesota Duluth Bulldogs D2/D1", conf: "NCHC / NSIC", home: "KDLH", seasons: ["fall", "winter"] }
         ];
 
+        /* NON-SPORTS CHARTER TEMPLATES */
         const NON_SPORTS_TEMPLATES = {
             "aerospace": [
                 {
-                    name: "SpaceX Rocket Launch & Ordnance Engineering Team",
+                    name: "SpaceX Launch Systems & Avionics Logistics",
                     category: "Aerospace Logistics",
-                    purposeTemplate: "High-priority deployment carrying 172 rocket guidance engineers, pad mechanics, and flight controllers.",
+                    purposeTemplate: "Deploying 172 rocket engineers, orbital flight controllers, and payload mechanics.",
                     cargo: {
-                        hold1: { desc: "AKH-111: Containerized Engineer Personal Luggage & Laptops", weight: 3000, uld: "AKH-111", type: "ULD Container" },
-                        hold2: { desc: "AKH-207: Containerized Cleanroom Avionics Hardware", weight: 2200, uld: "AKH-207", type: "ULD Container" },
-                        hold3: { desc: "Loose Equipment Cases: Guidance Telemetry Sensors & Umbilical Rigs", weight: 3700, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold4: { desc: "Loose Heavy Trunks: Launch Pad Valves & Pneumatic Tools", weight: 3200, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold5: { desc: "Net Bulk: Nitrogen Gas Sampling Containers & Cleanroom Suits", weight: 1100, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                        hold1: { desc: "AKH-111: Containerized Engineer Laptops & Telemetry Units", weight: 3000, uld: "AKH-111" },
+                        hold2: { desc: "AKH-207: Containerized Cleanroom Payload Avionics", weight: 2200, uld: "AKH-207" },
+                        hold3: { desc: "Loose Cases: Guidance Sensors & Umbilical Cabling", weight: 3700 },
+                        hold4: { desc: "Loose Trunks: Pneumatic Valves & Launch Rigs", weight: 3200 },
+                        hold5: { desc: "Net Bulk: Cleanroom Suits & Gas Sampling Kits", weight: 1100 }
                     }
                 }
             ],
             "film": [
                 {
-                    name: "Hollywood Production Motion Picture Cast & Stunt Crew",
+                    name: "Hollywood Motion Picture Cast & Stunt Production",
                     category: "Entertainment Production",
-                    purposeTemplate: "Location shoot charter transporting 168 actors, stunt performers, directors, and camera operators.",
+                    purposeTemplate: "Location shoot airlift carrying 168 actors, stunt performers, directors, and camera operators.",
                     cargo: {
-                        hold1: { desc: "AKH-114: Containerized Wardrobe & Costume Trunks", weight: 3300, uld: "AKH-114", type: "ULD Container" },
-                        hold2: { desc: "AKH-210: Containerized Cinema Camera & Anamorphic Lens Cases", weight: 2600, uld: "AKH-210", type: "ULD Container" },
-                        hold3: { desc: "Loose Equipment Cases: Location Lighting Panels & Cabling", weight: 4100, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold4: { desc: "Loose Heavy Trunks: Stunt Safety Harnesses & Mechanical Rigging", weight: 3500, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold5: { desc: "Net Bulk: Video Village Monitors & Director Folding Chairs", weight: 1250, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                        hold1: { desc: "AKH-114: Containerized Wardrobe & Costume Trunks", weight: 3300, uld: "AKH-114" },
+                        hold2: { desc: "AKH-210: Containerized Cinema Camera & Lens Trunks", weight: 2600, uld: "AKH-210" },
+                        hold3: { desc: "Loose Cases: Lighting Arrays & Grip Cables", weight: 4100 },
+                        hold4: { desc: "Loose Trunks: Stunt Safety Harnesses & Rigging", weight: 3500 },
+                        hold5: { desc: "Net Bulk: Video Monitors & Folding Crew Chairs", weight: 1250 }
                     }
                 }
             ],
             "diplomatic": [
                 {
-                    name: "United Nations General Assembly Diplomatic Delegation",
+                    name: "United Nations Diplomatic Peace Envoy",
                     category: "Government Mission",
-                    purposeTemplate: "High-level state transport carrying 158 ambassadors, bilateral translators, press liaisons, and security officers.",
+                    purposeTemplate: "High-level state transport carrying 158 ambassadors, translators, press liaisons, and security.",
                     cargo: {
-                        hold1: { desc: "AKH-101: Containerized Diplomatic Pouch & Ambassador Baggage", weight: 2800, uld: "AKH-101", type: "ULD Container" },
-                        hold2: { desc: "AKH-202: Containerized Encrypted Satellite Comms Nodes (Class 9 HAZMAT)", weight: 2100, uld: "AKH-202", type: "ULD Container" },
-                        hold3: { desc: "Loose Equipment Cases: Armored Escort Protective Gear Trunks", weight: 3500, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold4: { desc: "Loose Heavy Trunks: Portable Secure Briefing Room Telecom Rigs", weight: 2700, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold5: { desc: "Net Bulk: Consular Emergency Document Containers", weight: 950, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                        hold1: { desc: "AKH-101: Containerized Diplomatic Pouches & Official Baggage", weight: 2800, uld: "AKH-101" },
+                        hold2: { desc: "AKH-202: Containerized Encrypted Satellite Comms Nodes", weight: 2100, uld: "AKH-202" },
+                        hold3: { desc: "Loose Cases: Tactical Security Gear & Escort Trunks", weight: 3500 },
+                        hold4: { desc: "Loose Trunks: Portable Secure Comms Briefing Units", weight: 2700 },
+                        hold5: { desc: "Net Bulk: Consular Emergency Document Safe Boxes", weight: 950 }
                     }
                 }
             ],
             "humanitarian": [
                 {
-                    name: "Red Cross Disaster Relief Trauma Emergency Response",
+                    name: "Red Cross Emergency Trauma Response Team",
                     category: "Medical Humanitarian",
-                    purposeTemplate: "Emergency response charter deploying 175 trauma surgeons, emergency responders, and logistics officers.",
+                    purposeTemplate: "Disaster relief charter deploying 175 trauma surgeons, emergency responders, and field officers.",
                     cargo: {
-                        hold1: { desc: "AKH-108: Containerized Cold-Chain Vaccine & Plasma Crates (UN1845 Dry Ice)", weight: 2700, uld: "AKH-108", type: "ULD Container" },
-                        hold2: { desc: "AKH-209: Containerized Responder Personal Gear & Field Beds", weight: 2500, uld: "AKH-209", type: "ULD Container" },
-                        hold3: { desc: "Loose Equipment Cases: Mobile ICU Surgical Ventilators & Trauma Kits", weight: 4400, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold4: { desc: "Loose Heavy Trunks: Diesel Field Generators & Water Purification Units", weight: 3900, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold5: { desc: "Net Bulk: Emergency Inflatable Shelter Tents & Satellite Dishes", weight: 1550, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                        hold1: { desc: "AKH-108: Containerized Cold-Chain Plasma (UN1845 Dry Ice)", weight: 2700, uld: "AKH-108" },
+                        hold2: { desc: "AKH-209: Containerized Responder Field Gear & Cots", weight: 2500, uld: "AKH-209" },
+                        hold3: { desc: "Loose Cases: Mobile Surgical Ventilators & Field ICU Units", weight: 4400 },
+                        hold4: { desc: "Loose Trunks: Field Diesel Generators & Water Purifiers", weight: 3900 },
+                        hold5: { desc: "Net Bulk: Emergency Shelter Tents & Comms Dishes", weight: 1550 }
                     }
                 }
             ],
             "tech": [
                 {
-                    name: "Global Silicon Valley AI & Hardware Executive Summit",
+                    name: "Silicon Valley AI & Quantum Hardware Summit",
                     category: "Technology Corporate",
-                    purposeTemplate: "Tech summit charter carrying 165 software directors, AI engineers, keynote presenters, and security.",
+                    purposeTemplate: "Tech summit charter carrying 165 software directors, AI engineers, and keynote speakers.",
                     cargo: {
-                        hold1: { desc: "AKH-102: Containerized Executive Luggage & Apparel", weight: 3100, uld: "AKH-102", type: "ULD Container" },
-                        hold2: { desc: "AKH-203: Containerized Prototype Hardware Demo Units", weight: 2300, uld: "AKH-203", type: "ULD Container" },
-                        hold3: { desc: "Loose Equipment Cases: High-Density Server Displays & Monitors", weight: 3600, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold4: { desc: "Loose Heavy Trunks: Stage Production Audio/Visual Console Cases", weight: 2900, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold5: { desc: "Net Bulk: Confidential Document Storage Safes", weight: 1050, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                        hold1: { desc: "AKH-102: Containerized Executive Apparel & Luggage", weight: 3100, uld: "AKH-102" },
+                        hold2: { desc: "AKH-203: Containerized Prototype Hardware Demo Racks", weight: 2300, uld: "AKH-203" },
+                        hold3: { desc: "Loose Cases: High-Density Display Monitors & Cabling", weight: 3600 },
+                        hold4: { desc: "Loose Trunks: Presentation Audio Console Cases", weight: 2900 },
+                        hold5: { desc: "Net Bulk: Confidential Document Vault Safes", weight: 1050 }
                     }
                 }
             ],
             "vip": [
                 {
-                    name: "International Resort & Casino VIP Host Delegation",
+                    name: "Luxury Resort VIP Host Delegation",
                     category: "Luxury VIP Charter",
-                    purposeTemplate: "Luxury VIP charter carrying 162 corporate award recipients, hospitality executives, and gaming directors.",
+                    purposeTemplate: "Luxury VIP charter carrying 162 corporate guests, resort executives, and gaming hosts.",
                     cargo: {
-                        hold1: { desc: "AKH-103: Containerized VIP Designer Checked Luggage Trunks", weight: 3600, uld: "AKH-103", type: "ULD Container" },
-                        hold2: { desc: "AKH-205: Containerized High-End Culinary Supplies & Fine Wine", weight: 1900, uld: "AKH-205", type: "ULD Container" },
-                        hold3: { desc: "Loose Equipment Cases: Stage Decor & Event Lighting Rigs", weight: 3100, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold4: { desc: "Loose Heavy Trunks: Security Gear & Luxury Gift Trunks", weight: 2400, uld: "BELT LOAD", type: "Belt Loader" },
-                        hold5: { desc: "Net Bulk: Golf Travel Bags & Resort Sports Equipment", weight: 1300, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                        hold1: { desc: "AKH-103: Containerized VIP Designer Luggage Trunks", weight: 3600, uld: "AKH-103" },
+                        hold2: { desc: "AKH-205: Containerized Fine Wine & Gourmet Culinary Crates", weight: 1900, uld: "AKH-205" },
+                        hold3: { desc: "Loose Cases: Event Lighting Arrays & Stage Decors", weight: 3100 },
+                        hold4: { desc: "Loose Trunks: Executive Security & Gift Trunks", weight: 2400 },
+                        hold5: { desc: "Net Bulk: Golf Travel Bags & Resort Sport Gear", weight: 1300 }
                     }
                 }
             ]
         };
 
-        /* EXPANDED PASSENGER NAMES */
+        /* EXPANDED PASSENGER NAMES (100+) */
         const VIP_NAMES_FIRST = [
             "James", "Marcus", "Sophia", "Elena", "Mateo", "Caleb", "Chloe", "Tariq", "Aisha", "Dominic", 
             "Gabriella", "Hiroshi", "Keiko", "Liam", "Noah", "Olivia", "Emma", "Kwame", "Priya", "Jackson", 
             "Benjamin", "Harper", "Lucas", "Mia", "Alexander", "Evelyn", "Daniel", "Charlotte", "Henry", "Amara", 
-            "Sebastian", "Abigail", "Jack", "Emily", "Owen", "Elizabeth", "Theodore", "Mila", "Samuel", "Ella"
+            "Sebastian", "Abigail", "Jack", "Emily", "Owen", "Elizabeth", "Theodore", "Mila", "Samuel", "Ella",
+            "Kirk", "Justin", "Anthony", "Karl", "Rudy", "Byron", "Carlos", "Zach", "Jordan", "Harrison"
         ];
 
         const VIP_NAMES_LAST = [
             "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", 
             "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", 
             "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", 
-            "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera"
+            "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera",
+            "Cousins", "Jefferson", "Edwards", "Towns", "Gobert", "Buxton", "Correa", "Parise", "Suter", "Kaprizov"
         ];
 
         /* ==========================================================================
@@ -862,6 +776,7 @@
             const dd = String(today.getDate()).padStart(2, '0');
             dateInput.value = `${yyyy}-${mm}-${dd}`;
             
+            handleMissionTypeChange('MN_PRO');
             handleDateChange();
             startZuluClock();
             renderHistoryList();
@@ -877,13 +792,66 @@
             const badge = document.getElementById('season-badge-preview');
 
             if (month >= 9 && month <= 11) {
-                badge.innerText = "SEASON: FALL (NCAA Football & NFL Matchups)";
+                badge.innerText = "ACTIVE SEASON: FALL (Vikings NFL / NCAA Football / Soccer)";
             } else if (month === 12 || month <= 2) {
-                badge.innerText = "SEASON: WINTER (Basketball, Hockey & CFP Bowls)";
+                badge.innerText = "ACTIVE SEASON: WINTER (Timberwolves NBA / Wild NHL / Basketball)";
             } else if (month >= 3 && month <= 5) {
-                badge.innerText = "SEASON: SPRING (March Madness, MLB & College Baseball)";
+                badge.innerText = "ACTIVE SEASON: SPRING (Twins MLB / March Madness / NBA & NHL Playoffs)";
             } else {
-                badge.innerText = "SEASON: SUMMER (Pre-Season Camps, MLS & Track)";
+                badge.innerText = "ACTIVE SEASON: SUMMER (Twins MLB / College Preseason Camps)";
+            }
+
+            // Refresh sub-team dropdown if category is sports
+            const cat = document.getElementById('select-mission-type').value;
+            if (cat === 'MN_PRO' || cat === 'NCAA') {
+                handleMissionTypeChange(cat);
+            }
+        }
+
+        function handleMissionTypeChange(cat) {
+            const container = document.getElementById('sub-team-container');
+            const subSelect = document.getElementById('select-sub-team');
+            const dateVal = document.getElementById('input-dispatch-date').value;
+            const month = dateVal ? parseInt(dateVal.split('-')[1]) : 11;
+
+            if (cat === 'MN_PRO') {
+                container.style.display = 'block';
+                subSelect.innerHTML = '';
+                
+                Object.keys(MN_PRO_TEAMS).forEach(key => {
+                    const team = MN_PRO_TEAMS[key];
+                    const opt = document.createElement('option');
+                    opt.value = key;
+
+                    // Check if team is in active season for selected date
+                    let isActive = false;
+                    if (team.seasonStartMonth > team.seasonEndMonth) { // Over midnight year (e.g. Oct to June or Aug to Feb)
+                        isActive = (month >= team.seasonStartMonth || month <= team.seasonEndMonth);
+                    } else {
+                        isActive = (month >= team.seasonStartMonth && month <= team.seasonEndMonth);
+                    }
+
+                    opt.innerText = `${team.name} ${isActive ? '✅ [ACTIVE SEASON]' : '⚠️ [OFF-SEASON]'}`;
+                    if (key === 'vikings' && isActive) opt.selected = true;
+                    subSelect.appendChild(opt);
+                });
+            } else if (cat === 'NCAA') {
+                container.style.display = 'block';
+                subSelect.innerHTML = '';
+
+                const autoOpt = document.createElement('option');
+                autoOpt.value = 'AUTO';
+                autoOpt.innerText = '⚡ Auto Select Conference Matchup';
+                subSelect.appendChild(autoOpt);
+
+                COLLEGE_TEAMS.forEach((team, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.innerText = `${team.name} (${team.conf}) ➔ Airport: ${team.home}`;
+                    subSelect.appendChild(opt);
+                });
+            } else {
+                container.style.display = 'none';
             }
         }
 
@@ -897,7 +865,7 @@
                 const opt = document.createElement('option');
                 opt.value = icao;
                 opt.innerText = `${icao} - ${apt.name} (${apt.city})`;
-                if (icao === 'KATL') opt.selected = true;
+                if (icao === 'KMSP') opt.selected = true;
                 select.appendChild(opt);
             });
 
@@ -985,14 +953,13 @@
         }
 
         /* ==========================================================================
-           4. DISPATCH GENERATOR ENGINE FOR N361VA
+           4. DISPATCH GENERATOR ENGINE FOR N361VA (WITH STRICT CONTINUOUS LEGS)
            ========================================================================== */
 
         function generateDispatchSchedule() {
-            let startICAO = document.getElementById('input-custom-icao').value.toUpperCase().trim() || 'KATL';
+            let startICAO = document.getElementById('input-custom-icao').value.toUpperCase().trim() || 'KMSP';
             const dispatchDate = document.getElementById('input-dispatch-date').value || "2026-11-07";
             const legCountSetting = document.getElementById('select-leg-count').value;
-            const routePattern = document.getElementById('select-route-pattern').value;
             const rangeProfile = document.getElementById('select-range-profile').value;
             const missionCategory = document.getElementById('select-mission-type').value;
 
@@ -1005,7 +972,6 @@
 
             const month = parseInt(dispatchDate.split('-')[1]);
             let currentICAO = startICAO;
-            let initialHubICAO = startICAO;
             let schedule = [];
             let totalMinuteTracker = 60;
 
@@ -1013,13 +979,68 @@
                 let destICAO = "";
                 let missionObj = null;
 
-                if (missionCategory === 'SPORTS' || missionCategory === 'ALL') {
-                    missionObj = generateSeasonalSportsMatchup(month, currentICAO, rangeProfile);
-                    currentICAO = missionObj.originICAO;
-                    destICAO = missionObj.destICAO;
+                if (missionCategory === 'MN_PRO') {
+                    const selectedTeamKey = document.getElementById('select-sub-team').value || 'vikings';
+                    const team = MN_PRO_TEAMS[selectedTeamKey] || MN_PRO_TEAMS['vikings'];
+
+                    if (i === 0 && currentICAO !== team.homeICAO) {
+                        currentICAO = team.homeICAO; // Leg 1 departs from team home (KMSP)
+                    }
+
+                    // Pick opponent destination from valid range profile
+                    let pool = team.opponents;
+                    let filteredPool = filterAirportsByRange(currentICAO, rangeProfile).filter(k => pool.includes(k) && k !== currentICAO);
+                    if (filteredPool.length === 0) filteredPool = pool.filter(k => k !== currentICAO);
+                    if (filteredPool.length === 0) filteredPool = Object.keys(AIRPORTS).filter(k => k !== currentICAO);
+
+                    destICAO = filteredPool[Math.floor(Math.random() * filteredPool.length)];
+
+                    missionObj = {
+                        name: `${team.name} Road Trip Leg ${i+1}`,
+                        category: `${team.sport} Official Charter`,
+                        purposeTemplate: `Official team charter carrying the ${team.name} roster, coaching staff, and equipment from ${currentICAO} to ${destICAO}.`,
+                        cargo: {
+                            hold1: { desc: `AKH-101: ${team.name} Team Luggage & Travel Trunks`, weight: 3400, uld: "AKH-101" },
+                            hold2: { desc: `AKH-202: Medical Taping & Hydrotherapy Supplies`, weight: 2200, uld: "AKH-202" },
+                            hold3: { desc: `Loose Cases: Game Gear, Uniforms & Sideline Hampers`, weight: 4100 },
+                            hold4: { desc: `Loose Trunks: Video Scouting Rigs & Sideline Monitors`, weight: 3100 },
+                            hold5: { desc: `Net Bulk: Hydration Coolers & Player Supplements`, weight: 1200 }
+                        }
+                    };
+
+                } else if (missionCategory === 'NCAA') {
+                    const subVal = document.getElementById('select-sub-team').value;
+                    let cTeam = null;
+
+                    if (subVal !== 'AUTO') {
+                        cTeam = COLLEGE_TEAMS[parseInt(subVal)];
+                    } else {
+                        cTeam = COLLEGE_TEAMS[Math.floor(Math.random() * COLLEGE_TEAMS.length)];
+                    }
+
+                    if (i === 0 && currentICAO !== cTeam.home) {
+                        currentICAO = cTeam.home;
+                    }
+
+                    let pool = filterAirportsByRange(currentICAO, rangeProfile).filter(k => k !== currentICAO);
+                    if (pool.length === 0) pool = Object.keys(AIRPORTS).filter(k => k !== currentICAO);
+                    destICAO = pool[Math.floor(Math.random() * pool.length)];
+
+                    missionObj = {
+                        name: `${cTeam.name} Away Championship Leg ${i+1}`,
+                        category: `NCAA ${cTeam.conf} Charter`,
+                        purposeTemplate: `Championship travel charter transporting ${cTeam.name} squad and athletic staff from ${currentICAO} to ${destICAO}.`,
+                        cargo: {
+                            hold1: { desc: `AKH-105: ${cTeam.name} Student-Athlete Luggage`, weight: 3200, uld: "AKH-105" },
+                            hold2: { desc: `AKH-206: Athletic Training & Taping Trunks`, weight: 2100, uld: "AKH-206" },
+                            hold3: { desc: `Loose Cases: Game Gear & Travel Hampers`, weight: 3800 },
+                            hold4: { desc: `Loose Trunks: Coaching Film Rigs & Video Displays`, weight: 2900 },
+                            hold5: { desc: `Net Bulk: Hydration Coolers & Team Snacks`, weight: 1100 }
+                        }
+                    };
+
                 } else {
-                    let pool = filterAirportsByRange(currentICAO, rangeProfile);
-                    pool = pool.filter(k => k !== currentICAO);
+                    let pool = filterAirportsByRange(currentICAO, rangeProfile).filter(k => k !== currentICAO);
                     if (pool.length === 0) pool = Object.keys(AIRPORTS).filter(k => k !== currentICAO);
                     destICAO = pool[Math.floor(Math.random() * pool.length)];
 
@@ -1034,12 +1055,6 @@
                     const tag = keyMap[missionCategory] || "tech";
                     const nonSportsPool = NON_SPORTS_TEMPLATES[tag] || NON_SPORTS_TEMPLATES["tech"];
                     missionObj = nonSportsPool[i % nonSportsPool.length];
-                }
-
-                if (routePattern === 'SHUTTLE' && i % 2 === 1) {
-                    destICAO = initialHubICAO;
-                } else if (routePattern === 'CIRCUIT' && i === numLegs - 1 && numLegs > 1) {
-                    destICAO = initialHubICAO;
                 }
 
                 const origApt = getAirport(currentICAO);
@@ -1108,6 +1123,7 @@
                     routeWaypoints: generateWaypoints(currentICAO, destICAO)
                 });
 
+                // CONTINUOUS LEG CHAIN MANDATE: Next leg origin MUST be current leg destination!
                 currentICAO = destICAO;
                 totalMinuteTracker += (flightMinutes + turnaround);
             }
@@ -1120,46 +1136,7 @@
             renderActiveInspectorView();
             updateMapRoute();
 
-            saveToHistory(A320_PROFILE.tail, startICAO, schedule);
-        }
-
-        function generateSeasonalSportsMatchup(month, currentICAO, rangeProfile) {
-            let seasonKey = "fall";
-            if (month >= 9 && month <= 11) {
-                seasonKey = "fall";
-            } else if (month === 12 || month <= 2) {
-                seasonKey = "winter";
-            } else if (month >= 3 && month <= 5) {
-                seasonKey = "spring";
-            } else {
-                seasonKey = "summer";
-            }
-
-            const seasonTeams = SPORTS_TEAMS.filter(t => t.season === seasonKey);
-            const homeTeam = seasonTeams[Math.floor(Math.random() * seasonTeams.length)];
-            let oppTeam = seasonTeams[Math.floor(Math.random() * seasonTeams.length)];
-            
-            while (oppTeam.name === homeTeam.name && seasonTeams.length > 1) {
-                oppTeam = seasonTeams[Math.floor(Math.random() * seasonTeams.length)];
-            }
-
-            const originICAO = homeTeam.home;
-            const destICAO = oppTeam.home;
-
-            return {
-                name: `${homeTeam.name} Away Matchup @ ${oppTeam.name}`,
-                category: homeTeam.category,
-                purposeTemplate: `Official gameday charter transporting ${homeTeam.name} squad, athletic trainers, and staff from home base (${originICAO}) to ${oppTeam.name} home airfield (${destICAO}).`,
-                originICAO,
-                destICAO,
-                cargo: {
-                    hold1: { desc: `AKH-101: ${homeTeam.name} Team Luggage & Travel Gear`, weight: 3400, uld: "AKH-101", type: "ULD Container" },
-                    hold2: { desc: `AKH-202: Medical Taping & Hydrotherapy Equipment`, weight: 2200, uld: "AKH-202", type: "ULD Container" },
-                    hold3: { desc: `Loose Equipment Hampers: Game Gear, Balls & Uniform Trunks`, weight: 4100, uld: "BELT LOAD", type: "Belt Loader" },
-                    hold4: { desc: `Loose Heavy Trunks: Video Scouting & Sideline Rigs`, weight: 3100, uld: "BELT LOAD", type: "Belt Loader" },
-                    hold5: { desc: `Net Bulk: Hydration Coolers & Player Supplements`, weight: 1200, uld: "NET-BULK", type: "Belt / Bulk Net" }
-                }
-            };
+            saveToHistory(A320_PROFILE.tail, schedule[0].origin.icao, schedule);
         }
 
         function filterAirportsByRange(fromICAO, rangeProfile) {
@@ -1205,7 +1182,7 @@
             });
 
             const shuffledSeats = [...seats].sort(() => 0.5 - Math.random());
-            const roles = ["Head Coach", "Starting QB / Captain", "Defensive Coordinator", "Offensive Coordinator", "Athletic Trainer", "Equipment Director", "Senior VIP / AD", "Media Officer"];
+            const roles = ["Head Coach", "Starting Quarterback / Captain", "Defensive Coordinator", "Offensive Coordinator", "Athletic Trainer", "Equipment Director", "General Manager", "Team Physician"];
 
             for (let i = 0; i < count; i++) {
                 const seatNo = shuffledSeats[i];
@@ -1246,7 +1223,7 @@
             document.getElementById('summary-total-pax').innerText = `${totalPax} PAX`;
             document.getElementById('summary-final-pos').innerText = finalPos;
 
-            document.getElementById('itinerary-leg-count-badge').innerText = `${currentSchedule.length} LEGS ASSIGNED`;
+            document.getElementById('itinerary-leg-count-badge').innerText = `${currentSchedule.length} LEGS CHAINED`;
         }
 
         function renderLegTabs() {
@@ -1391,7 +1368,7 @@
 
                     <div class="bg-slate-900/80 p-4 rounded-xl border-l-4 border-l-gold-500 border border-slate-800 space-y-1 font-sans">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-mono text-gold-400 uppercase font-bold"><i class="fa-solid fa-building-flag mr-1"></i> Seasonal Charter Mission</span>
+                            <span class="text-xs font-mono text-gold-400 uppercase font-bold"><i class="fa-solid fa-building-flag mr-1"></i> Active Charter Mission</span>
                             <span class="text-[10px] font-mono px-2 py-0.5 bg-slate-800 text-slate-300 rounded">${leg.org.category}</span>
                         </div>
                         <h3 class="text-base font-bold text-slate-100">${leg.org.name}</h3>
@@ -1424,7 +1401,7 @@
                     const seatId = `${r}${c}`;
                     const p = paxMap[seatId];
                     if (p) {
-                        const isVip = p.status.includes('Coach') || p.status.includes('Captain') || p.status.includes('Director');
+                        const isVip = p.status.includes('Coach') || p.status.includes('Captain') || p.status.includes('Director') || p.status.includes('Quarterback');
                         rowHTML += `
                             <button onclick="openSeatModal('${seatId}')" title="${seatId}: ${p.name} (${p.status})" class="seat-btn w-6 h-7 rounded text-[10px] font-mono font-bold flex items-center justify-center ${isVip ? 'bg-gold-500 text-slate-950 shadow-md shadow-gold-500/30' : 'bg-emerald-600/90 text-white hover:bg-emerald-500'}">
                                 ${c}
@@ -1445,7 +1422,7 @@
                     const seatId = `${r}${c}`;
                     const p = paxMap[seatId];
                     if (p) {
-                        const isVip = p.status.includes('Coach') || p.status.includes('Captain') || p.status.includes('Director');
+                        const isVip = p.status.includes('Coach') || p.status.includes('Captain') || p.status.includes('Director') || p.status.includes('Quarterback');
                         rowHTML += `
                             <button onclick="openSeatModal('${seatId}')" title="${seatId}: ${p.name} (${p.status})" class="seat-btn w-6 h-7 rounded text-[10px] font-mono font-bold flex items-center justify-center ${isVip ? 'bg-gold-500 text-slate-950 shadow-md shadow-gold-500/30' : 'bg-emerald-600/90 text-white hover:bg-emerald-500'}">
                                 ${c}
@@ -1542,12 +1519,12 @@
                         <div class="grid grid-cols-5 gap-2 text-xs">
                             <div class="bg-slate-900 p-2.5 rounded border border-cyan-500/40">
                                 <span class="text-cyan-400 text-[10px] block font-bold">HOLD 1 (FWD ULD)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold1.uld}</span>
+                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold1.uld || 'AKH ULD'}</span>
                                 <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold1.weight.toLocaleString()} LBS</span>
                             </div>
                             <div class="bg-slate-900 p-2.5 rounded border border-cyan-500/40">
                                 <span class="text-cyan-400 text-[10px] block font-bold">HOLD 2 (FWD ULD)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold2.uld}</span>
+                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold2.uld || 'AKH ULD'}</span>
                                 <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold2.weight.toLocaleString()} LBS</span>
                             </div>
                             <div class="bg-slate-900 p-2.5 rounded border border-amber-500/40">
@@ -1581,13 +1558,13 @@
                             <tbody class="divide-y divide-slate-800/60">
                                 <tr>
                                     <td class="py-2.5 text-cyan-400 font-bold">Hold 1 (Fwd ULD)</td>
-                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold1.uld}</td>
+                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold1.uld || 'AKH-101'}</td>
                                     <td class="py-2.5 text-slate-200">${cargo.hold1.desc}</td>
                                     <td class="py-2.5 text-amber-400 font-bold">${cargo.hold1.weight.toLocaleString()} lbs</td>
                                 </tr>
                                 <tr>
                                     <td class="py-2.5 text-cyan-400 font-bold">Hold 2 (Fwd ULD)</td>
-                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold2.uld}</td>
+                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold2.uld || 'AKH-202'}</td>
                                     <td class="py-2.5 text-slate-200">${cargo.hold2.desc}</td>
                                     <td class="py-2.5 text-amber-400 font-bold">${cargo.hold2.weight.toLocaleString()} lbs</td>
                                 </tr>
@@ -1689,7 +1666,7 @@
                 leafletMap = L.map('flight-map', {
                     zoomControl: true,
                     attributionControl: false
-                }).setView([39.8283, -98.5795], 4);
+                }).setView([44.8848, -93.2223], 4);
 
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
@@ -1844,8 +1821,8 @@
                 <div class="border border-slate-300 p-3 rounded text-xs bg-slate-50 font-mono">
                     <strong class="block mb-1 text-slate-800">LOWER DECK CARGO MANIFEST DETAILS:</strong>
                     <div class="grid grid-cols-2 gap-2 mt-1">
-                        <div>• <strong>Hold 1 (${c.hold1.uld}):</strong> ${c.hold1.desc} (${c.hold1.weight.toLocaleString()} lbs)</div>
-                        <div>• <strong>Hold 2 (${c.hold2.uld}):</strong> ${c.hold2.desc} (${c.hold2.weight.toLocaleString()} lbs)</div>
+                        <div>• <strong>Hold 1 (${c.hold1.uld || 'AKH ULD'}):</strong> ${c.hold1.desc} (${c.hold1.weight.toLocaleString()} lbs)</div>
+                        <div>• <strong>Hold 2 (${c.hold2.uld || 'AKH ULD'}):</strong> ${c.hold2.desc} (${c.hold2.weight.toLocaleString()} lbs)</div>
                         <div>• <strong>Hold 3 (Aft Belt):</strong> ${c.hold3.desc} (${c.hold3.weight.toLocaleString()} lbs)</div>
                         <div>• <strong>Hold 4 (Aft Belt):</strong> ${c.hold4.desc} (${c.hold4.weight.toLocaleString()} lbs)</div>
                         <div>• <strong>Hold 5 (Bulk Net):</strong> ${c.hold5.desc} (${c.hold5.weight.toLocaleString()} lbs)</div>
@@ -1929,14 +1906,14 @@
 
             const orgObj = {
                 name: orgName,
-                category: "High-Capacity Direct Charter",
-                purposeTemplate: `Direct charter flight transporting ${paxCount} passengers on behalf of ${orgName}.`,
+                category: "Continuous Group Charter",
+                purposeTemplate: `Direct continuous leg transporting ${paxCount} passengers on behalf of ${orgName}.`,
                 cargo: {
-                    hold1: { desc: "AKH-115: Containerized Guest Checked Luggage", weight: 3100, uld: "AKH-115", type: "ULD Container" },
-                    hold2: { desc: "AKH-212: Containerized Event Catering & Supplies", weight: 1900, uld: "AKH-212", type: "ULD Container" },
-                    hold3: { desc: "Loose Equipment Trunks: Audio/Visual Production Rigs", weight: 3400, uld: "BELT LOAD", type: "Belt Loader" },
-                    hold4: { desc: "Loose Heavy Crates: Staging Gear & Presentation Screens", weight: 2600, uld: "BELT LOAD", type: "Belt Loader" },
-                    hold5: { desc: "Net Bulk: Loose Bags & Event Promotional Trunks", weight: 1100, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    hold1: { desc: "AKH-115: Containerized Guest Checked Luggage", weight: 3100, uld: "AKH-115" },
+                    hold2: { desc: "AKH-212: Containerized Event Catering & Supplies", weight: 1900, uld: "AKH-212" },
+                    hold3: { desc: "Loose Equipment Trunks: Audio/Visual Rigs", weight: 3400 },
+                    hold4: { desc: "Loose Heavy Crates: Staging Gear", weight: 2600 },
+                    hold5: { desc: "Net Bulk: Loose Bags & Event Banners", weight: 1100 }
                 }
             };
 
