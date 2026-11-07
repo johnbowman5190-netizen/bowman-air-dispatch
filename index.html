@@ -55,7 +55,6 @@
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
-        /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -89,7 +88,6 @@
         .leaflet-container {
             background: #090e17 !important;
         }
-        /* Seat Grid styling */
         .seat-btn {
             transition: all 0.15s ease-in-out;
         }
@@ -97,7 +95,6 @@
             transform: scale(1.18);
             z-index: 10;
         }
-        /* Print Styles for Dispatch Release */
         @media print {
             body * {
                 visibility: hidden;
@@ -134,7 +131,7 @@
                         <span class="px-2 py-0.5 text-xs font-semibold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">DISPATCH OPS</span>
                         <span class="px-2 py-0.5 text-xs font-bold font-mono rounded bg-gold-500/20 text-gold-400 border border-gold-500/40">N361VA (A320-200)</span>
                     </div>
-                    <p class="text-xs text-slate-400 font-mono">HIGH-CAPACITY AIRLINER DISPATCH ENGINE • 180 ECONOMY SEATS</p>
+                    <p class="text-xs text-slate-400 font-mono">HIGH-CAPACITY AIRLINER DISPATCH ENGINE • 180 SEATS (ROWS 1-12 & 14-31)</p>
                 </div>
             </div>
 
@@ -186,7 +183,7 @@
                     </div>
                     <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
                         <span class="text-slate-400 text-[10px] block">SEATING LAYOUT</span>
-                        <span class="text-cyan-400 font-bold">180 Y (3x3 Layout)</span>
+                        <span class="text-cyan-400 font-bold">180 Y (No Row 13)</span>
                     </div>
                     <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
                         <span class="text-slate-400 text-[10px] block">CRUISE / FUEL BURN</span>
@@ -213,18 +210,28 @@
 
                     <!-- BASE / ORIGIN AIRPORT SELECTOR -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Aircraft Base / Origin Location</label>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Aircraft Origin Airport (Search or Type Custom)</label>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-2">
                                 <select id="select-location-preset" onchange="handleLocationPresetChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 focus:ring-2 focus:ring-gold-500 font-mono">
-                                    <!-- Populated dynamically with 30+ airports -->
+                                    <!-- Populated dynamically with 120+ airports -->
                                 </select>
                             </div>
                             <div>
-                                <input type="text" id="input-custom-icao" placeholder="ICAO" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KATL">
+                                <input type="text" id="input-custom-icao" placeholder="e.g. KJFK" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KATL">
                             </div>
                         </div>
-                        <p class="text-[10px] text-slate-500 mt-1">Starting airport for N361VA daily charter rotations.</p>
+                        <p class="text-[10px] text-slate-500 mt-1">Select from 120+ major global airports or type any custom 4-letter ICAO code.</p>
+                    </div>
+
+                    <!-- ROUTE PATTERN BUILDER -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Flight Routing Pattern</label>
+                        <select id="select-route-pattern" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
+                            <option value="PROGRESSIVE" selected>➔ Continuous Progressive (A ➔ B ➔ C ➔ D)</option>
+                            <option value="SHUTTLE">🔄 Hub Shuttle / Out & Back (A ➔ B ➔ A ➔ C)</option>
+                            <option value="CIRCUIT">🔺 Loop Circuit (A ➔ B ➔ C ➔ A)</option>
+                        </select>
                     </div>
 
                     <!-- CHARTER MISSION TYPE CATEGORY SELECTOR -->
@@ -253,18 +260,18 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-300 mb-1">Legs Today</label>
                             <select id="select-leg-count" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono">
-                                <option value="AUTO" selected>Auto (1-4 Legs)</option>
+                                <option value="AUTO" selected>Auto (2-4 Legs)</option>
                                 <option value="1">1 Leg (Direct Charter)</option>
-                                <option value="2">2 Legs (Out & Return)</option>
-                                <option value="3">3 Legs (Triangle Routing)</option>
-                                <option value="4">4 Legs (Full Circuit)</option>
+                                <option value="2">2 Legs (Continuous)</option>
+                                <option value="3">3 Legs (Continuous)</option>
+                                <option value="4">4 Legs (Full Schedule)</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-300 mb-1">Range Profile</label>
                             <select id="select-range-profile" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono">
                                 <option value="BALANCED">Balanced Mix</option>
-                                <option value="SHORT">Short Hops (&lt;800 NM)</option>
+                                <option value="SHORT">Regional Hops (&lt;800 NM)</option>
                                 <option value="LONG">Transcontinental (&gt;1,200 NM)</option>
                             </select>
                         </div>
@@ -369,7 +376,7 @@
                         <i class="fa-solid fa-chair"></i> 180 Seat Cabin Map
                     </button>
                     <button onclick="setActiveInspectorTab('cargo')" id="tab-btn-cargo" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-transparent text-slate-400 hover:text-slate-200">
-                        <i class="fa-solid fa-boxes-packing"></i> Belly Hold Cargo
+                        <i class="fa-solid fa-boxes-packing"></i> Lower Deck Cargo
                     </button>
                     <button onclick="setActiveInspectorTab('wb')" id="tab-btn-wb" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-transparent text-slate-400 hover:text-slate-200">
                         <i class="fa-solid fa-scale-balanced"></i> Weight & Balance
@@ -415,7 +422,7 @@
         <div class="hud-card border border-slate-700 rounded-xl max-w-md w-full p-5 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 class="text-sm font-bold text-slate-200 uppercase font-mono flex items-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-emerald-400"></i> Append Flight Leg (N361VA)
+                    <i class="fa-solid fa-plus-circle text-emerald-400"></i> Append Progressive Leg (N361VA)
                 </h3>
                 <button onclick="closeAddLegModal()" class="text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark text-base"></i>
@@ -424,8 +431,8 @@
 
             <div class="space-y-3 font-mono">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Origin Airport ICAO</label>
-                    <input type="text" id="custom-leg-dep" placeholder="e.g. KATL" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono uppercase">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Departure Airport ICAO</label>
+                    <input type="text" id="custom-leg-dep" readonly class="w-full bg-slate-950 border border-slate-800 text-gold-400 text-xs rounded p-2 font-mono uppercase font-bold">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Destination Airport ICAO</label>
@@ -439,7 +446,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Passenger Count (Up to 180 PAX)</label>
-                    <input type="number" id="custom-leg-pax" min="20" max="180" value="165" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
+                    <input type="number" id="custom-leg-pax" min="20" max="180" value="168" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
                 </div>
             </div>
 
@@ -488,7 +495,9 @@
             model: "Airbus A320-200",
             type: "High-Capacity Charter Airliner",
             totalSeats: 180,
-            seatLayout: "3x3 Economy (30 Rows, Seats A-F)",
+            // EXPLICIT SEATING CONVENTION: 30 Rows, 6 seats per row, SKIPPING ROW 13
+            seatRows: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+            seatLayout: "3x3 Economy (30 Rows: 1-12 & 14-31)",
             cruiseKtas: 450,
             ceiling: "FL390",
             dow: 93500, // Dry Operating Weight (lbs)
@@ -500,10 +509,10 @@
             fuelBurnPerHour: 5800 // Avg fuel burn lbs/hr
         };
 
-        /* 30+ WORLDWIDE AIRPORTS DATABASE */
+        /* 120+ GLOBAL AIRPORTS DATABASE */
         const AIRPORTS = {
             // NORTH AMERICA
-            "KATL": { name: "Hartsfield-Jackson Atlanta", city: "Atlanta, GA, USA", lat: 33.6407, lng: -84.4277, elev: 1026, rwy: "08L/26R (9,000 ft)", alt: "KCLT" },
+            "KATL": { name: "Hartsfield-Jackson Atlanta Intl", city: "Atlanta, GA, USA", lat: 33.6407, lng: -84.4277, elev: 1026, rwy: "08L/26R (9,000 ft)", alt: "KCLT" },
             "KORD": { name: "Chicago O'Hare Intl", city: "Chicago, IL, USA", lat: 41.9742, lng: -87.9073, elev: 668, rwy: "10L/28R (13,000 ft)", alt: "KMKE" },
             "KLAX": { name: "Los Angeles Intl", city: "Los Angeles, CA, USA", lat: 33.9425, lng: -118.4081, elev: 128, rwy: "25L/07R (12,091 ft)", alt: "KONT" },
             "KDFW": { name: "Dallas/Fort Worth Intl", city: "Dallas, TX, USA", lat: 32.8998, lng: -97.0403, elev: 607, rwy: "17R/35L (13,401 ft)", alt: "KAUS" },
@@ -517,86 +526,221 @@
             "KPHX": { name: "Phoenix Sky Harbor", city: "Phoenix, AZ, USA", lat: 33.4352, lng: -112.0101, elev: 1135, rwy: "08/26 (11,489 ft)", alt: "KTUS" },
             "KMSY": { name: "Louis Armstrong Intl", city: "New Orleans, LA, USA", lat: 29.9934, lng: -90.2580, elev: 4, rwy: "11/29 (10,104 ft)", alt: "KBTR" },
             "KSAN": { name: "San Diego Intl", city: "San Diego, CA, USA", lat: 32.7338, lng: -117.1933, elev: 17, rwy: "09/27 (9,400 ft)", alt: "KLAX" },
+            "KBWI": { name: "Baltimore/Washington Intl", city: "Baltimore, MD, USA", lat: 39.1754, lng: -76.6683, elev: 146, rwy: "10/28 (10,502 ft)", alt: "KIAD" },
+            "KIAD": { name: "Washington Dulles Intl", city: "Washington, DC, USA", lat: 38.9531, lng: -77.4565, elev: 313, rwy: "01C/19C (11,500 ft)", alt: "KDCA" },
+            "KDCA": { name: "Reagan Washington National", city: "Washington, DC, USA", lat: 38.8512, lng: -77.0377, elev: 15, rwy: "01/19 (7,169 ft)", alt: "KIAD" },
+            "KMCO": { name: "Orlando Intl", city: "Orlando, FL, USA", lat: 28.4294, lng: -81.3089, elev: 96, rwy: "17L/35R (12,005 ft)", alt: "KTPA" },
+            "KTPA": { name: "Tampa Intl", city: "Tampa, FL, USA", lat: 27.9755, lng: -82.5332, elev: 26, rwy: "01L/19R (11,002 ft)", alt: "KMCO" },
+            "KPDX": { name: "Portland Intl", city: "Portland, OR, USA", lat: 45.5898, lng: -122.5951, elev: 31, rwy: "10L/28R (9,825 ft)", alt: "KSEA" },
             "PHNL": { name: "Daniel K. Inouye Intl", city: "Honolulu, HI, USA", lat: 21.3187, lng: -157.9224, elev: 13, rwy: "08L/26R (12,300 ft)", alt: "OGGG" },
-            "PANC": { name: "Ted Stevens Anchorage", city: "Anchorage, AK, USA", lat: 61.1743, lng: -149.9963, elev: 152, rwy: "07L/25R (10,600 ft)", alt: "PAFA" },
+            "PANC": { name: "Ted Stevens Anchorage Intl", city: "Anchorage, AK, USA", lat: 61.1743, lng: -149.9963, elev: 152, rwy: "07L/25R (10,600 ft)", alt: "PAFA" },
             "CYVR": { name: "Vancouver Intl", city: "Vancouver, BC, Canada", lat: 49.1967, lng: -123.1815, elev: 14, rwy: "08R/26L (11,500 ft)", alt: "CYXX" },
             "CYYZ": { name: "Toronto Pearson Intl", city: "Toronto, ON, Canada", lat: 43.6777, lng: -79.6248, elev: 569, rwy: "05/23 (11,120 ft)", alt: "CYOW" },
-
-            // CARIBBEAN & LATIN AMERICA
-            "MYNN": { name: "Lynden Pindling Intl", city: "Nassau, Bahamas", lat: 25.0389, lng: -77.4663, elev: 16, rwy: "14/32 (11,000 ft)", alt: "MYGF" },
+            "CYUL": { name: "Montréal-Trudeau Intl", city: "Montréal, QC, Canada", lat: 45.4706, lng: -73.7408, elev: 118, rwy: "06L/24R (11,000 ft)", alt: "CYOW" },
+            "CYYC": { name: "Calgary Intl", city: "Calgary, AB, Canada", lat: 51.1139, lng: -114.0203, elev: 3557, rwy: "17L/35R (14,000 ft)", alt: "CYEG" },
+            "MMMX": { name: "Mexico City Benito Juárez Intl", city: "Mexico City, Mexico", lat: 19.4363, lng: -99.0721, elev: 7341, rwy: "05L/23R (12,795 ft)", alt: "MMTLC" },
             "MMUN": { name: "Cancún Intl", city: "Cancún, Mexico", lat: 21.0365, lng: -86.8770, elev: 20, rwy: "12L/30R (11,483 ft)", alt: "MIDD" },
+            "MMGL": { name: "Guadalajara Miguel Hidalgo", city: "Guadalajara, Mexico", lat: 20.5218, lng: -103.3112, elev: 5016, rwy: "10/28 (13,123 ft)", alt: "MMMX" },
+
+            // CARIBBEAN & CENTRAL AMERICA
+            "MYNN": { name: "Lynden Pindling Intl", city: "Nassau, Bahamas", lat: 25.0389, lng: -77.4663, elev: 16, rwy: "14/32 (11,000 ft)", alt: "MYGF" },
             "TJSJ": { name: "Luis Muñoz Marín Intl", city: "San Juan, Puerto Rico", lat: 18.4394, lng: -66.0018, elev: 9, rwy: "08/26 (10,400 ft)", alt: "TIST" },
             "TNCM": { name: "Princess Juliana Intl", city: "St. Maarten", lat: 18.0410, lng: -63.1089, elev: 14, rwy: "10/28 (7,546 ft)", alt: "TJBQ" },
             "MPTO": { name: "Tocumen Intl", city: "Panama City, Panama", lat: 9.0714, lng: -79.3834, elev: 135, rwy: "03L/21R (10,007 ft)", alt: "MROC" },
+            "MDPC": { name: "Punta Cana Intl", city: "Punta Cana, Dominican Rep", lat: 18.5674, lng: -68.3634, elev: 40, rwy: "08/26 (10,170 ft)", alt: "MDSD" },
+            "MKJP": { name: "Norman Manley Intl", city: "Kingston, Jamaica", lat: 17.9357, lng: -76.7875, elev: 10, rwy: "12/30 (8,911 ft)", alt: "MKJS" },
+            "MWCR": { name: "Owen Roberts Intl", city: "Grand Cayman", lat: 19.2925, lng: -81.3577, elev: 8, rwy: "08/26 (7,000 ft)", alt: "MYNN" },
+            "MROC": { name: "Juan Santamaría Intl", city: "San José, Costa Rica", lat: 9.9939, lng: -84.2088, elev: 3021, rwy: "07/25 (9,882 ft)", alt: "MPTO" },
+            "MSLP": { name: "Monseñor Óscar Romero Intl", city: "San Salvador, El Salvador", lat: 13.4409, lng: -89.0557, elev: 102, rwy: "07/25 (10,500 ft)", alt: "MGGT" },
+
+            // SOUTH AMERICA
+            "SBGR": { name: "São Paulo/Guarulhos Intl", city: "São Paulo, Brazil", lat: -23.4356, lng: -46.4731, elev: 2459, rwy: "10L/28R (12,139 ft)", alt: "SBCP" },
+            "SBRJ": { name: "Santos Dumont", city: "Rio de Janeiro, Brazil", lat: -22.9100, lng: -43.1625, elev: 11, rwy: "02R/20L (4,340 ft)", alt: "SBGL" },
+            "SBGL": { name: "Rio de Janeiro Galeão", city: "Rio de Janeiro, Brazil", lat: -22.8089, lng: -43.2436, elev: 28, rwy: "10/28 (13,123 ft)", alt: "SBRJ" },
+            "SAEZ": { name: "Ezeiza Intl", city: "Buenos Aires, Argentina", lat: -34.8222, lng: -58.5358, elev: 67, rwy: "11/29 (10,827 ft)", alt: "SABE" },
+            "SCEL": { name: "Santiago Arturo Merino Benítez", city: "Santiago, Chile", lat: -33.3930, lng: -70.7858, elev: 1560, rwy: "17L/35R (12,467 ft)", alt: "SAME" },
+            "SKBO": { name: "El Dorado Intl", city: "Bogotá, Colombia", lat: 4.7016, lng: -74.1469, elev: 8360, rwy: "13L/31R (12,467 ft)", alt: "SKRG" },
+            "SPJC": { name: "Jorge Chávez Intl", city: "Lima, Peru", lat: -12.0219, lng: -77.1143, elev: 113, rwy: "16/34 (11,507 ft)", alt: "SPZO" },
+            "SUMU": { name: "Carrasco Intl", city: "Montevideo, Uruguay", lat: -34.8384, lng: -56.0308, elev: 105, rwy: "06/24 (10,500 ft)", alt: "SAEZ" },
+            "SEQM": { name: "Mariscal Sucre Intl", city: "Quito, Ecuador", lat: -0.1292, lng: -78.3575, elev: 7874, rwy: "18/36 (13,435 ft)", alt: "SEGU" },
 
             // EUROPE
             "LFPB": { name: "Paris Le Bourget", city: "Paris, France", lat: 48.9694, lng: 2.4414, elev: 218, rwy: "07/25 (9,843 ft)", alt: "LFPG" },
+            "LFPG": { name: "Paris Charles de Gaulle", city: "Paris, France", lat: 49.0097, lng: 2.5479, elev: 392, rwy: "09R/27L (13,779 ft)", alt: "LFPB" },
             "EGSS": { name: "London Stansted", city: "London, UK", lat: 51.8860, lng: 0.2389, elev: 348, rwy: "04/22 (10,003 ft)", alt: "EGLL" },
             "EGGW": { name: "London Luton", city: "London, UK", lat: 51.8747, lng: -0.3683, elev: 526, rwy: "08/26 (7,086 ft)", alt: "EGSS" },
+            "EGLL": { name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543, elev: 83, rwy: "09L/27R (12,802 ft)", alt: "EGKK" },
             "EDDM": { name: "Munich Airport", city: "Munich, Germany", lat: 48.3537, lng: 11.7860, elev: 1487, rwy: "08L/26R (13,123 ft)", alt: "EDDF" },
+            "EDDF": { name: "Frankfurt Airport", city: "Frankfurt, Germany", lat: 50.0379, lng: 8.5622, elev: 364, rwy: "07L/25R (13,123 ft)", alt: "EDDM" },
             "LEMD": { name: "Adolfo Suárez Madrid-Barajas", city: "Madrid, Spain", lat: 40.4839, lng: -3.5680, elev: 2000, rwy: "14L/32R (14,268 ft)", alt: "LEBL" },
+            "LEBL": { name: "Barcelona-El Prat", city: "Barcelona, Spain", lat: 41.2974, lng: 2.0833, elev: 14, rwy: "07L/25R (11,000 ft)", alt: "LEMD" },
             "LIRF": { name: "Rome Fiumicino", city: "Rome, Italy", lat: 41.8003, lng: 12.2389, elev: 15, rwy: "16L/34R (12,795 ft)", alt: "LIRA" },
+            "EHAM": { name: "Amsterdam Schiphol", city: "Amsterdam, Netherlands", lat: 52.3105, lng: 4.7683, elev: -11, rwy: "18R/36L (12,467 ft)", alt: "EBBR" },
+            "LSZH": { name: "Zurich Airport", city: "Zurich, Switzerland", lat: 47.4582, lng: 8.5555, elev: 1416, rwy: "16/34 (12,139 ft)", alt: "LSGG" },
+            "LOWW": { name: "Vienna Intl", city: "Vienna, Austria", lat: 48.1103, lng: 16.5697, elev: 600, rwy: "11/29 (11,483 ft)", alt: "LKPR" },
+            "EKCH": { name: "Copenhagen Airport", city: "Copenhagen, Denmark", lat: 55.6180, lng: 12.6508, elev: 17, rwy: "04L/22R (11,811 ft)", alt: "ENGM" },
+            "ENGM": { name: "Oslo Gardermoen", city: "Oslo, Norway", lat: 60.1975, lng: 11.1004, elev: 681, rwy: "01L/19R (11,811 ft)", alt: "ESSA" },
+            "ESSA": { name: "Stockholm Arlanda", city: "Stockholm, Sweden", lat: 59.6498, lng: 17.9238, elev: 137, rwy: "01L/19R (10,830 ft)", alt: "EFHK" },
+            "LPPT": { name: "Humberto Delgado Lisbon", city: "Lisbon, Portugal", lat: 38.7742, lng: -9.1342, elev: 374, rwy: "03/21 (12,484 ft)", alt: "LEMD" },
+            "LGAV": { name: "Athens Eleftherios Venizelos", city: "Athens, Greece", lat: 37.9364, lng: 23.9472, elev: 308, rwy: "03L/21R (13,123 ft)", alt: "LCLK" },
+            "EDDB": { name: "Berlin Brandenburg", city: "Berlin, Germany", lat: 52.3667, lng: 13.5033, elev: 147, rwy: "07L/25R (11,811 ft)", alt: "EDDF" },
 
-            // MIDDLE EAST & ASIA
+            // MIDDLE EAST & AFRICA
             "OMDB": { name: "Dubai Intl", city: "Dubai, UAE", lat: 25.2532, lng: 55.3657, elev: 62, rwy: "12L/30R (14,600 ft)", alt: "OMAA" },
+            "OMAA": { name: "Zayed Intl Abu Dhabi", city: "Abu Dhabi, UAE", lat: 24.4330, lng: 54.6511, elev: 88, rwy: "13L/31R (13,451 ft)", alt: "OMDB" },
+            "OTHH": { name: "Hamad Intl", city: "Doha, Qatar", lat: 25.2731, lng: 51.6081, elev: 13, rwy: "16L/34R (15,912 ft)", alt: "OMDB" },
+            "OEJN": { name: "King Abdulaziz Intl", city: "Jeddah, Saudi Arabia", lat: 21.6796, lng: 39.1565, elev: 48, rwy: "16C/34C (13,123 ft)", alt: "OERK" },
+            "OERK": { name: "King Khalid Intl", city: "Riyadh, Saudi Arabia", lat: 24.9576, lng: 46.6988, elev: 2049, rwy: "15L/33R (13,780 ft)", alt: "OEJN" },
+            "HECA": { name: "Cairo Intl", city: "Cairo, Egypt", lat: 30.1219, lng: 31.4056, elev: 382, rwy: "05L/23R (13,123 ft)", alt: "HEGN" },
+            "FACT": { name: "Cape Town Intl", city: "Cape Town, South Africa", lat: -33.9715, lng: 18.6021, elev: 151, rwy: "01/19 (10,502 ft)", alt: "FAOR" },
+            "FAOR": { name: "O.R. Tambo Intl", city: "Johannesburg, South Africa", lat: -26.1367, lng: 28.2460, elev: 5558, rwy: "03L/21R (14,495 ft)", alt: "FACT" },
+            "HKJK": { name: "Jomo Kenyatta Intl", city: "Nairobi, Kenya", lat: -1.3192, lng: 36.9275, elev: 5327, rwy: "06/24 (13,507 ft)", alt: "HTDA" },
+            "GOBD": { name: "Blaise Diagne Intl", city: "Dakar, Senegal", lat: 14.6700, lng: -17.0733, elev: 290, rwy: "01/19 (11,483 ft)", alt: "GUCY" },
+            "DNMM": { name: "Murtala Muhammed Intl", city: "Lagos, Nigeria", lat: 6.5774, lng: 3.3212, elev: 135, rwy: "18R/36L (12,795 ft)", alt: "DNAA" },
+
+            // ASIA & OCEANIA
             "VHHH": { name: "Hong Kong Intl", city: "Hong Kong", lat: 22.3080, lng: 113.9185, elev: 28, rwy: "07L/25R (12,467 ft)", alt: "VMMC" },
             "RJTT": { name: "Tokyo Haneda", city: "Tokyo, Japan", lat: 35.5494, lng: 139.7798, elev: 35, rwy: "34L/16R (11,024 ft)", alt: "RJAA" },
-            "WSSS": { name: "Singapore Changi", city: "Singapore", lat: 1.3644, lng: 103.9915, elev: 22, rwy: "02L/20R (13,123 ft)", alt: "WMKK" }
+            "RJAA": { name: "Tokyo Narita", city: "Tokyo, Japan", lat: 35.7647, lng: 140.3863, elev: 141, rwy: "16L/34R (13,123 ft)", alt: "RJTT" },
+            "WSSS": { name: "Singapore Changi", city: "Singapore", lat: 1.3644, lng: 103.9915, elev: 22, rwy: "02L/20R (13,123 ft)", alt: "WMKK" },
+            "VTBS": { name: "Suvarnabhumi Airport", city: "Bangkok, Thailand", lat: 13.6900, lng: 100.7501, elev: 5, rwy: "01L/19R (13,123 ft)", alt: "VTSP" },
+            "VTSP": { name: "Phuket Intl", city: "Phuket, Thailand", lat: 8.1132, lng: 98.3169, elev: 82, rwy: "09/27 (9,843 ft)", alt: "VTBS" },
+            "RKSI": { name: "Incheon Intl", city: "Seoul, South Korea", lat: 37.4602, lng: 126.4407, elev: 23, rwy: "15L/33R (12,303 ft)", alt: "RKSS" },
+            "WMKK": { name: "Kuala Lumpur Intl", city: "Kuala Lumpur, Malaysia", lat: 2.7456, lng: 101.7099, elev: 70, rwy: "14L/32R (13,530 ft)", alt: "WSSS" },
+            "RPLL": { name: "Ninoy Aquino Intl", city: "Manila, Philippines", lat: 14.5086, lng: 121.0194, elev: 75, rwy: "06/24 (12,260 ft)", alt: "RPLC" },
+            "YSSY": { name: "Sydney Kingsford Smith", city: "Sydney, Australia", lat: -33.9461, lng: 151.1772, elev: 21, rwy: "16R/34L (12,992 ft)", alt: "YMML" },
+            "YMML": { name: "Melbourne Airport", city: "Melbourne, Australia", lat: -37.6690, lng: 144.8410, elev: 434, rwy: "16/34 (11,998 ft)", alt: "YSSY" },
+            "NZAA": { name: "Auckland Airport", city: "Auckland, New Zealand", lat: -37.0082, lng: 174.7850, elev: 23, rwy: "05L/23R (11,926 ft)", alt: "NZCH" },
+            "NZCH": { name: "Christchurch Intl", city: "Christchurch, New Zealand", lat: -43.4870, lng: 172.5372, elev: 123, rwy: "05/23 (10,787 ft)", alt: "NZAA" }
         };
 
         const CHARTER_MISSIONS = {
             "SPORTS": [
-                { name: "NCAA Basketball March Madness Championship Squad", category: "Collegiate Athletics", purposeTemplate: "Direct charter for 168 traveling team personnel, coaching staff, athletic trainers, cheer squad, and band." },
-                { name: "FIFA World Cup 2026 National Delegation & Staff", category: "Professional Soccer", purposeTemplate: "Priority shuttle carrying 175 national team players, FIFA officials, training apparatus, and medical staff." },
-                { name: "NFL Regional Championship Team & Executive Delegation", category: "Professional Football", purposeTemplate: "Full roster team deployment with 172 players, coaches, media team, and specialized equipment." },
-                { name: "Formula 1 Racing Team Pit Crew & Telemetry Staff", category: "Motorsport Logistics", purposeTemplate: "Transport of 170 pit crew mechanics, telemetry server specialists, and composite wing spare assemblies." }
+                {
+                    name: "FIFA World Cup 2026 National Squad Shuttle",
+                    category: "Professional Soccer",
+                    purposeTemplate: "Direct charter transporting 174 national soccer team players, coaching directors, medical staff, and executive delegation.",
+                    cargo: {
+                        hold1: { desc: "AKH-104: Containerized Team Checked Baggage & Kit Trunks", weight: 3200, uld: "AKH-104", type: "ULD Container" },
+                        hold2: { desc: "AKH-201: Containerized Medical Diagnostic & Cryo Recovery Units", weight: 2100, uld: "AKH-201", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Hampers: Match Ball Cases & Training Cones", weight: 3400, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Video Telemetry Servers & Monitor Rigs", weight: 2800, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Hydration Carts & Spare Player Cleat Trunks", weight: 1150, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                },
+                {
+                    name: "NCAA March Madness Tournament Championship Delegation",
+                    category: "Collegiate Athletics",
+                    purposeTemplate: "Priority group airlift for 168 athletic student-athletes, coaching staff, band leaders, cheer squad, and university athletic directors.",
+                    cargo: {
+                        hold1: { desc: "AKH-106: Containerized Student-Athlete Personal Luggage", weight: 3400, uld: "AKH-106", type: "ULD Container" },
+                        hold2: { desc: "AKH-204: Containerized March Madness Uniforms & Pep Gear", weight: 1900, uld: "AKH-204", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: Marching Band Percussion & Brass Flight Cases", weight: 3900, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Athletic Trainer Treatment Tables & Taping Kits", weight: 2500, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Oversized Mascot Costumes & Media Backdrop Screens", weight: 980, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                },
+                {
+                    name: "Formula 1 Racing Team Trackside Crew & Telemetry Staff",
+                    category: "Motorsports Logistics",
+                    purposeTemplate: "High-priority deployment carrying 170 pit crew mechanics, chassis technicians, telemetry engineers, and team leadership.",
+                    cargo: {
+                        hold1: { desc: "AKH-110: Containerized Mechanics Personal Gear & Nomex Suits", weight: 2900, uld: "AKH-110", type: "ULD Container" },
+                        hold2: { desc: "AKH-208: Containerized Engine Telemetry Server Racks (UN3481)", weight: 2400, uld: "AKH-208", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: Carbon Composite Front Wing Spare Trunks", weight: 3100, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Pneumatic Wheel Gun Rigs & Pit Stop Gantry Tools", weight: 4200, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: High-Resolution Timing Scanners & Antenna Array", weight: 1200, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ],
             "CORPORATE": [
-                { name: "Global Tech Summit Executive Keynote Delegation", category: "Technology Corporate", purposeTemplate: "Executive charter carrying 165 keynote speakers, AI developers, and confidential prototype hardware demo units." },
-                { name: "Offshore Energy & Technical Field Inspection Crew", category: "Energy Sector", purposeTemplate: "High-capacity crew rotation transporting 175 engineers, safety inspectors, and specialized drilling telemetry sensors." },
-                { name: "Wall Street Financial Leadership Annual Conference", category: "Financial Services", purposeTemplate: "Corporate shuttle transport for 160 investment directors, analysts, and executive security personnel." }
+                {
+                    name: "Global AI & Tech Executive Summit Keynote Delegation",
+                    category: "Technology Corporate",
+                    purposeTemplate: "Executive charter flight transporting 165 AI engineers, keynote presenters, software directors, and security details.",
+                    cargo: {
+                        hold1: { desc: "AKH-102: Containerized Executive Suites Luggage & Apparel", weight: 3100, uld: "AKH-102", type: "ULD Container" },
+                        hold2: { desc: "AKH-203: Containerized Prototype Hardware Demo Units", weight: 2300, uld: "AKH-203", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: High-Density Server Rack Displays & Monitors", weight: 3600, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Stage Production Audio/Visual Console Flight Cases", weight: 2900, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Confidential Document Storage Safes & Press Collateral", weight: 1050, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ],
             "ENTERTAINMENT": [
-                { name: "World Concert Stadium Arena Production Crew", category: "Entertainment Logistics", purposeTemplate: "Charter transport for 180 stadium tour technicians, audio visual engineers, stage riggers, and backup cast." },
-                { name: "Major Motion Picture Production Cast & Crew", category: "Film & Media", purposeTemplate: "Filming relocation charter carrying 165 actors, director crew, camera operators, and wardrobe trunks." },
-                { name: "International Symphony Orchestra & Choral Society", category: "Arts & Culture", purposeTemplate: "Transport of 175 musicians, conductors, choir vocalists, and custom climate-controlled instrument flight trunks." }
+                {
+                    name: "International Symphony Orchestra & Choir World Tour",
+                    category: "Arts & Culture",
+                    purposeTemplate: "Cultural exchange flight for 176 classical musicians, choir vocalists, conductors, and instrument handlers.",
+                    cargo: {
+                        hold1: { desc: "AKH-105: Containerized Musician Checked Luggage & Formal Attire", weight: 3300, uld: "AKH-105", type: "ULD Container" },
+                        hold2: { desc: "AKH-206: Containerized Sheet Music Archives & Conductor Score Trunks", weight: 1800, uld: "AKH-206", type: "ULD Container" },
+                        hold3: { desc: "Loose Flight Cases: Climate-Controlled String Instrument Cases (Cellos/Basses)", weight: 4300, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Percussion Timpani Drums & Brass Flight Trunks", weight: 3800, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Concert Hall Acoustic Panels & Choir Riser Frames", weight: 1400, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ],
             "GOVERNMENT": [
-                { name: "United Nations Diplomatic Delegation & Security", category: "Diplomatic Mission", purposeTemplate: "High-level diplomatic charter carrying 155 international delegates, translators, and state security details." },
-                { name: "Embassy Relocation & Consular Emergency Taskforce", category: "Government Operations", purposeTemplate: "Rapid deployment of 170 diplomatic personnel, secure communications nodes, and consular files." },
-                { name: "Global Trade Summit Presidential Support Team", category: "Government Affairs", purposeTemplate: "Transport for 165 trade summit advance staff, press corps, and diplomatic liaison personnel." }
+                {
+                    name: "United Nations Diplomatic Delegation & State Security",
+                    category: "Diplomatic Operations",
+                    purposeTemplate: "High-level government transport carrying 158 ambassadors, bilateral translators, press liaisons, and diplomatic security officers.",
+                    cargo: {
+                        hold1: { desc: "AKH-101: Containerized Diplomatic Pouch & Ambassador Baggage", weight: 2800, uld: "AKH-101", type: "ULD Container" },
+                        hold2: { desc: "AKH-202: Containerized Encrypted Satellite Comms Nodes (Class 9 HAZMAT)", weight: 2100, uld: "AKH-202", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: Armored Escort Protective Gear Trunks", weight: 3500, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Portable Secure Briefing Room Telecom Rigs", weight: 2700, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Consular Emergency Document Containers", weight: 950, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ],
             "MEDICAL": [
-                { name: "Red Cross Disaster Relief Emergency Response Taskforce", category: "Humanitarian / Emergency", purposeTemplate: "Rapid airlift of 180 emergency first responders, search-and-rescue teams, mobile satellite nodes, and trauma surgical kits." },
-                { name: "Specialist Medical & Surgical Deployment Team", category: "Global Health", purposeTemplate: "Chartered transport carrying 160 surge surgeons, epidemiology specialists, and mobile ICU diagnostic monitors." },
-                { name: "Global Vaccine & Emergency Medical Supply Logistics", category: "Humanitarian Medical", purposeTemplate: "Combined passenger flight carrying 150 medical logistics directors alongside critical cold-chain plasma storage units." }
+                {
+                    name: "Red Cross Disaster Relief Emergency Response Taskforce",
+                    category: "Humanitarian Relief",
+                    purposeTemplate: "Emergency airlift carrying 175 trauma surgeons, emergency first-responders, disaster liaisons, and field logistics crews.",
+                    cargo: {
+                        hold1: { desc: "AKH-108: Containerized Cold-Chain Vaccine & Plasma Crates (UN1845 Dry Ice)", weight: 2700, uld: "AKH-108", type: "ULD Container" },
+                        hold2: { desc: "AKH-209: Containerized Responder Personal Gear & Sleeping Units", weight: 2500, uld: "AKH-209", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: Mobile ICU Surgical Ventilators & Trauma Kits", weight: 4400, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Diesel Field Generators & Water Purification Units", weight: 3900, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Emergency Inflatable Shelter Tents & Satellite Dishes", weight: 1550, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ],
             "AEROSPACE": [
-                { name: "SpaceX Starship Launch Flight Control & Engineering Crew", category: "Aerospace Operations", purposeTemplate: "Priority shuttle carrying 175 flight engineers, telemetry analysts, launch pad mechanics, and guidance components." },
-                { name: "NASA Planetary Exploration & Science Mission Team", category: "Space Exploration", purposeTemplate: "Airborne deployment of 165 planetary scientists, satellite technicians, and high-altitude calibration apparatus." },
-                { name: "Arctic Climatology Airborne Research Expedition", category: "Scientific Research", purposeTemplate: "Scientific charter transporting 155 polar meteorologists, glaciologists, and ice-core drill equipment." }
+                {
+                    name: "SpaceX Launch Operations Flight Control & Engineering Crew",
+                    category: "Aerospace Engineering",
+                    purposeTemplate: "Priority shuttle deploying 172 rocket guidance engineers, launch pad mechanics, software analysts, and range controllers.",
+                    cargo: {
+                        hold1: { desc: "AKH-111: Containerized Engineer Personal Luggage & Laptops", weight: 3000, uld: "AKH-111", type: "ULD Container" },
+                        hold2: { desc: "AKH-207: Containerized Cleanroom Avionics Diagnostic Hardware", weight: 2200, uld: "AKH-207", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: Rocket Guidance Telemetry Sensors & Umbilical Rigs", weight: 3700, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Launch Pad Pneumatic Valves & Calibration Tools", weight: 3200, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Nitrogen Gas Sampling Containers & Cleanroom Suits", weight: 1100, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ],
             "VIP": [
-                { name: "Luxury Caribbean Resort Executive VIP Group", category: "Private Hospitality", purposeTemplate: "Exclusive high-capacity resort flight for 160 corporate VIP award winners, families, and concierge staff." },
-                { name: "Destination VIP International Wedding Delegation", category: "Private Luxury Event", purposeTemplate: "Private airliner charter carrying 170 wedding guests, catering chefs, event planners, and luxury decor trunks." },
-                { name: "High-Roller Casino Executive Invitational Delegation", category: "Hospitality & Gaming", purposeTemplate: "VIP charter flight transporting 150 elite gaming guests, security escorts, and luxury hospitality staff." }
+                {
+                    name: "Luxury Resort Executive VIP Group & Gaming Invitation",
+                    category: "Private Luxury Hospitality",
+                    purposeTemplate: "High-capacity VIP charter transporting 162 elite corporate award recipients, casino executives, and luxury concierge staff.",
+                    cargo: {
+                        hold1: { desc: "AKH-103: Containerized VIP Designer Checked Luggage Trunks", weight: 3600, uld: "AKH-103", type: "ULD Container" },
+                        hold2: { desc: "AKH-205: Containerized High-End Culinary Ingredients & Fine Wine", weight: 1900, uld: "AKH-205", type: "ULD Container" },
+                        hold3: { desc: "Loose Equipment Cases: Executive Event Stage Decor & Lighting Rigs", weight: 3100, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold4: { desc: "Loose Heavy Trunks: Security Escort Equipment & Luxury Gift Trunks", weight: 2400, uld: "BELT LOAD", type: "Belt Loader" },
+                        hold5: { desc: "Net Bulk: Golf Club Travel Bags & Resort Sports Equipment", weight: 1300, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                    }
+                }
             ]
         };
 
-        const BELLY_HOLD_ITEMS_POOL = [
-            { desc: "Athletic Equipment Trunks & Training Kits", weight: 3400, hold: "Hold 1 (Fwd)", uld: "AKH-104", hazmat: "NONE" },
-            { desc: "Broadcast 4K Camera Telemetry Rigs", weight: 2800, hold: "Hold 1 (Fwd)", uld: "AKH-105", hazmat: "NONE" },
-            { desc: "Lithium Ion Telemetry Battery Power Packs", weight: 950, hold: "Hold 2 (Fwd)", uld: "AKH-201", hazmat: "UN3481 (Class 9)" },
-            { desc: "Dry Ice Medical Preservation Units", weight: 640, hold: "Hold 2 (Fwd)", uld: "AKH-202", hazmat: "UN1845 (Class 9)" },
-            { desc: "Stage Lighting Racks & Sound Mixing Consoles", weight: 4800, hold: "Hold 3 (Aft)", uld: "AKH-301", hazmat: "NONE" },
-            { desc: "Priceless Orchestral Instrument Flight Cases", weight: 3100, hold: "Hold 3 (Aft)", uld: "AKH-302", hazmat: "NONE" },
-            { desc: "Formula 1 Carbon Composite Chassis Spares", weight: 2200, hold: "Hold 4 (Aft)", uld: "AKH-401", hazmat: "NONE" },
-            { desc: "Passenger Checked Baggage (Containerized)", weight: 6500, hold: "Hold 4 (Aft)", uld: "AKH-402", hazmat: "NONE" },
-            { desc: "Loose Oversized Cargo & Emergency Kits", weight: 1400, hold: "Hold 5 (Bulk)", uld: "NET-BULK", hazmat: "NONE" }
-        ];
-
-        const VIP_NAMES_FIRST = ["Jordan", "Taylor", "Morgan", "Alex", "Cameron", "Devon", "Casey", "Riley", "Avery", "Sam", "Chris", "Pat", "Julian", "Marcus", "Elena"];
-        const VIP_NAMES_LAST = ["Brooks", "Hayes", "Vaughn", "Mercer", "Sinclair", "Sterling", "Dalton", "Elliot", "Fletcher", "Ramirez", "Novak", "Chen", "Kovacs", "O'Connor", "Dupont"];
+        const VIP_NAMES_FIRST = ["Jordan", "Taylor", "Morgan", "Alex", "Cameron", "Devon", "Casey", "Riley", "Avery", "Sam", "Chris", "Pat", "Julian", "Marcus", "Elena", "Sophia", "Ethan", "Liam"];
+        const VIP_NAMES_LAST = ["Brooks", "Hayes", "Vaughn", "Mercer", "Sinclair", "Sterling", "Dalton", "Elliot", "Fletcher", "Ramirez", "Novak", "Chen", "Kovacs", "O'Connor", "Dupont", "Vance"];
 
         /* ==========================================================================
            2. GLOBAL STATE
@@ -624,11 +768,10 @@
             const dd = String(today.getDate()).padStart(2, '0');
             dateInput.value = `${yyyy}-${mm}-${dd}`;
 
-            populateCustomLegSelect();
             startZuluClock();
             renderHistoryList();
 
-            // Initialize Map safely inside try/catch block
+            // Initialize Map safely
             initLeafletMap();
 
             // Generate initial dispatch schedule
@@ -638,6 +781,8 @@
         function populateAirportDropdown() {
             const select = document.getElementById('select-location-preset');
             select.innerHTML = '';
+            
+            // Add top 120+ airports
             Object.keys(AIRPORTS).forEach(icao => {
                 const apt = AIRPORTS[icao];
                 const opt = document.createElement('option');
@@ -646,10 +791,34 @@
                 if (icao === 'KATL') opt.selected = true;
                 select.appendChild(opt);
             });
+
             const customOpt = document.createElement('option');
             customOpt.value = 'CUSTOM';
-            customOpt.innerText = '-- Custom ICAO --';
+            customOpt.innerText = '-- Type Custom ICAO Below --';
             select.appendChild(customOpt);
+        }
+
+        function getAirport(icao) {
+            const code = icao.toUpperCase().trim();
+            if (AIRPORTS[code]) return AIRPORTS[code];
+
+            // Deterministic Fallback Generator for any typed custom 4-letter ICAO
+            let hash = 0;
+            for (let i = 0; i < code.length; i++) {
+                hash = code.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const lat = ((Math.abs(hash) % 800) / 10) - 40; // -40 to +40
+            const lng = ((Math.abs(hash * 3) % 3600) / 10) - 180; // -180 to +180
+
+            return {
+                name: `${code} International Airport`,
+                city: `Custom Aerodrome (${code})`,
+                lat: parseFloat(lat.toFixed(4)),
+                lng: parseFloat(lng.toFixed(4)),
+                elev: (Math.abs(hash) % 1500) + 20,
+                rwy: "09/27 (8,500 ft)",
+                alt: "KATL"
+            };
         }
 
         function startZuluClock() {
@@ -681,19 +850,6 @@
             }
         }
 
-        function populateCustomLegSelect() {
-            const sel = document.getElementById('custom-leg-arr-select');
-            if (!sel) return;
-            sel.innerHTML = '';
-            Object.keys(AIRPORTS).forEach(icao => {
-                const apt = AIRPORTS[icao];
-                const opt = document.createElement('option');
-                opt.value = icao;
-                opt.innerText = `${icao} - ${apt.name} (${apt.city})`;
-                sel.appendChild(opt);
-            });
-        }
-
         function calculateNM(lat1, lon1, lat2, lon2) {
             const R = 3440.065;
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -702,7 +858,7 @@
                       Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
                       Math.sin(dLon/2) * Math.sin(dLon/2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return Math.max(80, Math.round(R * c));
+            return Math.max(120, Math.round(R * c));
         }
 
         function formatMinutesToHHMM(mins) {
@@ -724,18 +880,14 @@
            ========================================================================== */
 
         function generateDispatchSchedule() {
-            let startICAO = document.getElementById('input-custom-icao').value.toUpperCase().trim();
-            if (!AIRPORTS[startICAO]) {
-                startICAO = 'KATL';
-                document.getElementById('input-custom-icao').value = 'KATL';
-            }
-
+            let startICAO = document.getElementById('input-custom-icao').value.toUpperCase().trim() || 'KATL';
             const dispatchDate = document.getElementById('input-dispatch-date').value || "2026-11-07";
             const legCountSetting = document.getElementById('select-leg-count').value;
+            const routePattern = document.getElementById('select-route-pattern').value;
             const rangeProfile = document.getElementById('select-range-profile').value;
             const missionCategory = document.getElementById('select-mission-type').value;
 
-            let numLegs = 2;
+            let numLegs = 3;
             if (legCountSetting === 'AUTO') {
                 numLegs = Math.floor(Math.random() * 3) + 2; // 2 to 4 legs
             } else {
@@ -744,62 +896,77 @@
 
             const airportKeys = Object.keys(AIRPORTS);
             let currentICAO = startICAO;
+            let initialHubICAO = startICAO;
             let schedule = [];
             let totalMinuteTracker = 60; // 08:00 Z start
 
             for (let i = 0; i < numLegs; i++) {
-                let possibleDests = airportKeys.filter(k => k !== currentICAO);
+                let destICAO = "";
 
-                if (rangeProfile === 'SHORT') {
-                    possibleDests = possibleDests.filter(k => calculateNM(AIRPORTS[currentICAO].lat, AIRPORTS[currentICAO].lng, AIRPORTS[k].lat, AIRPORTS[k].lng) < 800);
-                } else if (rangeProfile === 'LONG') {
-                    possibleDests = possibleDests.filter(k => calculateNM(AIRPORTS[currentICAO].lat, AIRPORTS[currentICAO].lng, AIRPORTS[k].lat, AIRPORTS[k].lng) > 1200);
+                if (routePattern === 'SHUTTLE') {
+                    // Out & Back pattern: A -> B -> A -> C
+                    if (i % 2 === 1) {
+                        destICAO = initialHubICAO;
+                    } else {
+                        let pool = airportKeys.filter(k => k !== currentICAO && k !== initialHubICAO);
+                        destICAO = pool[Math.floor(Math.random() * pool.length)] || "KORD";
+                    }
+                } else if (routePattern === 'CIRCUIT' && i === numLegs - 1 && numLegs > 1) {
+                    // Triangle loop pattern: Return to origin on last leg
+                    destICAO = initialHubICAO;
+                } else {
+                    // PROGRESSIVE ROUTING (A -> B -> C -> D)
+                    let possibleDests = airportKeys.filter(k => k !== currentICAO);
+                    if (rangeProfile === 'SHORT') {
+                        possibleDests = possibleDests.filter(k => calculateNM(getAirport(currentICAO).lat, getAirport(currentICAO).lng, AIRPORTS[k].lat, AIRPORTS[k].lng) < 800);
+                    } else if (rangeProfile === 'LONG') {
+                        possibleDests = possibleDests.filter(k => calculateNM(getAirport(currentICAO).lat, getAirport(currentICAO).lng, AIRPORTS[k].lat, AIRPORTS[k].lng) > 1200);
+                    }
+                    if (possibleDests.length === 0) possibleDests = airportKeys.filter(k => k !== currentICAO);
+                    destICAO = possibleDests[Math.floor(Math.random() * possibleDests.length)];
                 }
-                if (possibleDests.length === 0) possibleDests = airportKeys.filter(k => k !== currentICAO);
 
-                const destICAO = possibleDests[Math.floor(Math.random() * possibleDests.length)];
-
-                const origApt = AIRPORTS[currentICAO];
-                const destApt = AIRPORTS[destICAO];
+                const origApt = getAirport(currentICAO);
+                const destApt = getAirport(destICAO);
                 const distanceNM = calculateNM(origApt.lat, origApt.lng, destApt.lat, destApt.lng);
 
-                // A320 Flight time calculation (450 KTAS cruise speed + 30 mins vectors/climb/descent)
+                // A320 Flight time calculation (450 KTAS cruise speed + 30 mins climb/descent)
                 const cruiseHours = distanceNM / A320_PROFILE.cruiseKtas;
                 const flightMinutes = Math.round((cruiseHours * 60) + 30);
 
                 const etd = formatFlightTime(dispatchDate, totalMinuteTracker);
                 const eta = formatFlightTime(dispatchDate, totalMinuteTracker + flightMinutes);
-                const turnaround = Math.floor(Math.random() * 45) + 60; // 60 - 105 min turn
+                const turnaround = Math.floor(Math.random() * 40) + 55; // 55 - 95 min turnaround
 
                 // Pick Charter Mission according to Category selection
                 const orgObj = getRandomCharterMission(missionCategory, i);
                 const flightNum = `BMN${3611 + i}`;
                 const callsign = `BOWMAN ${3611 + i}`;
 
-                // Pax count between 140 and 180 (Full capacity economy setup)
-                const paxCount = Math.floor(Math.random() * 41) + 140; 
+                // Pax count between 145 and 180 (Full capacity setup)
+                const paxCount = Math.floor(Math.random() * 36) + 145; 
                 const paxManifest = generateA320PaxManifest(paxCount);
 
-                // Lower Belly Cargo
-                const cargoManifest = generateBellyCargoManifest();
-                const totalCargoWeight = cargoManifest.reduce((acc, item) => acc + item.weight, 0);
+                // Lower Belly Cargo Breakdown (Holds 1-4 & Bulk 5)
+                const cargoObj = orgObj.cargo;
+                const totalCargoWeight = cargoObj.hold1.weight + cargoObj.hold2.weight + cargoObj.hold3.weight + cargoObj.hold4.weight + cargoObj.hold5.weight;
 
                 // Weights
-                const paxTotalWeight = paxCount * 205; // 205 lbs standard per pax + luggage
+                const paxTotalWeight = paxCount * 205; // 205 lbs per pax + luggage
                 const zfw = A320_PROFILE.dow + paxTotalWeight + totalCargoWeight;
 
                 // Fuel Plan
                 const tripFuel = Math.round((flightMinutes / 60) * A320_PROFILE.fuelBurnPerHour);
                 const reserveFuel = 3800; // FAR 45 min reserve
-                const alternateFuel = 2400; // Alternate diversion fuel
+                const alternateFuel = 2400; // Alternate fuel
                 const contingencyFuel = Math.round(tripFuel * 0.05); // 5% contingency
                 const blockFuel = tripFuel + reserveFuel + alternateFuel + contingencyFuel;
 
                 const tow = zfw + blockFuel;
                 const ldw = tow - tripFuel;
 
-                // Center of Gravity (% MAC) - A320 normal range 15% to 40%
-                const cgPercent = (24.5 + ((paxCount / 180) * 3.5) + ((totalCargoWeight / 25000) * 2.1)).toFixed(1);
+                // Center of Gravity (% MAC) - A320 normal range 18% to 38%
+                const cgPercent = (24.2 + ((paxCount / 180) * 3.2) + ((totalCargoWeight / 25000) * 1.8)).toFixed(1);
 
                 schedule.push({
                     legNumber: i + 1,
@@ -817,7 +984,7 @@
                     org: orgObj,
                     paxCount,
                     paxManifest,
-                    cargoManifest,
+                    cargoObj,
                     totalCargoWeight,
                     paxTotalWeight,
                     tripFuel,
@@ -861,7 +1028,7 @@
         }
 
         function generateWaypoints(orig, dest) {
-            const fixes = ["JFK", "DIXIE", "GDM", "BOS", "HNK", "ALB", "BUF", "JOT", "OBK", "BNE", "TUL", "PXR", "FLG", "DAG", "SFO", "KATL", "KCLT", "MEM", "MOD", "RBL"];
+            const fixes = ["JFK", "DIXIE", "GDM", "BOS", "HNK", "ALB", "BUF", "JOT", "OBK", "BNE", "TUL", "PXR", "FLG", "DAG", "SFO", "KATL", "KCLT", "MEM", "MOD", "RBL", "NTA", "LIZ"];
             const selected = [];
             for (let i = 0; i < 3; i++) {
                 selected.push(fixes[Math.floor(Math.random() * fixes.length)]);
@@ -869,17 +1036,17 @@
             return `${orig} DCT ${selected.join(' DCT ')} DCT ${dest}`;
         }
 
-        /* Generate 180 Economy Seat Occupancy Map & Roster */
+        /* Generate 180 Seat Occupancy (Skipping Row 13: Rows 1-12 & 14-31) */
         function generateA320PaxManifest(count) {
             const paxMap = {};
             const seats = [];
             
-            // Build full 180 seat list (Rows 1 to 30, Seats A, B, C, D, E, F)
-            for (let r = 1; r <= 30; r++) {
+            // Explicitly build 30 rows using A320_PROFILE.seatRows (Rows 1-12 & 14-31)
+            A320_PROFILE.seatRows.forEach(r => {
                 ['A', 'B', 'C', 'D', 'E', 'F'].forEach(c => {
                     seats.push(`${r}${c}`);
                 });
-            }
+            });
 
             const shuffledSeats = [...seats].sort(() => 0.5 - Math.random());
 
@@ -899,24 +1066,6 @@
             }
 
             return paxMap;
-        }
-
-        function generateBellyCargoManifest() {
-            const items = [];
-            const selectedCount = Math.floor(Math.random() * 3) + 5; // 5 to 7 items
-
-            for (let i = 0; i < selectedCount; i++) {
-                const template = BELLY_HOLD_ITEMS_POOL[i % BELLY_HOLD_ITEMS_POOL.length];
-                items.push({
-                    itemId: `ULD-${Math.floor(Math.random()*8900)+1000}`,
-                    desc: template.desc,
-                    weight: template.weight + Math.floor(Math.random() * 300) - 150,
-                    hold: template.hold,
-                    uld: template.uld,
-                    hazmat: template.hazmat
-                });
-            }
-            return items;
         }
 
         /* ==========================================================================
@@ -1109,13 +1258,12 @@
             `;
         }
 
-        /* 180 SEAT MAP TAB RENDERER */
+        /* 180 SEAT MAP TAB RENDERER (ROWS 1-12 & 14-31) */
         function renderSeatMapTab(container, leg) {
             const paxMap = leg.paxManifest;
-            
             let seatRowsHTML = '';
 
-            for (let r = 1; r <= 30; r++) {
+            A320_PROFILE.seatRows.forEach(r => {
                 let rowHTML = `<div class="flex items-center justify-center space-x-1.5 my-1">
                     <span class="text-[10px] font-mono text-slate-500 w-5 text-right font-bold">${r}</span>`;
                 
@@ -1164,16 +1312,16 @@
 
                 rowHTML += `</div>`;
                 seatRowsHTML += rowHTML;
-            }
+            });
 
             container.innerHTML = `
                 <div class="space-y-4 font-mono">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
                         <div>
                             <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-                                <i class="fa-solid fa-chair text-gold-400"></i> Airbus A320 Cabin Layout (180 Seats)
+                                <i class="fa-solid fa-chair text-gold-400"></i> Airbus A320 Seating Chart (180 Seats)
                             </h3>
-                            <p class="text-xs text-slate-400">Click any occupied seat to view passenger details and catering request.</p>
+                            <p class="text-xs text-slate-400">Rows 1 to 12 & 14 to 31 (Row 13 omitted per airliner standard).</p>
                         </div>
                         <div class="flex items-center space-x-3 text-xs">
                             <span class="flex items-center"><span class="w-3 h-3 bg-emerald-600 rounded mr-1"></span> Occupied (${leg.paxCount})</span>
@@ -1185,7 +1333,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                         <!-- Visual Seat Grid -->
                         <div class="lg:col-span-5 bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-y-auto max-h-[420px]">
-                            <div class="text-center text-[10px] text-slate-500 border-b border-slate-800 pb-2 mb-3">FRONT CABIN / COCKPIT</div>
+                            <div class="text-center text-[10px] text-slate-500 border-b border-slate-800 pb-2 mb-3">FORWARD FLIGHT DECK</div>
                             ${seatRowsHTML}
                             <div class="text-center text-[10px] text-slate-500 border-t border-slate-800 pt-2 mt-3">AFT GALLEY / LAVATORIES</div>
                         </div>
@@ -1204,7 +1352,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-800/60">
-                                        ${Object.values(paxMap).slice(0, 15).map(p => `
+                                        ${Object.values(paxMap).slice(0, 16).map(p => `
                                             <tr>
                                                 <td class="py-2 text-gold-400 font-bold">${p.seat}</td>
                                                 <td class="py-2 text-slate-200 font-semibold">${p.name}</td>
@@ -1215,16 +1363,16 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <p class="text-[10px] text-slate-500 text-right">+ ${Math.max(0, leg.paxCount - 15)} additional passengers onboard</p>
+                            <p class="text-[10px] text-slate-500 text-right">+ ${Math.max(0, leg.paxCount - 16)} additional passengers onboard</p>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        /* BELLY CARGO TAB RENDERER */
+        /* LOWER DECK CARGO TAB RENDERER (FORWARD AKH ULD CONTAINERS vs AFT BELT LOADER) */
         function renderBellyCargoTab(container, leg) {
-            const cargo = leg.cargoManifest;
+            const cargo = leg.cargoObj;
             const totalCargoKg = Math.round(leg.totalCargoWeight * 0.453592);
 
             container.innerHTML = `
@@ -1232,9 +1380,9 @@
                     <div class="flex justify-between items-center pb-3 border-b border-slate-800">
                         <div>
                             <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-                                <i class="fa-solid fa-boxes-packing text-amber-400"></i> Airbus A320 Lower Deck Cargo Compartment
+                                <i class="fa-solid fa-boxes-packing text-amber-400"></i> Airbus A320 Lower Deck Cargo Compartments
                             </h3>
-                            <p class="text-xs text-slate-400">Itemized lower belly ULD & bulk cargo distribution manifest.</p>
+                            <p class="text-xs text-slate-400">Forward Holds 1 & 2 (ULD AKH Containers) | Aft Holds 3, 4 & 5 (Belt Loader Bulk Ops).</p>
                         </div>
                         <div class="text-right">
                             <span class="text-xs text-slate-400 block">TOTAL BELLY CARGO</span>
@@ -1246,25 +1394,30 @@
                     <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center space-y-2">
                         <div class="text-[10px] text-slate-500 uppercase tracking-widest">A320 LOWER DECK HOLD SCHEMATIC</div>
                         <div class="grid grid-cols-5 gap-2 text-xs">
-                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
-                                <span class="text-slate-400 text-[10px] block font-bold">HOLD 1 (FWD)</span>
-                                <span class="text-cyan-400 font-bold">AKH 104 / 105</span>
+                            <div class="bg-slate-900 p-2.5 rounded border border-cyan-500/40">
+                                <span class="text-cyan-400 text-[10px] block font-bold">HOLD 1 (FWD ULD)</span>
+                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold1.uld}</span>
+                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold1.weight.toLocaleString()} LBS</span>
                             </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
-                                <span class="text-slate-400 text-[10px] block font-bold">HOLD 2 (FWD)</span>
-                                <span class="text-cyan-400 font-bold">AKH 201 / 202</span>
+                            <div class="bg-slate-900 p-2.5 rounded border border-cyan-500/40">
+                                <span class="text-cyan-400 text-[10px] block font-bold">HOLD 2 (FWD ULD)</span>
+                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold2.uld}</span>
+                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold2.weight.toLocaleString()} LBS</span>
                             </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
-                                <span class="text-slate-400 text-[10px] block font-bold">HOLD 3 (AFT)</span>
-                                <span class="text-cyan-400 font-bold">AKH 301 / 302</span>
+                            <div class="bg-slate-900 p-2.5 rounded border border-amber-500/40">
+                                <span class="text-amber-400 text-[10px] block font-bold">HOLD 3 (AFT BELT)</span>
+                                <span class="text-slate-200 font-bold text-[11px]">BELT LOAD</span>
+                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold3.weight.toLocaleString()} LBS</span>
                             </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
-                                <span class="text-slate-400 text-[10px] block font-bold">HOLD 4 (AFT)</span>
-                                <span class="text-cyan-400 font-bold">AKH 401 / 402</span>
+                            <div class="bg-slate-900 p-2.5 rounded border border-amber-500/40">
+                                <span class="text-amber-400 text-[10px] block font-bold">HOLD 4 (AFT BELT)</span>
+                                <span class="text-slate-200 font-bold text-[11px]">BELT LOAD</span>
+                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold4.weight.toLocaleString()} LBS</span>
                             </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
+                            <div class="bg-slate-900 p-2.5 rounded border border-slate-700">
                                 <span class="text-slate-400 text-[10px] block font-bold">HOLD 5 (BULK)</span>
-                                <span class="text-amber-400 font-bold">LOOSE NET</span>
+                                <span class="text-slate-200 font-bold text-[11px]">BULK NET</span>
+                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold5.weight.toLocaleString()} LBS</span>
                             </div>
                         </div>
                     </div>
@@ -1274,25 +1427,43 @@
                         <table class="w-full text-left text-xs">
                             <thead>
                                 <tr class="text-slate-400 border-b border-slate-800 text-[10px]">
-                                    <th class="pb-2">CONTAINER / ULD</th>
-                                    <th class="pb-2">DESCRIPTION</th>
-                                    <th class="pb-2">LOCATION HOLD</th>
+                                    <th class="pb-2">HOLD / LOADING METHOD</th>
+                                    <th class="pb-2">CONTAINER / TAG</th>
+                                    <th class="pb-2">MANIFESTED ITEMS & GEAR</th>
                                     <th class="pb-2">WEIGHT (LBS)</th>
-                                    <th class="pb-2">HAZMAT STATUS</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800/60">
-                                ${cargo.map(c => `
-                                    <tr>
-                                        <td class="py-2.5 text-gold-400 font-bold">${c.uld}</td>
-                                        <td class="py-2.5 text-slate-200 font-semibold">${c.desc}</td>
-                                        <td class="py-2.5 text-slate-300 text-[11px]">${c.hold}</td>
-                                        <td class="py-2.5 text-amber-400 font-bold">${c.weight.toLocaleString()} lbs</td>
-                                        <td class="py-2.5">
-                                            <span class="px-2 py-0.5 text-[9px] rounded ${c.hazmat !== 'NONE' ? 'bg-red-950 text-red-400 border border-red-800 font-bold' : 'bg-slate-800 text-slate-400'}">${c.hazmat}</span>
-                                        </td>
-                                    </tr>
-                                `).join('')}
+                                <tr>
+                                    <td class="py-2.5 text-cyan-400 font-bold">Hold 1 (Fwd ULD)</td>
+                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold1.uld}</td>
+                                    <td class="py-2.5 text-slate-200">${cargo.hold1.desc}</td>
+                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold1.weight.toLocaleString()} lbs</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-cyan-400 font-bold">Hold 2 (Fwd ULD)</td>
+                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold2.uld}</td>
+                                    <td class="py-2.5 text-slate-200">${cargo.hold2.desc}</td>
+                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold2.weight.toLocaleString()} lbs</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-amber-400 font-bold">Hold 3 (Aft Belt Loader)</td>
+                                    <td class="py-2.5 text-slate-400">Belt Loader</td>
+                                    <td class="py-2.5 text-slate-200">${cargo.hold3.desc}</td>
+                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold3.weight.toLocaleString()} lbs</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-amber-400 font-bold">Hold 4 (Aft Belt Loader)</td>
+                                    <td class="py-2.5 text-slate-400">Belt Loader</td>
+                                    <td class="py-2.5 text-slate-200">${cargo.hold4.desc}</td>
+                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold4.weight.toLocaleString()} lbs</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 text-slate-400 font-bold">Hold 5 (Bulk Net)</td>
+                                    <td class="py-2.5 text-slate-400">Loose / Net</td>
+                                    <td class="py-2.5 text-slate-200">${cargo.hold5.desc}</td>
+                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold5.weight.toLocaleString()} lbs</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1485,6 +1656,7 @@
             const modal = document.getElementById('print-dispatch-modal');
             const container = document.getElementById('dispatch-release-content');
             const leg = currentSchedule[activeLegIndex];
+            const c = leg.cargoObj;
 
             container.innerHTML = `
                 <div class="border-b-2 border-slate-900 pb-4 mb-4 flex justify-between items-start font-mono">
@@ -1527,6 +1699,18 @@
                     <div class="mt-1 text-slate-700">${leg.org.purposeTemplate}</div>
                 </div>
 
+                <!-- CARGO MANIFEST REFLECTED IN DISPATCH RELEASE -->
+                <div class="border border-slate-300 p-3 rounded text-xs bg-slate-50 font-mono">
+                    <strong class="block mb-1 text-slate-800">LOWER DECK CARGO MANIFEST DETAILS:</strong>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        <div>• <strong>Hold 1 (${c.hold1.uld}):</strong> ${c.hold1.desc} (${c.hold1.weight.toLocaleString()} lbs)</div>
+                        <div>• <strong>Hold 2 (${c.hold2.uld}):</strong> ${c.hold2.desc} (${c.hold2.weight.toLocaleString()} lbs)</div>
+                        <div>• <strong>Hold 3 (Aft Belt):</strong> ${c.hold3.desc} (${c.hold3.weight.toLocaleString()} lbs)</div>
+                        <div>• <strong>Hold 4 (Aft Belt):</strong> ${c.hold4.desc} (${c.hold4.weight.toLocaleString()} lbs)</div>
+                        <div>• <strong>Hold 5 (Bulk Net):</strong> ${c.hold5.desc} (${c.hold5.weight.toLocaleString()} lbs)</div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-6 text-xs font-mono">
                     <div class="border border-slate-300 p-3 rounded">
                         <div class="font-bold border-b border-slate-200 pb-1 mb-2">FUEL & FLIGHT PLAN</div>
@@ -1565,6 +1749,20 @@
             if (!currentSchedule.length) return;
             const lastLeg = currentSchedule[currentSchedule.length - 1];
             document.getElementById('custom-leg-dep').value = lastLeg.destination.icao;
+
+            // Populate destination dropdown
+            const sel = document.getElementById('custom-leg-arr-select');
+            sel.innerHTML = '';
+            Object.keys(AIRPORTS).forEach(icao => {
+                if (icao !== lastLeg.destination.icao) {
+                    const apt = AIRPORTS[icao];
+                    const opt = document.createElement('option');
+                    opt.value = icao;
+                    opt.innerText = `${icao} - ${apt.name} (${apt.city})`;
+                    sel.appendChild(opt);
+                }
+            });
+
             document.getElementById('add-leg-modal').classList.remove('hidden');
         }
 
@@ -1573,17 +1771,13 @@
         }
 
         function submitCustomLeg() {
-            const depICAO = document.getElementById('custom-leg-dep').value.toUpperCase().trim();
+            const depICAO = document.getElementById('custom-leg-dep').value;
             const arrICAO = document.getElementById('custom-leg-arr-select').value;
             const orgName = document.getElementById('custom-leg-org').value.trim() || "High-Capacity Group Charter";
-            const paxCount = parseInt(document.getElementById('custom-leg-pax').value) || 160;
+            const paxCount = parseInt(document.getElementById('custom-leg-pax').value) || 165;
 
-            if (!AIRPORTS[depICAO] || !AIRPORTS[arrICAO]) {
-                return;
-            }
-
-            const origApt = AIRPORTS[depICAO];
-            const destApt = AIRPORTS[arrICAO];
+            const origApt = getAirport(depICAO);
+            const destApt = getAirport(arrICAO);
             const distanceNM = calculateNM(origApt.lat, origApt.lng, destApt.lat, destApt.lng);
 
             const cruiseHours = distanceNM / A320_PROFILE.cruiseKtas;
@@ -1593,8 +1787,21 @@
             const etd = lastLeg.eta;
             const eta = "NEXT LEG";
 
-            const cargoManifest = generateBellyCargoManifest();
-            const totalCargoWeight = cargoManifest.reduce((acc, item) => acc + item.weight, 0);
+            const orgObj = {
+                name: orgName,
+                category: "High-Capacity Direct Charter",
+                purposeTemplate: `Direct charter flight transporting ${paxCount} passengers on behalf of ${orgName}.`,
+                cargo: {
+                    hold1: { desc: "AKH-115: Containerized Guest Checked Luggage", weight: 3100, uld: "AKH-115", type: "ULD Container" },
+                    hold2: { desc: "AKH-212: Containerized Event Catering & Supplies", weight: 1900, uld: "AKH-212", type: "ULD Container" },
+                    hold3: { desc: "Loose Equipment Trunks: Audio/Visual Production Rigs", weight: 3400, uld: "BELT LOAD", type: "Belt Loader" },
+                    hold4: { desc: "Loose Heavy Crates: Staging Gear & Presentation Screens", weight: 2600, uld: "BELT LOAD", type: "Belt Loader" },
+                    hold5: { desc: "Net Bulk: Loose Bags & Event Promotional Trunks", weight: 1100, uld: "NET-BULK", type: "Belt / Bulk Net" }
+                }
+            };
+
+            const cargoObj = orgObj.cargo;
+            const totalCargoWeight = cargoObj.hold1.weight + cargoObj.hold2.weight + cargoObj.hold3.weight + cargoObj.hold4.weight + cargoObj.hold5.weight;
 
             const tripFuel = Math.round((flightMinutes / 60) * A320_PROFILE.fuelBurnPerHour);
             const blockFuel = tripFuel + 6200;
@@ -1616,14 +1823,10 @@
                 etd,
                 eta,
                 turnaroundMins: 60,
-                org: {
-                    name: orgName,
-                    category: "High-Capacity Direct Charter",
-                    purposeTemplate: `Direct charter flight transporting ${paxCount} passengers on behalf of ${orgName}.`
-                },
+                org: orgObj,
                 paxCount,
                 paxManifest: generateA320PaxManifest(paxCount),
-                cargoManifest,
+                cargoObj,
                 totalCargoWeight,
                 paxTotalWeight,
                 tripFuel,
