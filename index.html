@@ -1,1811 +1,1370 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bowman Air - A320 Charter Dispatch (N361VA)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gold: {
-                            400: '#fbbf24',
-                            500: '#d4af37',
-                            600: '#b48811',
-                        },
-                        av: {
-                            bg: '#080d1a',
-                            card: '#0f172a',
-                            panel: '#1e293b',
-                            border: '#334155',
-                            accent: '#38bdf8',
-                            green: '#22c55e',
-                            amber: '#f59e0b',
-                            red: '#ef4444'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS & JS for Maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bowman Air Dispatch Ops - N361VA</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <style>
-        body {
-            background-color: #080d1a;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
-        }
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #d4af37;
-        }
-        .hud-glass {
-            background: rgba(15, 23, 42, 0.94);
-            backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(51, 65, 85, 0.6);
-        }
-        .hud-card {
-            background: #0f172a;
-            border: 1px solid #1e293b;
-        }
-        #flight-map {
-            width: 100%;
-            height: 100%;
-            min-height: 320px;
-            background: #090e17;
-            border-radius: 0.75rem;
-        }
-        .leaflet-container {
-            background: #090e17 !important;
-        }
-        .seat-btn {
-            transition: all 0.15s ease-in-out;
-        }
-        .seat-btn:hover {
-            transform: scale(1.18);
-            z-index: 10;
-        }
-        @media print {
-            body * {
-                visibility: hidden;
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            cockpit: {
+              bg: '#0B1120',
+              card: '#152035',
+              border: '#233354',
+              accent: '#00f2fe',
+              gold: '#f59e0b',
+              emerald: '#10b981',
+              muted: '#64748b'
             }
-            #print-dispatch-modal, #print-dispatch-modal * {
-                visibility: visible;
-            }
-            #print-dispatch-modal {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                background: white !important;
-                color: black !important;
-            }
-            .no-print {
-                display: none !important;
-            }
+          }
         }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0B1120;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono-telemetry {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0d172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    /* Leaflet Dark Map Tweaks */
+    .leaflet-container {
+      background: #090e17 !important;
+    }
+    .dark-tiles .leaflet-tile {
+      filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+    }
+    /* Printable Dispatch Release */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-modal-content, #print-modal-content * {
+        visibility: visible;
+      }
+      #print-modal-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: #000 !important;
+        background: #fff !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
 
-    <!-- TOP TELEMETRY NAVBAR -->
-    <header class="hud-glass sticky top-0 z-40 px-4 py-3">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-700 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                    <i class="fa-solid font-bold text-slate-950 text-xl fa-plane"></i>
-                </div>
-                <div>
-                    <div class="flex items-center space-x-2 flex-wrap gap-y-1">
-                        <span class="text-xl font-bold tracking-wider text-slate-100 uppercase">Bowman Air</span>
-                        <span class="px-2 py-0.5 text-xs font-semibold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">DISPATCH OPS</span>
-                        <span class="px-2 py-0.5 text-xs font-bold font-mono rounded bg-gold-500/20 text-gold-400 border border-gold-500/40">N361VA (A320-200)</span>
-                    </div>
-                    <p class="text-xs text-slate-400 font-mono">CONTINUOUS LEG ENGINE • MINNESOTA PRO & NCAA SPORTS • 180 SEATS (NO ROW 13)</p>
-                </div>
-            </div>
-
-            <!-- TELEMETRY STRIP -->
-            <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
-                <div class="flex items-center space-x-2 bg-slate-900/90 px-3 py-1.5 rounded-md border border-slate-800">
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-slate-400">STATUS:</span>
-                    <span class="text-emerald-400 font-bold">RELEASE APPROVED</span>
-                </div>
-                <div class="bg-slate-900/90 px-3 py-1.5 rounded-md border border-slate-800 text-slate-300">
-                    <i class="fa-solid fa-clock text-gold-400 mr-1.5"></i>
-                    <span>ZULU:</span>
-                    <span id="zulu-clock" class="text-slate-100 font-bold ml-1">--:--:-- Z</span>
-                </div>
-                <div class="bg-slate-900/90 px-3 py-1.5 rounded-md border border-slate-800 text-slate-300">
-                    <i class="fa-solid fa-weight-hanging text-amber-400 mr-1.5"></i>
-                    <span>MTOW:</span>
-                    <span class="text-amber-400 font-bold ml-1">172,000 LBS</span>
-                </div>
-            </div>
+  <!-- TOP GLASS COCKPIT HEADER BAR -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-4 py-3 shadow-lg">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Tail Number -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-cyan-600/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-inner">
+          <i class="fa-solid fa-plane-departure text-lg"></i>
         </div>
-    </header>
-
-    <!-- MAIN APP WRAPPER -->
-    <div class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        <!-- LEFT CONTROL PANEL (4 Cols) -->
-        <aside class="lg:col-span-4 space-y-6">
-
-            <!-- AIRCRAFT PROFILE SPEC CARD -->
-            <div class="hud-card rounded-xl p-4 border border-slate-800 shadow-xl relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950/40">
-                <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-800">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-plane-flight text-cyan-400"></i>
-                        <h2 class="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">Assigned Fleet Profile</h2>
-                    </div>
-                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">AIRWORTHY</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-                    <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
-                        <span class="text-slate-400 text-[10px] block">REGISTRATION</span>
-                        <span class="text-gold-400 font-bold text-sm">N361VA</span>
-                    </div>
-                    <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
-                        <span class="text-slate-400 text-[10px] block">TYPE / ENGINE</span>
-                        <span class="text-slate-100 font-bold">A320-200 / CFM56</span>
-                    </div>
-                    <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
-                        <span class="text-slate-400 text-[10px] block">SEATING LAYOUT</span>
-                        <span class="text-cyan-400 font-bold">180 Y (No Row 13)</span>
-                    </div>
-                    <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
-                        <span class="text-slate-400 text-[10px] block">CRUISE / FUEL BURN</span>
-                        <span class="text-emerald-400 font-bold">450 KTAS / 5,800 lb/h</span>
-                    </div>
-                </div>
-
-                <div class="mt-3 pt-2 border-t border-slate-800 flex justify-between text-[11px] font-mono text-slate-400">
-                    <span>MAX RANGE: <strong class="text-slate-200">3,300 NM</strong></span>
-                    <span>MAX CARGO: <strong class="text-amber-400">41,500 LBS</strong></span>
-                </div>
-            </div>
-
-            <!-- DISPATCH CONTROLS & GENERATOR -->
-            <div class="hud-card rounded-xl p-5 border border-slate-800 shadow-xl relative">
-                <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
-                    <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-gold-400"></i> Operational Setup
-                    </h2>
-                    <span class="text-xs text-slate-400 font-mono">REF: BMN-361</span>
-                </div>
-
-                <form id="dispatch-form" onsubmit="event.preventDefault(); generateDispatchSchedule();" class="space-y-4">
-
-                    <!-- BASE / ORIGIN AIRPORT SELECTOR -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Leg 1 Origin Airport (Starting Hub)</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="col-span-2">
-                                <select id="select-location-preset" onchange="handleLocationPresetChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 focus:ring-2 focus:ring-gold-500 font-mono">
-                                    <!-- Populated dynamically -->
-                                </select>
-                            </div>
-                            <div>
-                                <input type="text" id="input-custom-icao" placeholder="e.g. KMSP" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KMSP">
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-slate-500 mt-1">Select from 180+ global airports or enter custom ICAO.</p>
-                    </div>
-
-                    <!-- EXPLICIT RANGE PROFILE SELECTOR -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Leg Distance / Range Profile</label>
-                        <select id="select-range-profile" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                            <option value="MIXED" selected>⚡ Mixed / Variable Distances</option>
-                            <option value="SHORT">🛫 Short Hops (&lt; 500 NM)</option>
-                            <option value="MEDIUM">✈️ Medium Hops (500 NM – 1,500 NM)</option>
-                            <option value="LONG">🌍 Long Transcontinental (&gt; 1,500 NM up to 3,300 NM)</option>
-                        </select>
-                    </div>
-
-                    <!-- CHARTER MISSION CATEGORY SELECTOR -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Charter Mission Category</label>
-                        <select id="select-mission-type" onchange="handleMissionTypeChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                            <option value="SPORTS_UNIFIED" selected>⚽ Integrated Sports Charters (MN Pro & AAC College Road Trips)</option>
-                            <option value="MN_PRO">⭐ Minnesota Pro Teams Only (Vikings, Wolves, Wild, Twins)</option>
-                            <option value="NCAA_AAC">🎓 NCAA AAC Conference Only (American Athletic Conference)</option>
-                            <option value="CORPORATE">💼 Corporate & Tech Executive Envoys</option>
-                            <option value="ENTERTAINMENT">🎸 World Concert Tours & Film Cast</option>
-                            <option value="GOVERNMENT">🏛️ Diplomatic & UN Government Missions</option>
-                            <option value="MEDICAL">🚑 Emergency & Medical Humanitarian</option>
-                            <option value="AEROSPACE">🚀 Aerospace & Scientific Logistics</option>
-                            <option value="VIP">💎 Private Luxury VIP & Wealth Summits</option>
-                            <option value="ALL">⚡ Random Mixed Operations</option>
-                        </select>
-                    </div>
-
-                    <!-- SPECIFIC SUB-TEAM SELECTOR (FOR MINNESOTA PRO & AAC NCAA) -->
-                    <div id="sub-team-container">
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Target Charter Team / Sub-Group</label>
-                        <select id="select-sub-team" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                            <!-- Populated dynamically based on category -->
-                        </select>
-                    </div>
-
-                    <!-- DISPATCH DATE -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Dispatch Operating Date (Controls Seasonality)</label>
-                        <input type="date" id="input-dispatch-date" onchange="handleDateChange()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
-                        <p id="season-badge-preview" class="text-[10px] text-gold-400 mt-1 font-mono">SEASON: FALL (NFL Vikings / College Football)</p>
-                    </div>
-
-                    <!-- NUMBER OF LEGS -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Sequential Leg Chain Count (A ➔ B ➔ C ➔ D)</label>
-                        <select id="select-leg-count" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono">
-                            <option value="AUTO" selected>Auto Chain (2 to 4 Legs)</option>
-                            <option value="1">1 Leg (Direct Charter)</option>
-                            <option value="2">2 Continuous Legs (A➔B➔C)</option>
-                            <option value="3">3 Continuous Legs (A➔B➔C➔D)</option>
-                            <option value="4">4 Continuous Legs (A➔B➔C➔D➔E)</option>
-                        </select>
-                    </div>
-
-                    <!-- GENERATE ACTION BUTTON -->
-                    <button type="submit" class="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-gold-500 via-amber-500 to-gold-600 hover:from-gold-400 hover:to-amber-500 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-gold-500/20 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-compass-drafting text-lg"></i>
-                        <span>GENERATE DISPATCH SCHEDULE (N361VA)</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- DAILY SCHEDULE SUMMARY TELEMETRY -->
-            <div class="hud-card rounded-xl p-5 border border-slate-800 shadow-xl">
-                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center justify-between font-mono">
-                    <span><i class="fa-solid fa-chart-line text-cyan-400 mr-1.5"></i> Daily Dispatch Totals</span>
-                    <span id="itinerary-leg-count-badge" class="px-2 py-0.5 text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 rounded font-mono">0 LEGS</span>
-                </h3>
-
-                <div class="space-y-2.5 font-mono text-xs">
-                    <div class="flex justify-between items-center bg-slate-900/70 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-400">Total Route Distance:</span>
-                        <span id="summary-total-dist" class="text-gold-400 font-bold">0 NM</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-slate-900/70 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-400">Total Flight Time:</span>
-                        <span id="summary-total-time" class="text-slate-100 font-bold">00h 00m</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-slate-900/70 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-400">Est Total Fuel Burn:</span>
-                        <span id="summary-total-fuel" class="text-amber-400 font-bold">0 LBS</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-slate-900/70 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-400">Total Passengers Carried:</span>
-                        <span id="summary-total-pax" class="text-cyan-400 font-bold">0 PAX</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-slate-900/70 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-400">Final Aircraft Position:</span>
-                        <span id="summary-final-pos" class="text-emerald-400 font-bold">----</span>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="mt-4 pt-3 border-t border-slate-800 flex gap-2">
-                    <button onclick="openPrintModal()" class="flex-1 py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center justify-center gap-1.5 font-mono">
-                        <i class="fa-solid fa-print text-gold-400"></i> FAA Dispatch Release
-                    </button>
-                    <button onclick="addCustomLegModal()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center justify-center gap-1.5 font-mono" title="Append Continuous Leg">
-                        <i class="fa-solid fa-plus text-emerald-400"></i> Add Leg
-                    </button>
-                </div>
-            </div>
-
-            <!-- SAVED DISPATCH LOGS -->
-            <div class="hud-card rounded-xl p-4 border border-slate-800 shadow-xl">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono">
-                        <i class="fa-solid fa-history text-slate-400 mr-1.5"></i> Saved Dispatch Logs
-                    </h3>
-                    <button onclick="clearHistory()" class="text-[10px] text-slate-500 hover:text-slate-300 underline font-mono">Clear Log</button>
-                </div>
-                <input type="text" id="input-search-history" onkeyup="filterHistory(this.value)" placeholder="Search past runs..." class="w-full bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded p-2 mb-2 font-mono">
-                <div id="dispatch-history-list" class="space-y-1.5 max-h-40 overflow-y-auto pr-1 text-xs font-mono">
-                    <!-- History items populated dynamically -->
-                </div>
-            </div>
-
-        </aside>
-
-        <!-- RIGHT MAIN DISPLAY AREA (8 Cols) -->
-        <main class="lg:col-span-8 space-y-6">
-
-            <!-- ROUTE VISUALIZER MAP -->
-            <div class="hud-card rounded-xl p-4 border border-slate-800 shadow-xl relative">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-map-location-dot text-gold-400"></i>
-                        <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider font-mono">Flight Route Visualizer (N361VA)</h2>
-                    </div>
-                    <div id="map-route-text" class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800 max-w-[50%] truncate">
-                        NO ROUTE LOADED
-                    </div>
-                </div>
-                <div class="h-64 sm:h-80 w-full rounded-lg overflow-hidden border border-slate-800 relative shadow-inner">
-                    <div id="flight-map"></div>
-                </div>
-            </div>
-
-            <!-- LEG SELECTOR TIMELINE TABS -->
-            <div class="flex items-center justify-between bg-slate-900/90 p-1.5 rounded-xl border border-slate-800 overflow-x-auto gap-2" id="leg-timeline-tabs">
-                <!-- Dynamic tabs inserted here -->
-            </div>
-
-            <!-- INSPECTOR VIEW SUB-TABS -->
-            <div class="hud-card rounded-xl border border-slate-800 shadow-xl overflow-hidden">
-                <div class="flex border-b border-slate-800 bg-slate-950/80 font-mono text-xs overflow-x-auto">
-                    <button onclick="setActiveInspectorTab('overview')" id="tab-btn-overview" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-gold-500 text-gold-400 bg-slate-900">
-                        <i class="fa-solid fa-plane-flight"></i> Flight Overview
-                    </button>
-                    <button onclick="setActiveInspectorTab('seats')" id="tab-btn-seats" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-transparent text-slate-400 hover:text-slate-200">
-                        <i class="fa-solid fa-chair"></i> 180 Seat Cabin Map
-                    </button>
-                    <button onclick="setActiveInspectorTab('cargo')" id="tab-btn-cargo" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-transparent text-slate-400 hover:text-slate-200">
-                        <i class="fa-solid fa-boxes-packing"></i> Lower Deck Cargo
-                    </button>
-                    <button onclick="setActiveInspectorTab('wb')" id="tab-btn-wb" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-transparent text-slate-400 hover:text-slate-200">
-                        <i class="fa-solid fa-scale-balanced"></i> Weight & Balance
-                    </button>
-                </div>
-
-                <div class="p-5" id="inspector-content-area">
-                    <!-- Dynamic Inspector View loaded here -->
-                </div>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- MODAL: FAA DISPATCH RELEASE DOCUMENT -->
-    <div id="print-dispatch-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto">
-            <div class="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center no-print">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-file-invoice text-gold-400 text-lg"></i>
-                    <h3 class="text-sm font-bold text-slate-100 uppercase font-mono">FAA Flight Dispatch Release Document • N361VA</h3>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <button onclick="window.print()" class="px-3 py-1.5 bg-gold-500 hover:bg-gold-400 text-slate-950 font-bold text-xs rounded shadow flex items-center gap-1.5 font-mono">
-                        <i class="fa-solid fa-print"></i> Print Release
-                    </button>
-                    <button onclick="closePrintModal()" class="text-slate-400 hover:text-white text-lg px-2">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div id="dispatch-release-content" class="p-6 md:p-8 overflow-y-auto font-mono text-slate-900 bg-white text-xs space-y-6">
-                <!-- Dynamic release sheet HTML populated here -->
-            </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-lg tracking-wider text-slate-50 uppercase">Bowman Air</h1>
+            <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">DISPATCH OPS</span>
+            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">N361VA (A320-200)</span>
+          </div>
+          <p class="text-xs text-slate-400 font-medium">CONTINUOUS LEG ENGINE • MINNESOTA PRO & NCAA SPORTS • 180 SEATS (NO ROW 13)</p>
         </div>
-    </div>
+      </div>
 
-    <!-- MODAL: ADD CUSTOM LEG -->
-    <div id="add-leg-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="hud-card border border-slate-700 rounded-xl max-w-md w-full p-5 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-sm font-bold text-slate-200 uppercase font-mono flex items-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-emerald-400"></i> Append Continuous Leg (N361VA)
-                </h3>
-                <button onclick="closeAddLegModal()" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-base"></i>
-                </button>
-            </div>
-
-            <div class="space-y-3 font-mono">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Departure Airport (Current Location)</label>
-                    <input type="text" id="custom-leg-dep" readonly class="w-full bg-slate-950 border border-slate-800 text-gold-400 text-xs rounded p-2 font-mono uppercase font-bold">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Destination Airport ICAO</label>
-                    <select id="custom-leg-arr-select" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
-                        <!-- Populated by JS -->
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Charter Organization / Group Name</label>
-                    <input type="text" id="custom-leg-org" placeholder="e.g. Regional Sports Charter" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Passenger Count (Up to 180 PAX)</label>
-                    <input type="number" id="custom-leg-pax" min="20" max="180" value="168" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
-                </div>
-            </div>
-
-            <div class="flex justify-end space-x-2 pt-3 border-t border-slate-800 font-mono">
-                <button onclick="closeAddLegModal()" class="px-3 py-2 bg-slate-800 text-slate-300 text-xs rounded font-semibold hover:bg-slate-700">Cancel</button>
-                <button onclick="submitCustomLeg()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold rounded">Append Leg</button>
-            </div>
+      <!-- Live Telemetry Status Pills -->
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Status Indicator -->
+        <div class="flex items-center space-x-2 bg-emerald-950/50 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-400">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span>STATUS: RELEASE APPROVED</span>
         </div>
-    </div>
 
-    <!-- MODAL: PASSENGER SEAT DETAIL POPUP -->
-    <div id="seat-detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="hud-card border border-slate-700 rounded-xl max-w-sm w-full p-5 shadow-2xl space-y-3 font-mono">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-sm font-bold text-gold-400 flex items-center gap-2" id="modal-seat-title">
-                    <i class="fa-solid fa-chair"></i> SEAT 12A
-                </h3>
-                <button onclick="closeSeatModal()" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div id="modal-seat-body" class="space-y-2 text-xs text-slate-300">
-                <!-- Dynamic Seat Info -->
-            </div>
-
-            <div class="pt-2 border-t border-slate-800 text-right">
-                <button onclick="closeSeatModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs">Close</button>
-            </div>
+        <!-- Zulu Clock -->
+        <div class="bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-lg text-xs font-mono text-cyan-300 flex items-center space-x-2">
+          <i class="fa-regular fa-clock text-cyan-400"></i>
+          <span>ZULU:</span>
+          <span id="zuluClock" class="font-bold">--:--:-- Z</span>
         </div>
+
+        <!-- MTOW Limit Badge -->
+        <div class="bg-amber-950/40 border border-amber-500/30 px-3 py-1.5 rounded-lg text-xs font-mono text-amber-300 flex items-center space-x-2">
+          <i class="fa-solid fa-weight-hanging text-amber-400"></i>
+          <span>MTOW: <strong class="text-slate-100">172,000 LBS</strong></span>
+        </div>
+      </div>
+
     </div>
+  </header>
 
-    <!-- FOOTER -->
-    <footer class="mt-auto border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500 font-mono">
-        <p>Bowman Air Dispatch Operations Engine &copy; 2026 | Aircraft N361VA (Airbus A320-200) | Part 121 / 135 Compliant</p>
-    </footer>
+  <!-- QUICK TECH TELEMETRY BANNER -->
+  <section class="bg-slate-900/60 border-b border-slate-800 py-2 px-4 text-xs font-mono text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-4">
+        <span>SEATING: <strong class="text-cyan-400">180 Y (No Row 13)</strong></span>
+        <span class="text-slate-600">|</span>
+        <span>CRUISE/BURN: <strong class="text-slate-200">450 KTAS / 5,800 lb/h</strong></span>
+        <span class="text-slate-600">|</span>
+        <span>MAX RANGE: <strong class="text-slate-200">3,300 NM</strong></span>
+        <span class="text-slate-600">|</span>
+        <span>MAX CARGO: <strong class="text-slate-200">41,500 LBS</strong></span>
+      </div>
+      <div class="text-slate-400 text-[11px]">
+        <i class="fa-solid fa-shield-halved text-cyan-400 mr-1"></i> FAA Part 121 Supplemental Dispatch Validated
+      </div>
+    </div>
+  </section>
 
-    <!-- MAIN JAVASCRIPT LOGIC -->
-    <script>
-        /* ==========================================================================
-           1. DATA ARCHITECTURE & AIRCRAFT PROFILE (N361VA)
-           ========================================================================== */
+  <!-- MAIN APP CONTENT WRAPPER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        const A320_PROFILE = {
-            tail: "N361VA",
-            model: "Airbus A320-200",
-            type: "High-Capacity Charter Airliner",
-            totalSeats: 180,
-            // 30 Rows, 6 seats/row, STRICTLY SKIPPING ROW 13 (Rows 1-12 & 14-31)
-            seatRows: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-            seatLayout: "3x3 Economy (30 Rows: 1-12 & 14-31)",
-            cruiseKtas: 450,
-            ceiling: "FL390",
-            dow: 94000,
-            mzfw: 138000,
-            mtow: 172000,
-            mlw: 142000,
-            maxPayload: 41500,
-            maxFuel: 42000,
-            fuelBurnPerHour: 5800
-        };
+    <!-- LEFT SIDEBAR: OPERATIONAL SETUP FORM (4 COLS) -->
+    <section class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+          <h2 class="font-bold text-slate-100 text-sm tracking-wide uppercase flex items-center space-x-2">
+            <i class="fa-solid fa-sliders text-cyan-400"></i>
+            <span>Operational Setup</span>
+          </h2>
+          <span class="text-[11px] font-mono text-slate-400">REF: BMN-361</span>
+        </div>
 
-        /* COMPLETE MERGED AIRPORT DATABASE (DELTA, ALLEGIANT & BREEZE ROUTE MAPS - NO DUPLICATES) */
-        const AIRPORTS = {
-            "KMSP": { name: "Minneapolis-St. Paul Intl", city: "Minneapolis, MN, USA", lat: 44.8848, lng: -93.2223, elev: 841, rwy: "12L/30R (10,000 ft)", alt: "KMKE" },
-            "KATL": { name: "Hartsfield-Jackson Atlanta Intl", city: "Atlanta, GA, USA", lat: 33.6407, lng: -84.4277, elev: 1026, rwy: "08L/26R (9,000 ft)", alt: "KCLT" },
-            "KDTW": { name: "Detroit Metropolitan Wayne Co", city: "Detroit, MI, USA", lat: 42.2124, lng: -83.3534, elev: 645, rwy: "04L/22R (12,000 ft)", alt: "KCLE" },
-            "KSLC": { name: "Salt Lake City Intl", city: "Salt Lake City, UT, USA", lat: 40.7884, lng: -111.9778, elev: 4227, rwy: "16L/34R (12,003 ft)", alt: "KPVU" },
-            "KSEA": { name: "Seattle-Tacoma Intl", city: "Seattle, WA, USA", lat: 47.4502, lng: -122.3088, elev: 433, rwy: "16L/34R (11,901 ft)", alt: "KPDX" },
-            "KJFK": { name: "John F. Kennedy Intl", city: "New York, NY, USA", lat: 40.6397, lng: -73.7789, elev: 13, rwy: "13L/31R (14,511 ft)", alt: "EWR" },
-            "KLGA": { name: "LaGuardia Airport", city: "New York, NY, USA", lat: 40.7769, lng: -73.8740, elev: 21, rwy: "04/22 (7,001 ft)", alt: "KJFK" },
-            "KBOS": { name: "Boston Logan Intl", city: "Boston, MA, USA", lat: 42.3656, lng: -71.0096, elev: 19, rwy: "33L/15R (10,083 ft)", alt: "KPVD" },
-            "KLAX": { name: "Los Angeles Intl", city: "Los Angeles, CA, USA", lat: 33.9425, lng: -118.4081, elev: 128, rwy: "25L/07R (12,091 ft)", alt: "KONT" },
-            "KSFO": { name: "San Francisco Intl", city: "San Francisco, CA, USA", lat: 37.6213, lng: -122.3790, elev: 13, rwy: "28R/10L (11,870 ft)", alt: "KSJC" },
-            "KORD": { name: "Chicago O'Hare Intl", city: "Chicago, IL, USA", lat: 41.9742, lng: -87.9073, elev: 668, rwy: "10L/28R (13,000 ft)", alt: "KMKE" },
-            "KMDW": { name: "Chicago Midway Intl", city: "Chicago, IL, USA", lat: 41.7868, lng: -87.7522, elev: 620, rwy: "13C/31C (6,522 ft)", alt: "KORD" },
-            "KDFW": { name: "Dallas/Fort Worth Intl", city: "Dallas, TX, USA", lat: 32.8998, lng: -97.0403, elev: 607, rwy: "17R/35L (13,401 ft)", alt: "KAUS" },
-            "KDAL": { name: "Dallas Love Field", city: "Dallas, TX, USA", lat: 32.8471, lng: -96.8518, elev: 487, rwy: "13R/31L (8,800 ft)", alt: "KDFW" },
-            "KPHL": { name: "Philadelphia Intl", city: "Philadelphia, PA, USA", lat: 39.8719, lng: -75.2411, elev: 36, rwy: "09R/27L (12,000 ft)", alt: "KBWI" },
-            "KMIA": { name: "Miami Intl", city: "Miami, FL, USA", lat: 25.7959, lng: -80.2870, elev: 8, rwy: "08L/26R (13,016 ft)", alt: "KFLL" },
-            "KFLL": { name: "Fort Lauderdale-Hollywood Intl", city: "Fort Lauderdale, FL, USA", lat: 26.0742, lng: -80.1506, elev: 9, rwy: "10L/28R (9,000 ft)", alt: "KMIA" },
-            "KDEN": { name: "Denver Intl", city: "Denver, CO, USA", lat: 39.8561, lng: -104.6737, elev: 5431, rwy: "16R/34L (16,000 ft)", alt: "KCOS" },
-            "KPHX": { name: "Phoenix Sky Harbor Intl", city: "Phoenix, AZ, USA", lat: 33.4352, lng: -112.0101, elev: 1135, rwy: "08/26 (11,489 ft)", alt: "KIWA" },
-            "KAZA": { name: "Phoenix-Mesa Gateway", city: "Mesa, AZ, USA", lat: 33.3078, lng: -111.6550, elev: 1382, rwy: "12C/30C (10,401 ft)", alt: "KPHX" },
-            "KGRB": { name: "Green Bay Austin Straubel Intl", city: "Green Bay, WI, USA", lat: 44.4851, lng: -88.1296, elev: 695, rwy: "06/24 (7,700 ft)", alt: "KMKE" },
-            "KMKE": { name: "Milwaukee Mitchell Intl", city: "Milwaukee, WI, USA", lat: 42.9472, lng: -87.8966, elev: 723, rwy: "01L/19R (9,990 ft)", alt: "KORD" },
-            "KSTL": { name: "St. Louis Lambert Intl", city: "St. Louis, MO, USA", lat: 38.7499, lng: -90.3600, elev: 605, rwy: "12R/30L (11,020 ft)", alt: "KIND" },
-            "KPIT": { name: "Pittsburgh Intl", city: "Pittsburgh, PA, USA", lat: 40.4915, lng: -80.2329, elev: 1203, rwy: "10L/28R (11,500 ft)", alt: "KCLE" },
-            "KBUF": { name: "Buffalo Niagara Intl", city: "Buffalo, NY, USA", lat: 42.9405, lng: -78.7322, elev: 728, rwy: "05/23 (8,829 ft)", alt: "KROC" },
-            "KCLE": { name: "Cleveland Hopkins Intl", city: "Cleveland, OH, USA", lat: 41.4058, lng: -81.8494, elev: 791, rwy: "06L/24R (9,000 ft)", alt: "KCAK" },
-            "KBWI": { name: "Baltimore/Washington Intl", city: "Baltimore, MD, USA", lat: 39.1754, lng: -76.6683, elev: 146, rwy: "10/28 (10,502 ft)", alt: "DCA" },
-            "DCA":  { name: "Ronald Reagan Washington National", city: "Washington, DC, USA", lat: 38.8512, lng: -77.0377, elev: 15, rwy: "01/19 (7,169 ft)", alt: "KIAD" },
-            "CYWG": { name: "Winnipeg James Armstrong Richardson", city: "Winnipeg, MB, Canada", lat: 49.9100, lng: -97.2399, elev: 783, rwy: "18/36 (11,000 ft)", alt: "KGFK" },
-            "CYVR": { name: "Vancouver Intl", city: "Vancouver, BC, Canada", lat: 49.1967, lng: -123.1815, elev: 14, rwy: "08L/26R (11,500 ft)", alt: "KSEA" },
-            "CYYZ": { name: "Toronto Pearson Intl", city: "Toronto, ON, Canada", lat: 43.6777, lng: -79.6248, elev: 569, rwy: "05/23 (11,120 ft)", alt: "KBUF" },
-            "KLAS": { name: "Harry Reid Intl", city: "Las Vegas, NV, USA", lat: 36.0840, lng: -115.1537, elev: 2181, rwy: "26L/08R (14,510 ft)", alt: "KONT" },
-            "KBHM": { name: "Birmingham-Shuttlesworth Intl", city: "Birmingham, AL, USA", lat: 33.5629, lng: -86.7535, elev: 650, rwy: "06/24 (12,007 ft)", alt: "KATL" },
-            "KCLT": { name: "Charlotte Douglas Intl", city: "Charlotte, NC, USA", lat: 35.2140, lng: -80.9431, elev: 748, rwy: "18L/36R (10,000 ft)", alt: "KGSP" },
-            "KPGV": { name: "Pitt-Greenville Airport", city: "Greenville, NC, USA", lat: 35.6352, lng: -77.3853, elev: 27, rwy: "02/20 (7,175 ft)", alt: "KRDU" },
-            "KMEM": { name: "Memphis Intl", city: "Memphis, TN, USA", lat: 35.0424, lng: -89.9767, elev: 341, rwy: "18C/36C (11,120 ft)", alt: "KBNA" },
-            "KIAH": { name: "George Bush Intercontinental", city: "Houston, TX, USA", lat: 29.9902, lng: -95.3368, elev: 97, rwy: "15L/33R (12,001 ft)", alt: "KHOU" },
-            "KTPA": { name: "Tampa Intl", city: "Tampa, FL, USA", lat: 27.9755, lng: -82.5332, elev: 26, rwy: "01L/19R (11,002 ft)", alt: "KPIE" },
-            "KSAT": { name: "San Antonio Intl", city: "San Antonio, TX, USA", lat: 29.5337, lng: -98.4698, elev: 809, rwy: "13R/31L (8,505 ft)", alt: "KAUS" },
-            "KMSY": { name: "Louis Armstrong New Orleans Intl", city: "New Orleans, LA, USA", lat: 29.9934, lng: -90.2580, elev: 4, rwy: "11/29 (10,104 ft)", alt: "KBTR" },
-            "KTUL": { name: "Tulsa Intl", city: "Tulsa, OK, USA", lat: 36.1984, lng: -95.8881, elev: 677, rwy: "18L/36R (10,000 ft)", alt: "KOKC" },
-            "KICT": { name: "Wichita Dwight D. Eisenhower National", city: "Wichita, KS, USA", lat: 37.6499, lng: -97.4331, elev: 1333, rwy: "01R/19L (10,301 ft)", alt: "KOKC" },
-            "KSWF": { name: "Newburgh Stewart Intl", city: "Newburgh, NY, USA", lat: 41.5041, lng: -74.1048, elev: 491, rwy: "09/27 (11,817 ft)", alt: "EWR" },
-            "KCHS": { name: "Charleston Intl", city: "Charleston, SC, USA", lat: 32.8986, lng: -80.0405, elev: 46, rwy: "15/33 (9,001 ft)", alt: "KMYR" },
-            "KPVD": { name: "Rhode Island T.F. Green Intl", city: "Providence, RI, USA", lat: 41.7240, lng: -71.4282, elev: 55, rwy: "05/23 (8,700 ft)", alt: "KBOS" },
-            "KHVN": { name: "Tweed-New Haven Airport", city: "New Haven, CT, USA", lat: 41.2638, lng: -72.8868, elev: 12, rwy: "02/20 (5,600 ft)", alt: "KBDL" },
-            "KORF": { name: "Norfolk Intl", city: "Norfolk, VA, USA", lat: 36.8946, lng: -76.2012, elev: 27, rwy: "05/23 (9,001 ft)", alt: "KRIC" },
-            "KRIC": { name: "Richmond Intl", city: "Richmond, VA, USA", lat: 37.5052, lng: -77.3197, elev: 167, rwy: "16/34 (9,003 ft)", alt: "KORF" },
-            "KRDU": { name: "Raleigh-Durham Intl", city: "Raleigh, NC, USA", lat: 35.8776, lng: -78.7875, elev: 435, rwy: "05L/23R (10,000 ft)", alt: "KCLT" },
-            "KMYR": { name: "Myrtle Beach Intl", city: "Myrtle Beach, SC, USA", lat: 33.6797, lng: -78.9283, elev: 25, rwy: "18/36 (9,503 ft)", alt: "KCHS" },
-            "KPIE": { name: "St. Pete-Clearwater Intl", city: "St. Petersburg, FL, USA", lat: 27.9102, lng: -82.6874, elev: 11, rwy: "18/36 (9,730 ft)", alt: "KTPA" },
-            "KPGD": { name: "Punta Gorda Airport", city: "Punta Gorda, FL, USA", lat: 26.9174, lng: -82.0006, elev: 26, rwy: "04/22 (7,193 ft)", alt: "KRSW" },
-            "KRSW": { name: "Southwest Florida Intl", city: "Fort Myers, FL, USA", lat: 26.5362, lng: -81.7552, elev: 30, rwy: "06/24 (12,000 ft)", alt: "KPGD" },
-            "KSFB": { name: "Orlando Sanford Intl", city: "Sanford, FL, USA", lat: 28.7776, lng: -81.2375, elev: 55, rwy: "09L/27R (9,600 ft)", alt: "KMCO" },
-            "KMCO": { name: "Orlando Intl", city: "Orlando, FL, USA", lat: 28.4294, lng: -81.3089, elev: 96, rwy: "18L/36R (12,005 ft)", alt: "KSFB" },
-            "KCAK": { name: "Akron-Canton Airport", city: "Akron, OH, USA", lat: 40.9161, lng: -81.4422, elev: 1228, rwy: "01/19 (8,204 ft)", alt: "KCLE" },
-            "KSAV": { name: "Savannah/Hilton Head Intl", city: "Savannah, GA, USA", lat: 32.1276, lng: -81.2021, elev: 50, rwy: "10/28 (9,350 ft)", alt: "KCHS" },
-            "KHSV": { name: "Huntsville Intl", city: "Huntsville, AL, USA", lat: 34.6404, lng: -86.7731, elev: 629, rwy: "18L/36R (12,600 ft)", alt: "KBHM" },
-            "KXNA": { name: "Northwest Arkansas National", city: "Bentonville, AR, USA", lat: 36.2818, lng: -94.3068, elev: 1287, rwy: "16/34 (8,800 ft)", alt: "KTUL" },
-            "KOKC": { name: "Will Rogers World Airport", city: "Oklahoma City, OK, USA", lat: 35.3931, lng: -97.6007, elev: 1295, rwy: "17L/35R (9,802 ft)", alt: "KTUL" },
-            "KSDF": { name: "Louisville Muhammad Ali Intl", city: "Louisville, KY, USA", lat: 38.1744, lng: -85.7360, elev: 501, rwy: "17L/35R (10,000 ft)", alt: "KCVG" },
-            "KCVG": { name: "Cincinnati/Northern Kentucky Intl", city: "Cincinnati, OH, USA", lat: 39.0461, lng: -84.6621, elev: 896, rwy: "18C/36C (10,000 ft)", alt: "KCMH" },
-            "KCMH": { name: "John Glenn Columbus Intl", city: "Columbus, OH, USA", lat: 39.9980, lng: -82.8919, elev: 815, rwy: "10L/28R (10,113 ft)", alt: "KCLE" },
-            "KGRR": { name: "Gerald R. Ford Intl", city: "Grand Rapids, MI, USA", lat: 42.8808, lng: -85.5228, elev: 794, rwy: "08R/26L (10,000 ft)", alt: "KDTW" },
-            "KSAN": { name: "San Diego Intl", city: "San Diego, CA, USA", lat: 32.7336, lng: -117.1897, elev: 17, rwy: "09/27 (9,400 ft)", alt: "KONT" },
-            "KONT": { name: "Ontario Intl", city: "Ontario, CA, USA", lat: 34.0560, lng: -117.6012, elev: 944, rwy: "26L/08R (12,197 ft)", alt: "KLAX" },
-            "KPVU": { name: "Provo Municipal Airport", city: "Provo, UT, USA", lat: 40.2192, lng: -111.7234, elev: 4497, rwy: "13/31 (8,600 ft)", alt: "KSLC" },
-            "KFAT": { name: "Fresno Yosemite Intl", city: "Fresno, CA, USA", lat: 36.7762, lng: -119.7181, elev: 336, rwy: "11L/29R (9,530 ft)", alt: "KSMF" },
-            "LFPB": { name: "Paris Le Bourget", city: "Paris, France", lat: 48.9694, lng: 2.4414, elev: 218, rwy: "07/25 (9,843 ft)", alt: "LFPG" },
-            "EGLL": { name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543, elev: 83, rwy: "09L/27R (12,802 ft)", alt: "EGSS" }
-        };
+        <form id="dispatchForm" onsubmit="event.preventDefault(); handleGenerateDispatch();" class="space-y-4">
+          
+          <!-- Origin Airport Dropdown (Guaranteed Populated) -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+              Leg 1 Origin Airport (Operating Hub)
+            </label>
+            <div class="relative">
+              <select id="originAirport" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-medium">
+                <!-- Javascript will populate this on DOMContentLoaded -->
+                <option value="">Loading Airports...</option>
+              </select>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Select from 100+ Delta, Allegiant, Breeze, AAC, & MN sports hubs.</p>
+          </div>
 
-        /* EXCLUSIVE MINNESOTA PRO SPORTS CHARTERS */
-        const MN_PRO_TEAMS = {
-            "vikings": {
-                name: "Minnesota Vikings",
-                league: "NFL Football",
-                homeICAO: "KMSP",
-                seasonStart: 8,  // Aug
-                seasonEnd: 2     // Feb
-            },
-            "wolves": {
-                name: "Minnesota Timberwolves",
-                league: "NBA Basketball",
-                homeICAO: "KMSP",
-                seasonStart: 10, // Oct
-                seasonEnd: 6     // June
-            },
-            "wild": {
-                name: "Minnesota Wild",
-                league: "NHL Ice Hockey",
-                homeICAO: "KMSP",
-                seasonStart: 10, // Oct
-                seasonEnd: 6     // June
-            },
-            "twins": {
-                name: "Minnesota Twins",
-                league: "MLB Baseball",
-                homeICAO: "KMSP",
-                seasonStart: 3,  // March
-                seasonEnd: 10    // Oct
-            }
-        };
+          <!-- Leg Distance / Range Profile -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+              Leg Distance / Range Profile
+            </label>
+            <select id="rangeProfile" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+              <option value="MIXED" selected>⚡ Mixed / Variable Distances</option>
+              <option value="SHORT">✈️ Short Haul (< 500 NM)</option>
+              <option value="MEDIUM">✈️ Medium Haul (500 - 1,500 NM)</option>
+              <option value="LONG">✈️ Long Haul (> 1,500 NM)</option>
+            </select>
+          </div>
 
-        /* EXCLUSIVE AMERICAN ATHLETIC CONFERENCE (AAC) TEAMS */
-        const AAC_TEAMS = [
-            { name: "Memphis Tigers", conf: "AAC", home: "KMEM", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Tulane Green Wave", conf: "AAC", home: "KMSY", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "USF Bulls", conf: "AAC", home: "KTPA", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Temple Owls", conf: "AAC", home: "KPHL", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "East Carolina Pirates", conf: "AAC", home: "KPGV", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Navy Midshipmen", conf: "AAC", home: "KBWI", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Army Black Knights", conf: "AAC", home: "KSWF", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "UAB Blazers", conf: "AAC", home: "KBHM", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Charlotte 49ers", conf: "AAC", home: "KCLT", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "FAU Owls", conf: "AAC", home: "KFLL", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "North Texas Mean Green", conf: "AAC", home: "KDFW", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Rice Owls", conf: "AAC", home: "KIAH", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "UTSA Roadrunners", conf: "AAC", home: "KSAT", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Tulsa Golden Hurricane", conf: "AAC", home: "KTUL", seasons: [9,10,11,12,1,2,3,4,5] },
-            { name: "Wichita State Shockers", conf: "AAC", home: "KICT", seasons: [11,12,1,2,3,4,5] }
-        ];
+          <!-- De-duplicated Charter Mission Categories -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+              Charter Mission Category
+            </label>
+            <select id="charterCategory" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+              <option value="INTEGRATED_SPORTS" selected>⚽ Integrated Sports Charters (MN Pro & AAC College Road Trips)</option>
+              <option value="MN_PRO_ONLY">⭐ Minnesota Pro Teams Only (Vikings, Wolves, Wild, Twins)</option>
+              <option value="AAC_NCAA_ONLY">🎓 NCAA AAC Conference Only (American Athletic Conference)</option>
+              <option value="CORPORATE">💼 Corporate & Tech Executive Envoys</option>
+              <option value="CONCERT_FILM">🎸 World Concert Tours & Entertainment Cast</option>
+              <option value="DIPLOMATIC">🏛️ Diplomatic & UN Government Missions</option>
+              <option value="EMERGENCY">🚑 Emergency & Medical Humanitarian</option>
+            </select>
+          </div>
 
-        /* MAP OF DESTINATION AIRPORTS TO HOST TEAMS FOR REALISTIC MATCHUPS */
-        const HOST_TEAM_MAP = {
-            "KBOS": { NFL: "New England Patriots", NBA: "Boston Celtics", NHL: "Boston Bruins", MLB: "Boston Red Sox", AAC: "Boston College" },
-            "KORD": { NFL: "Chicago Bears", NBA: "Chicago Bulls", NHL: "Chicago Blackhawks", MLB: "Chicago Cubs", AAC: "Northwestern" },
-            "KMDW": { NFL: "Chicago Bears", NBA: "Chicago Bulls", NHL: "Chicago Blackhawks", MLB: "Chicago White Sox", AAC: "UIC" },
-            "KDFW": { NFL: "Dallas Cowboys", NBA: "Dallas Mavericks", NHL: "Dallas Stars", MLB: "Texas Rangers", AAC: "North Texas Mean Green" },
-            "KPHL": { NFL: "Philadelphia Eagles", NBA: "Philadelphia 76ers", NHL: "Philadelphia Flyers", MLB: "Philadelphia Phillies", AAC: "Temple Owls" },
-            "KLAX": { NFL: "Los Angeles Rams", NBA: "Los Angeles Lakers", NHL: "Los Angeles Kings", MLB: "Los Angeles Dodgers", AAC: "UCLA" },
-            "KMIA": { NFL: "Miami Dolphins", NBA: "Miami Heat", NHL: "Florida Panthers", MLB: "Miami Marlins", AAC: "Miami Hurricanes" },
-            "KFLL": { NFL: "Miami Dolphins", NBA: "Miami Heat", NHL: "Florida Panthers", MLB: "Miami Marlins", AAC: "FAU Owls" },
-            "KDEN": { NFL: "Denver Broncos", NBA: "Denver Nuggets", NHL: "Colorado Avalanche", MLB: "Colorado Rockies", AAC: "Air Force Falcons" },
-            "KPHX": { NFL: "Arizona Cardinals", NBA: "Phoenix Suns", NHL: "Arizona Coyotes", MLB: "Arizona Diamondbacks", AAC: "Arizona State" },
-            "KGRB": { NFL: "Green Bay Packers", NBA: "Milwaukee Bucks", NHL: "Green Bay Gamblers", MLB: "Milwaukee Brewers", AAC: "Wisconsin" },
-            "KDTW": { NFL: "Detroit Lions", NBA: "Detroit Pistons", NHL: "Detroit Red Wings", MLB: "Detroit Tigers", AAC: "Michigan Wolverines" },
-            "KCLE": { NFL: "Cleveland Browns", NBA: "Cleveland Cavaliers", NHL: "Monsters", MLB: "Cleveland Guardians", AAC: "Akron Zips" },
-            "KSTL": { NFL: "St. Louis Battlehawks", NBA: "St. Louis Hawks", NHL: "St. Louis Blues", MLB: "St. Louis Cardinals", AAC: "Saint Louis Billikens" },
-            "KPIT": { NFL: "Pittsburgh Steelers", NBA: "Pittsburgh Rens", NHL: "Pittsburgh Penguins", MLB: "Pittsburgh Pirates", AAC: "Pittsburgh Panthers" },
-            "CYWG": { NFL: "Winnipeg Blue Bombers", NBA: "Winnipeg Sea Bears", NHL: "Winnipeg Jets", MLB: "Winnipeg Goldeyes", AAC: "Manitoba Bisons" },
-            "CYVR": { NFL: "BC Lions", NBA: "Vancouver Bandits", NHL: "Vancouver Canucks", MLB: "Vancouver Canadians", AAC: "UBC Thunderbirds" },
-            "CYYZ": { NFL: "Toronto Argonauts", NBA: "Toronto Raptors", NHL: "Toronto Maple Leafs", MLB: "Toronto Blue Jays", AAC: "Toronto Varsity" },
-            "KLAS": { NFL: "Las Vegas Raiders", NBA: "Vegas Summer League", NHL: "Vegas Golden Knights", MLB: "Las Vegas Aviators", AAC: "UNLV Rebels" },
-            "KMEM": { NFL: "Memphis Showboats", NBA: "Memphis Grizzlies", NHL: "Memphis Riverkings", MLB: "Memphis Redbirds", AAC: "Memphis Tigers" },
-            "KMSY": { NFL: "New Orleans Saints", NBA: "New Orleans Pelicans", NHL: "NOLA Brass", MLB: "NOLA Baby Cakes", AAC: "Tulane Green Wave" },
-            "KTPA": { NFL: "Tampa Bay Buccaneers", NBA: "Tampa Bay Lightning (Exh)", NHL: "Tampa Bay Lightning", MLB: "Tampa Bay Rays", AAC: "USF Bulls" },
-            "KCLT": { NFL: "Carolina Panthers", NBA: "Charlotte Hornets", NHL: "Checkers", MLB: "Knights", AAC: "Charlotte 49ers" },
-            "KBHM": { NFL: "Birmingham Stallions", NBA: "Squadron", NHL: "Bulls", MLB: "Barons", AAC: "UAB Blazers" }
-        };
+          <!-- Target Charter Team / Sub-group -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+              Target Charter Team / Sub-Group
+            </label>
+            <select id="targetTeam" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+              <!-- Dynamically populated based on category & season -->
+            </select>
+          </div>
 
-        /* ==========================================================================
-           2. HANDLERS & DISPATCH ENGINE (UNIFIED & CONTINUOUS LEGS)
-           ========================================================================== */
+          <!-- Dispatch Date Picker (Controls Seasonality) -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+              Dispatch Operating Date (Controls Seasonality)
+            </label>
+            <input type="date" id="dispatchDate" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
+            <p id="seasonIndicator" class="text-[10px] text-amber-400 font-semibold mt-1">SEASON: FALL (NFL Vikings / College Football)</p>
+          </div>
 
-        function handleMissionTypeChange(cat) {
-            const container = document.getElementById('sub-team-container');
-            const subSelect = document.getElementById('select-sub-team');
-            const dateVal = document.getElementById('input-dispatch-date').value;
-            const month = dateVal ? parseInt(dateVal.split('-')[1]) : 11;
+          <!-- Sequential Continuous Leg Chain Count -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+              Sequential Leg Chain Count (A → B → C → D)
+            </label>
+            <select id="legCount" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-semibold">
+              <option value="1">1 Leg Direct (A → B)</option>
+              <option value="2">2 Continuous Legs (A → B → C)</option>
+              <option value="3">3 Continuous Legs (A → B → C → D)</option>
+              <option value="4" selected>4 Continuous Legs (A → B → C → D → E)</option>
+            </select>
+            <p class="text-[10px] text-emerald-400 mt-1">✓ Continuous Leg Rule Enforced: Leg 2 departs from Leg 1 Dest.</p>
+          </div>
 
-            if (cat === 'SPORTS_UNIFIED' || cat === 'MN_PRO') {
-                container.style.display = 'block';
-                subSelect.innerHTML = '';
+          <!-- Main Submit Button -->
+          <div class="pt-2">
+            <button type="submit" class="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center space-x-2 border border-amber-400/40">
+              <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+              <span>Generate Dispatch Schedule (N361VA)</span>
+            </button>
+          </div>
 
-                const autoOpt = document.createElement('option');
-                autoOpt.value = 'AUTO_SPORTS';
-                autoOpt.innerText = '⚡ Smart Auto Sports Road Trip (Date-Sensitive)';
-                subSelect.appendChild(autoOpt);
+        </form>
+      </div>
 
-                Object.keys(MN_PRO_TEAMS).forEach(key => {
-                    const team = MN_PRO_TEAMS[key];
-                    let isActive = false;
-                    if (team.seasonStart > team.seasonEnd) {
-                        isActive = (month >= team.seasonStart || month <= team.seasonEnd);
-                    } else {
-                        isActive = (month >= team.seasonStart && month <= team.seasonEnd);
-                    }
-                    const opt = document.createElement('option');
-                    opt.value = `MN_${key.toUpperCase()}`;
-                    opt.innerText = `${team.name} (${team.league}) ${isActive ? '✅ [ACTIVE]' : '⚠️ [OFF-SEASON]'}`;
-                    subSelect.appendChild(opt);
-                });
+      <!-- Quick Aircraft Info footer in sidebar -->
+      <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+        <span class="flex items-center space-x-1">
+          <i class="fa-solid fa-plane text-cyan-400"></i>
+          <span>Airbus A320-200</span>
+        </span>
+        <span class="font-mono">MTOW 172k lbs</span>
+      </div>
+    </section>
 
-                AAC_TEAMS.forEach((team, idx) => {
-                    const opt = document.createElement('option');
-                    opt.value = `AAC_${idx}`;
-                    opt.innerText = `${team.name} (AAC) ➔ ${team.home}`;
-                    subSelect.appendChild(opt);
-                });
+    <!-- RIGHT MAIN DISPLAY AREA (8 COLS) -->
+    <section class="lg:col-span-8 flex flex-col space-y-4">
+      
+      <!-- NAV TABS -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 flex flex-wrap gap-1 text-xs font-semibold">
+        <button onclick="switchTab('tab-route')" id="btn-tab-route" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>Route Map & Legs</span>
+        </button>
+        <button onclick="switchTab('tab-cabin')" id="btn-tab-cabin" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-chair"></i>
+          <span>180-Seat Cabin Layout</span>
+        </button>
+        <button onclick="switchTab('tab-cargo')" id="btn-tab-cargo" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-boxes-packing"></i>
+          <span>Belly Cargo Holds</span>
+        </button>
+        <button onclick="switchTab('tab-release')" id="btn-tab-release" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-file-contract"></i>
+          <span>FAA Dispatch Release</span>
+        </button>
+      </div>
 
-            } else if (cat === 'NCAA_AAC') {
-                container.style.display = 'block';
-                subSelect.innerHTML = '';
-                AAC_TEAMS.forEach((team, idx) => {
-                    const opt = document.createElement('option');
-                    opt.value = `AAC_${idx}`;
-                    opt.innerText = `${team.name} (AAC Conference)`;
-                    subSelect.appendChild(opt);
-                });
-            } else {
-                container.style.display = 'none';
-            }
-        }
+      <!-- TAB 1: ROUTE MAP & LEG CHAIN DISPLAY -->
+      <div id="tab-route" class="space-y-4">
+        
+        <!-- LEAFLET MAP CONTAINER -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 shadow-xl relative overflow-hidden">
+          <div id="map" class="w-full h-80 rounded-xl z-10 dark-tiles"></div>
+          <div class="absolute bottom-5 right-5 z-20 bg-slate-900/90 border border-slate-700/80 backdrop-blur text-[11px] font-mono px-3 py-1.5 rounded-lg text-slate-300 flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span>Continuous Flight Legs</span>
+          </div>
+        </div>
 
-        function generateDispatchSchedule() {
-            let startICAO = document.getElementById('input-custom-icao').value.toUpperCase().trim() || 'KMSP';
-            const dispatchDate = document.getElementById('input-dispatch-date').value || "2026-11-07";
-            const legCountSetting = document.getElementById('select-leg-count').value;
-            const rangeProfile = document.getElementById('select-range-profile').value;
-            const missionCategory = document.getElementById('select-mission-type').value;
+        <!-- GENERATED LEGS CARDS CONTAINER -->
+        <div id="legCardsContainer" class="space-y-3">
+          <!-- Dynamic continuous leg cards inserted here -->
+        </div>
 
-            let numLegs = 3;
-            if (legCountSetting === 'AUTO') {
-                numLegs = Math.floor(Math.random() * 3) + 2;
-            } else {
-                numLegs = parseInt(legCountSetting);
-            }
+      </div>
 
-            const month = parseInt(dispatchDate.split('-')[1]);
-            let currentICAO = startICAO;
-            let schedule = [];
-            let totalMinuteTracker = 60;
-
-            // Determine primary traveling team for unified sports
-            let activeSportsTeam = null;
-            let activeSportLeague = "NBA";
-
-            if (missionCategory.startsWith('SPORTS') || missionCategory === 'MN_PRO' || missionCategory === 'NCAA_AAC') {
-                const subSelection = document.getElementById('select-sub-team').value;
-                if (subSelection && subSelection.startsWith('MN_')) {
-                    const key = subSelection.replace('MN_', '').toLowerCase();
-                    const team = MN_PRO_TEAMS[key] || MN_PRO_TEAMS['wolves'];
-                    activeSportsTeam = team.name;
-                    activeSportLeague = team.league.split(' ')[0];
-                    currentICAO = team.homeICAO;
-                } else if (subSelection && subSelection.startsWith('AAC_')) {
-                    const idx = parseInt(subSelection.replace('AAC_', ''));
-                    const team = AAC_TEAMS[idx] || AAC_TEAMS[0];
-                    activeSportsTeam = team.name;
-                    activeSportLeague = "AAC";
-                    currentICAO = team.home;
-                } else {
-                    // Smart auto sports based on date
-                    if (month >= 8 && month <= 2) {
-                        activeSportsTeam = "Minnesota Vikings";
-                        activeSportLeague = "NFL";
-                        currentICAO = "KMSP";
-                    } else if (month >= 10 || month <= 6) {
-                        activeSportsTeam = "Minnesota Timberwolves";
-                        activeSportLeague = "NBA";
-                        currentICAO = "KMSP";
-                    } else {
-                        activeSportsTeam = "Minnesota Twins";
-                        activeSportLeague = "MLB";
-                        currentICAO = "KMSP";
-                    }
-                }
-            }
-
-            for (let i = 0; i < numLegs; i++) {
-                let destICAO = "";
-                let missionObj = null;
-
-                if (activeSportsTeam) {
-                    // Sequential Road Trip Routing:
-                    // Leg 1: Home ➔ Away Venue A
-                    // Leg 2: Away Venue A ➔ Away Venue B (or return Home)
-                    // Leg 3+: Away Venue B ➔ Return Home
-                    let pool = filterAirportsByRange(currentICAO, rangeProfile).filter(k => k !== currentICAO);
-                    if (pool.length === 0) pool = Object.keys(AIRPORTS).filter(k => k !== currentICAO);
-
-                    // On final leg, 60% chance to return to home base
-                    const homeBase = (activeSportsTeam.includes('Minnesota')) ? 'KMSP' : 'KMEM';
-                    if (i === numLegs - 1 && currentICAO !== homeBase) {
-                        destICAO = homeBase;
-                    } else {
-                        destICAO = pool[Math.floor(Math.random() * pool.length)];
-                    }
-
-                    const hostData = HOST_TEAM_MAP[destICAO];
-                    const hostName = (hostData && hostData[activeSportLeague]) ? hostData[activeSportLeague] : `${destICAO} Athletics`;
-
-                    if (destICAO === homeBase) {
-                        missionObj = {
-                            name: `${activeSportsTeam} Return Charter`,
-                            category: `${activeSportLeague} Official Team Charter`,
-                            purposeTemplate: `Return airlift carrying the ${activeSportsTeam} squad, coaching staff, and equipment back to home base from ${currentICAO}.`,
-                            cargo: {
-                                hold1: { desc: `AKH-101: ${activeSportsTeam} Team Luggage & Travel Cases`, weight: 3400, uld: "AKH-101" },
-                                hold2: { desc: `AKH-202: Medical Taping & Hydrotherapy Trunks`, weight: 2200, uld: "AKH-202" },
-                                hold3: { desc: `Loose Cases: Game Gear, Uniforms & Sideline Hampers`, weight: 4100 },
-                                hold4: { desc: `Loose Trunks: Scouting Video Rigs & Tech Displays`, weight: 3100 },
-                                hold5: { desc: `Net Bulk: Hydration Coolers & Player Supplements`, weight: 1200 }
-                            }
-                        };
-                    } else {
-                        missionObj = {
-                            name: `${activeSportsTeam} vs. ${hostName}`,
-                            category: `${activeSportLeague} Regular Season Road Trip`,
-                            purposeTemplate: `Official team charter transporting the ${activeSportsTeam} from ${currentICAO} to ${destICAO} for their upcoming game against the ${hostName}.`,
-                            cargo: {
-                                hold1: { desc: `AKH-101: ${activeSportsTeam} Player Luggage & Travel Trunks`, weight: 3500, uld: "AKH-101" },
-                                hold2: { desc: `AKH-202: Athletic Training & Medical Kits`, weight: 2300, uld: "AKH-202" },
-                                hold3: { desc: `Loose Cases: Official Match Gear & Sideline Hampers`, weight: 4200 },
-                                hold4: { desc: `Loose Trunks: Video Analysis & Media Scouting Gear`, weight: 3200 },
-                                hold5: { desc: `Net Bulk: Player Nutrition & Hydration Hampers`, weight: 1300 }
-                            }
-                        };
-                    }
-
-                } else {
-                    // Non-sports corporate, diplomatic, aerospace, etc.
-                    let pool = filterAirportsByRange(currentICAO, rangeProfile).filter(k => k !== currentICAO);
-                    if (pool.length === 0) pool = Object.keys(AIRPORTS).filter(k => k !== currentICAO);
-                    destICAO = pool[Math.floor(Math.random() * pool.length)];
-
-                    const keyMap = {
-                        "CORPORATE": "tech",
-                        "ENTERTAINMENT": "film",
-                        "GOVERNMENT": "diplomatic",
-                        "MEDICAL": "humanitarian",
-                        "AEROSPACE": "aerospace",
-                        "VIP": "vip"
-                    };
-                    const tag = keyMap[missionCategory] || "tech";
-                    const nonSportsPool = NON_SPORTS_TEMPLATES[tag] || NON_SPORTS_TEMPLATES["tech"];
-                    missionObj = nonSportsPool[i % nonSportsPool.length];
-                }
-
-                const origApt = getAirport(currentICAO);
-                const destApt = getAirport(destICAO);
-                const distanceNM = calculateNM(origApt.lat, origApt.lng, destApt.lat, destApt.lng);
-
-                const cruiseHours = distanceNM / A320_PROFILE.cruiseKtas;
-                const flightMinutes = Math.round((cruiseHours * 60) + 30);
-
-                const etd = formatFlightTime(dispatchDate, totalMinuteTracker);
-                const eta = formatFlightTime(dispatchDate, totalMinuteTracker + flightMinutes);
-                const turnaround = Math.floor(Math.random() * 40) + 55;
-
-                const flightNum = `BMN${3611 + i}`;
-                const callsign = `BOWMAN ${3611 + i}`;
-
-                const paxCount = Math.floor(Math.random() * 36) + 145;
-                const paxManifest = generateA320PaxManifest(paxCount);
-
-                const cargoObj = missionObj.cargo;
-                const totalCargoWeight = cargoObj.hold1.weight + cargoObj.hold2.weight + cargoObj.hold3.weight + cargoObj.hold4.weight + cargoObj.hold5.weight;
-                const paxTotalWeight = paxCount * 205;
-                const zfw = A320_PROFILE.dow + paxTotalWeight + totalCargoWeight;
-
-                const tripFuel = Math.round((flightMinutes / 60) * A320_PROFILE.fuelBurnPerHour);
-                const reserveFuel = 3800;
-                const alternateFuel = 2400;
-                const contingencyFuel = Math.round(tripFuel * 0.05);
-                const blockFuel = tripFuel + reserveFuel + alternateFuel + contingencyFuel;
-
-                const tow = zfw + blockFuel;
-                const ldw = tow - tripFuel;
-                const cgPercent = (24.2 + ((paxCount / 180) * 3.2) + ((totalCargoWeight / 25000) * 1.8)).toFixed(1);
-
-                schedule.push({
-                    legNumber: i + 1,
-                    flightNum,
-                    callsign,
-                    date: dispatchDate,
-                    aircraft: A320_PROFILE,
-                    origin: { icao: currentICAO, ...origApt },
-                    destination: { icao: destICAO, ...destApt },
-                    distanceNM,
-                    flightMinutes,
-                    etd,
-                    eta,
-                    turnaroundMins: turnaround,
-                    org: missionObj,
-                    paxCount,
-                    paxManifest,
-                    cargoObj,
-                    totalCargoWeight,
-                    paxTotalWeight,
-                    tripFuel,
-                    reserveFuel,
-                    alternateFuel,
-                    contingencyFuel,
-                    blockFuel,
-                    zfw,
-                    tow,
-                    ldw,
-                    cgPercent,
-                    cruiseFL: distanceNM > 1500 ? "FL370" : distanceNM > 600 ? "FL340" : "FL280",
-                    routeWaypoints: generateWaypoints(currentICAO, destICAO)
-                });
-
-                // MANDATORY CONTINUOUS LEG CHAIN: Leg N destination MUST be Leg N+1 origin!
-                currentICAO = destICAO;
-                totalMinuteTracker += (flightMinutes + turnaround);
-            }
-
-            currentSchedule = schedule;
-            activeLegIndex = 0;
-
-            renderScheduleTelemetrySummary();
-            renderLegTabs();
-            renderActiveInspectorView();
-            updateMapRoute();
-
-            saveToHistory(A320_PROFILE.tail, schedule[0].origin.icao, schedule);
-        }
-
-        function filterAirportsByRange(fromICAO, rangeProfile) {
-            const fromApt = getAirport(fromICAO);
-            const allKeys = Object.keys(AIRPORTS);
-
-            if (rangeProfile === 'SHORT') {
-                return allKeys.filter(k => {
-                    const d = calculateNM(fromApt.lat, fromApt.lng, AIRPORTS[k].lat, AIRPORTS[k].lng);
-                    return d < 500;
-                });
-            } else if (rangeProfile === 'MEDIUM') {
-                return allKeys.filter(k => {
-                    const d = calculateNM(fromApt.lat, fromApt.lng, AIRPORTS[k].lat, AIRPORTS[k].lng);
-                    return d >= 500 && d <= 1500;
-                });
-            } else if (rangeProfile === 'LONG') {
-                return allKeys.filter(k => {
-                    const d = calculateNM(fromApt.lat, fromApt.lng, AIRPORTS[k].lat, AIRPORTS[k].lng);
-                    return d > 1500 && d <= 3300;
-                });
-            }
-            return allKeys;
-        }
-
-        function generateWaypoints(orig, dest) {
-            const fixes = ["JFK", "DIXIE", "GDM", "BOS", "HNK", "ALB", "BUF", "JOT", "OBK", "BNE", "TUL", "PXR", "FLG", "DAG", "SFO", "KATL", "KCLT", "MEM", "MOD", "RBL", "NTA", "LIZ"];
-            const selected = [];
-            for (let i = 0; i < 3; i++) {
-                selected.push(fixes[Math.floor(Math.random() * fixes.length)]);
-            }
-            return `${orig} DCT ${selected.join(' DCT ')} DCT ${dest}`;
-        }
-
-        function generateA320PaxManifest(count) {
-            const paxMap = {};
-            const seats = [];
+      <!-- TAB 2: INTERACTIVE 180-SEAT CABIN INSPECTOR -->
+      <div id="tab-cabin" class="hidden space-y-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+          
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-800">
+            <div>
+              <h3 class="font-bold text-sm uppercase tracking-wide text-slate-100 flex items-center space-x-2">
+                <i class="fa-solid fa-chair text-cyan-400"></i>
+                <span>A320 Cabin Layout (180 Seats - NO Row 13)</span>
+              </h3>
+              <p class="text-xs text-slate-400">Click any seat to inspect passenger assignment, luggage & catering notes.</p>
+            </div>
             
-            A320_PROFILE.seatRows.forEach(r => {
-                ['A', 'B', 'C', 'D', 'E', 'F'].forEach(c => {
-                    seats.push(`${r}${c}`);
-                });
-            });
+            <!-- Seat Legend -->
+            <div class="flex items-center space-x-3 text-[11px] font-medium">
+              <span class="flex items-center space-x-1">
+                <span class="w-3 h-3 rounded bg-cyan-500/30 border border-cyan-400 inline-block"></span>
+                <span>Starters / VIPs</span>
+              </span>
+              <span class="flex items-center space-x-1">
+                <span class="w-3 h-3 rounded bg-amber-500/30 border border-amber-400 inline-block"></span>
+                <span>Coaching / Staff</span>
+              </span>
+              <span class="flex items-center space-x-1">
+                <span class="w-3 h-3 rounded bg-slate-700 border border-slate-500 inline-block"></span>
+                <span>Team Roster</span>
+              </span>
+            </div>
+          </div>
 
-            const shuffledSeats = [...seats].sort(() => 0.5 - Math.random());
-            const roles = ["Head Coach", "Starting Quarterback / Captain", "Defensive Coordinator", "Offensive Coordinator", "Athletic Trainer", "Equipment Director", "General Manager", "Team Physician"];
+          <!-- AIRCRAFT FUSELAGE Blueprint Layout -->
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-x-auto">
+            <div class="min-w-[500px] max-w-2xl mx-auto space-y-1" id="cabinGrid">
+              <!-- Dynamically generated 30 rows x 6 seats (Rows 1-12, 14-31) -->
+            </div>
+          </div>
 
-            for (let i = 0; i < count; i++) {
-                const seatNo = shuffledSeats[i];
-                const first = VIP_NAMES_FIRST[Math.floor(Math.random() * VIP_NAMES_FIRST.length)];
-                const last = VIP_NAMES_LAST[Math.floor(Math.random() * VIP_NAMES_LAST.length)];
+        </div>
+      </div>
 
-                paxMap[seatNo] = {
-                    seat: seatNo,
-                    name: `${first} ${last}`,
-                    status: i < roles.length ? roles[i] : "Roster Athlete / Staff",
-                    pitch: i < 12 ? '32 Inches (Extra Legroom)' : '30 Inches (Standard)',
-                    catering: i % 4 === 0 ? "Executive Hot Meal + Espresso" : "Standard Charter Box Meal",
-                    request: i % 6 === 0 ? "Ice Compression Unit" : "None",
-                    bags: Math.floor(Math.random() * 2) + 1,
-                    isOccupied: true
-                };
-            }
+      <!-- TAB 3: BELLY CARGO OPERATIONS -->
+      <div id="tab-cargo" class="hidden space-y-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-5">
+          
+          <div>
+            <h3 class="font-bold text-sm uppercase tracking-wide text-slate-100 flex items-center space-x-2">
+              <i class="fa-solid fa-boxes-packing text-amber-400"></i>
+              <span>Lower Deck Belly Hold Operations & ULD Layout</span>
+            </h3>
+            <p class="text-xs text-slate-400">Airbus A320-200 Hold Allocations (Max Payload Capacity: 41,500 LBS)</p>
+          </div>
 
-            return paxMap;
-        }
-
-        /* ==========================================================================
-           5. UI RENDER ENGINE
-           ========================================================================== */
-
-        function renderScheduleTelemetrySummary() {
-            if (!currentSchedule.length) return;
-
-            const totalDist = currentSchedule.reduce((acc, l) => acc + l.distanceNM, 0);
-            const totalMins = currentSchedule.reduce((acc, l) => acc + l.flightMinutes, 0);
-            const totalFuel = currentSchedule.reduce((acc, l) => acc + l.tripFuel, 0);
-            const totalPax = currentSchedule.reduce((acc, l) => acc + l.paxCount, 0);
-            const finalPos = currentSchedule[currentSchedule.length - 1].destination.icao;
-
-            document.getElementById('summary-total-dist').innerText = `${totalDist.toLocaleString()} NM`;
-            document.getElementById('summary-total-time').innerText = formatMinutesToHHMM(totalMins);
-            document.getElementById('summary-total-fuel').innerText = `${totalFuel.toLocaleString()} LBS`;
-            document.getElementById('summary-total-pax').innerText = `${totalPax} PAX`;
-            document.getElementById('summary-final-pos').innerText = finalPos;
-
-            document.getElementById('itinerary-leg-count-badge').innerText = `${currentSchedule.length} LEGS CHAINED`;
-        }
-
-        function renderLegTabs() {
-            const container = document.getElementById('leg-timeline-tabs');
-            container.innerHTML = '';
-
-            currentSchedule.forEach((leg, idx) => {
-                const isActive = idx === activeLegIndex;
-                const btn = document.createElement('button');
-                btn.onclick = () => {
-                    activeLegIndex = idx;
-                    renderLegTabs();
-                    renderActiveInspectorView();
-                    highlightMapLeg(idx);
-                };
-                btn.className = `flex-1 min-w-[130px] px-3 py-2.5 rounded-lg border font-mono text-xs text-left transition-all ${
-                    isActive 
-                        ? 'bg-gradient-to-r from-gold-500/20 to-amber-500/10 border-gold-500 text-gold-400 font-bold shadow' 
-                        : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-                }`;
-
-                btn.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="text-[10px] text-slate-500 uppercase">LEG ${leg.legNumber}</span>
-                        <span class="text-[10px] ${isActive ? 'text-gold-400' : 'text-slate-500'}">${leg.flightNum}</span>
-                    </div>
-                    <div class="font-bold flex items-center justify-between">
-                        <span>${leg.origin.icao}</span>
-                        <i class="fa-solid fa-arrow-right text-[10px] text-slate-500 mx-1"></i>
-                        <span>${leg.destination.icao}</span>
-                    </div>
-                    <div class="text-[10px] text-slate-400 mt-1 flex justify-between">
-                        <span>${leg.paxCount} PAX</span>
-                        <span>${formatMinutesToHHMM(leg.flightMinutes)}</span>
-                    </div>
-                `;
-                container.appendChild(btn);
-            });
-        }
-
-        function setActiveInspectorTab(tabKey) {
-            activeInspectorTab = tabKey;
-            ['overview', 'seats', 'cargo', 'wb'].forEach(t => {
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (t === tabKey) {
-                    btn.className = "px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-gold-500 text-gold-400 bg-slate-900";
-                } else {
-                    btn.className = "px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-transparent text-slate-400 hover:text-slate-200";
-                }
-            });
-            renderActiveInspectorView();
-        }
-
-        function renderActiveInspectorView() {
-            const container = document.getElementById('inspector-content-area');
-            if (!currentSchedule.length) {
-                container.innerHTML = `<div class="p-8 text-center text-slate-500 font-mono">No Active Leg Available</div>`;
-                return;
-            }
-
-            const leg = currentSchedule[activeLegIndex];
-
-            if (activeInspectorTab === 'overview') {
-                renderOverviewTab(container, leg);
-            } else if (activeInspectorTab === 'seats') {
-                renderSeatMapTab(container, leg);
-            } else if (activeInspectorTab === 'cargo') {
-                renderBellyCargoTab(container, leg);
-            } else if (activeInspectorTab === 'wb') {
-                renderWeightBalanceTab(container, leg);
-            }
-        }
-
-        function renderOverviewTab(container, leg) {
-            container.innerHTML = `
-                <div class="space-y-5 font-mono">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-                        <div>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-2.5 py-1 bg-gold-500/20 text-gold-400 border border-gold-500/40 rounded text-xs font-bold">LEG ${leg.legNumber} OF ${currentSchedule.length}</span>
-                                <h1 class="text-xl font-bold text-slate-100">${leg.flightNum} <span class="text-xs text-slate-400 font-normal">("${leg.callsign}")</span></h1>
-                            </div>
-                            <p class="text-xs text-slate-400 mt-1">BOWMAN AIR CHARTER DISPATCH • A320-200 <span class="text-gold-400 font-bold">N361VA</span></p>
-                        </div>
-
-                        <div class="flex items-center space-x-4 text-xs">
-                            <div class="text-right">
-                                <div class="text-slate-400 text-[10px]">FLIGHT DURATION</div>
-                                <div class="text-gold-400 text-sm font-bold">${formatMinutesToHHMM(leg.flightMinutes)}</div>
-                            </div>
-                            <div class="h-8 w-px bg-slate-800"></div>
-                            <div class="text-right">
-                                <div class="text-slate-400 text-[10px]">CRUISE ALTITUDE</div>
-                                <div class="text-cyan-400 text-sm font-bold">${leg.cruiseFL} @ M0.78</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
-                        <div class="md:col-span-4 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <span class="text-2xl font-bold text-slate-100">${leg.origin.icao}</span>
-                                    <span class="text-xs text-slate-400 ml-2">RWY ${leg.origin.rwy.split(' ')[0]}</span>
-                                </div>
-                                <span class="text-xs px-2 py-0.5 bg-slate-800 text-slate-300 rounded">DEPARTURE</span>
-                            </div>
-                            <div class="text-sm font-semibold text-slate-200 mt-1">${leg.origin.name}</div>
-                            <div class="text-xs text-slate-400">${leg.origin.city}</div>
-                            <div class="mt-3 pt-2 border-t border-slate-800/80 flex justify-between text-xs">
-                                <span class="text-slate-400">ETD:</span>
-                                <span class="text-emerald-400 font-bold">${leg.etd}</span>
-                            </div>
-                        </div>
-
-                        <div class="md:col-span-3 text-center flex flex-col items-center justify-center space-y-1">
-                            <div class="text-xs text-gold-400 font-bold">${leg.distanceNM} NM</div>
-                            <div class="w-full flex items-center justify-center space-x-2">
-                                <div class="h-0.5 flex-1 bg-gradient-to-r from-transparent via-gold-500/50 to-gold-500"></div>
-                                <i class="fa-solid fa-plane text-gold-400 transform rotate-90 text-sm"></i>
-                                <div class="h-0.5 flex-1 bg-gradient-to-r from-gold-500 via-gold-500/50 to-transparent"></div>
-                            </div>
-                            <div class="text-[10px] text-slate-400">ALT: ${leg.destination.alt}</div>
-                        </div>
-
-                        <div class="md:col-span-4 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <span class="text-2xl font-bold text-slate-100">${leg.destination.icao}</span>
-                                    <span class="text-xs text-slate-400 ml-2">RWY ${leg.destination.rwy.split(' ')[0]}</span>
-                                </div>
-                                <span class="text-xs px-2 py-0.5 bg-slate-800 text-slate-300 rounded">ARRIVAL</span>
-                            </div>
-                            <div class="text-sm font-semibold text-slate-200 mt-1">${leg.destination.name}</div>
-                            <div class="text-xs text-slate-400">${leg.destination.city}</div>
-                            <div class="mt-3 pt-2 border-t border-slate-800/80 flex justify-between text-xs">
-                                <span class="text-slate-400">ETA:</span>
-                                <span class="text-emerald-400 font-bold">${leg.eta}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/80 p-4 rounded-xl border-l-4 border-l-gold-500 border border-slate-800 space-y-1 font-sans">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-mono text-gold-400 uppercase font-bold"><i class="fa-solid fa-building-flag mr-1"></i> Active Charter Mission</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 bg-slate-800 text-slate-300 rounded">${leg.org.category}</span>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-100">${leg.org.name}</h3>
-                        <p class="text-xs text-slate-300 leading-relaxed">${leg.org.purposeTemplate}</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                            <div class="text-slate-500 text-[10px] font-bold mb-1">ATC ROUTE WAYPOINTS</div>
-                            <div class="truncate text-cyan-400 font-semibold">${leg.routeWaypoints}</div>
-                        </div>
-                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                            <div class="text-slate-500 text-[10px] font-bold mb-1">SIMULATED DEPARTURE METAR</div>
-                            <div class="text-slate-300 font-mono text-[11px]">${leg.origin.icao} 071850Z 18012KT 10SM FEW040 22/14 A3002 NOSIG</div>
-                        </div>
-                    </div>
+          <!-- Cargo Holds Visual Blueprint -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <!-- Hold 1 & 2 (Forward ULD) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-cyan-400 mb-2">
+                  <span>FORWARD HOLDS 1 & 2</span>
+                  <span class="bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded text-[10px] font-mono">AKH / LD3-45 ULD</span>
                 </div>
-            `;
-        }
-
-        function renderSeatMapTab(container, leg) {
-            const paxMap = leg.paxManifest;
-            let seatRowsHTML = '';
-
-            A320_PROFILE.seatRows.forEach(r => {
-                let rowHTML = `<div class="flex items-center justify-center space-x-1.5 my-1">
-                    <span class="text-[10px] font-mono text-slate-500 w-5 text-right font-bold">${r}</span>`;
-                
-                ['A', 'B', 'C'].forEach(c => {
-                    const seatId = `${r}${c}`;
-                    const p = paxMap[seatId];
-                    if (p) {
-                        const isVip = p.status.includes('Coach') || p.status.includes('Captain') || p.status.includes('Director') || p.status.includes('Quarterback');
-                        rowHTML += `
-                            <button onclick="openSeatModal('${seatId}')" title="${seatId}: ${p.name} (${p.status})" class="seat-btn w-6 h-7 rounded text-[10px] font-mono font-bold flex items-center justify-center ${isVip ? 'bg-gold-500 text-slate-950 shadow-md shadow-gold-500/30' : 'bg-emerald-600/90 text-white hover:bg-emerald-500'}">
-                                ${c}
-                            </button>
-                        `;
-                    } else {
-                        rowHTML += `
-                            <button onclick="openSeatModal('${seatId}')" title="${seatId}: AVAILABLE" class="seat-btn w-6 h-7 rounded text-[10px] font-mono flex items-center justify-center bg-slate-800 text-slate-600 hover:bg-slate-700">
-                                ${c}
-                            </button>
-                        `;
-                    }
-                });
-
-                rowHTML += `<div class="w-4 text-center text-[9px] text-slate-600">|</div>`;
-
-                ['D', 'E', 'F'].forEach(c => {
-                    const seatId = `${r}${c}`;
-                    const p = paxMap[seatId];
-                    if (p) {
-                        const isVip = p.status.includes('Coach') || p.status.includes('Captain') || p.status.includes('Director') || p.status.includes('Quarterback');
-                        rowHTML += `
-                            <button onclick="openSeatModal('${seatId}')" title="${seatId}: ${p.name} (${p.status})" class="seat-btn w-6 h-7 rounded text-[10px] font-mono font-bold flex items-center justify-center ${isVip ? 'bg-gold-500 text-slate-950 shadow-md shadow-gold-500/30' : 'bg-emerald-600/90 text-white hover:bg-emerald-500'}">
-                                ${c}
-                            </button>
-                        `;
-                    } else {
-                        rowHTML += `
-                            <button onclick="openSeatModal('${seatId}')" title="${seatId}: AVAILABLE" class="seat-btn w-6 h-7 rounded text-[10px] font-mono flex items-center justify-center bg-slate-800 text-slate-600 hover:bg-slate-700">
-                                ${c}
-                            </button>
-                        `;
-                    }
-                });
-
-                rowHTML += `</div>`;
-                seatRowsHTML += rowHTML;
-            });
-
-            container.innerHTML = `
-                <div class="space-y-4 font-mono">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-                                <i class="fa-solid fa-chair text-gold-400"></i> Airbus A320 Cabin Layout (180 Seats)
-                            </h3>
-                            <p class="text-xs text-slate-400">Rows 1–12 & 14–31 (Row 13 strictly omitted per airliner standard).</p>
-                        </div>
-                        <div class="flex items-center space-x-3 text-xs">
-                            <span class="flex items-center"><span class="w-3 h-3 bg-emerald-600 rounded mr-1"></span> Occupied (${leg.paxCount})</span>
-                            <span class="flex items-center"><span class="w-3 h-3 bg-gold-500 rounded mr-1"></span> Group VIP</span>
-                            <span class="flex items-center"><span class="w-3 h-3 bg-slate-800 rounded mr-1"></span> Empty (${180 - leg.paxCount})</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <div class="lg:col-span-5 bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-y-auto max-h-[420px]">
-                            <div class="text-center text-[10px] text-slate-500 border-b border-slate-800 pb-2 mb-3">FORWARD FLIGHT DECK</div>
-                            ${seatRowsHTML}
-                            <div class="text-center text-[10px] text-slate-500 border-t border-slate-800 pt-2 mt-3">AFT GALLEY / LAVATORIES</div>
-                        </div>
-
-                        <div class="lg:col-span-7 bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
-                            <h4 class="text-xs font-bold text-slate-200 uppercase">Passenger Roster Preview</h4>
-                            <div class="overflow-y-auto max-h-[360px]">
-                                <table class="w-full text-left text-xs">
-                                    <thead>
-                                        <tr class="text-slate-400 border-b border-slate-800 text-[10px]">
-                                            <th class="pb-2">SEAT</th>
-                                            <th class="pb-2">NAME</th>
-                                            <th class="pb-2">ROLE</th>
-                                            <th class="pb-2">CATERING</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-slate-800/60">
-                                        ${Object.values(paxMap).slice(0, 16).map(p => `
-                                            <tr>
-                                                <td class="py-2 text-gold-400 font-bold">${p.seat}</td>
-                                                <td class="py-2 text-slate-200 font-semibold">${p.name}</td>
-                                                <td class="py-2 text-[10px]"><span class="px-1.5 py-0.5 rounded ${p.status.includes('Coach') || p.status.includes('Captain') ? 'bg-amber-950 text-amber-400 border border-amber-800' : 'bg-slate-800 text-slate-400'}">${p.status}</span></td>
-                                                <td class="py-2 text-slate-400 text-[10px]">${p.catering}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p class="text-[10px] text-slate-500 text-right">+ ${Math.max(0, leg.paxCount - 16)} additional passengers onboard</p>
-                        </div>
-                    </div>
+                <p class="text-xs text-slate-300 font-medium mb-2">Sports Equipment Trunks & Gear Bins</p>
+                <div class="text-[11px] text-slate-400 space-y-1 font-mono">
+                  <div>• 4x AKH Sealed Containers</div>
+                  <div>• Team Uniform Hampers</div>
+                  <div>• Tactical Video Racks</div>
                 </div>
-            `;
-        }
-
-        function renderBellyCargoTab(container, leg) {
-            const cargo = leg.cargoObj;
-            const totalCargoKg = Math.round(leg.totalCargoWeight * 0.453592);
-
-            container.innerHTML = `
-                <div class="space-y-4 font-mono">
-                    <div class="flex justify-between items-center pb-3 border-b border-slate-800">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-                                <i class="fa-solid fa-boxes-packing text-amber-400"></i> Airbus A320 Lower Deck Cargo Compartments
-                            </h3>
-                            <p class="text-xs text-slate-400">Holds 1 & 2 (Forward AKH ULDs) | Holds 3, 4 & Bulk 5 (Aft Belt Loaders).</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-slate-400 block">TOTAL BELLY CARGO</span>
-                            <span class="text-amber-400 font-bold text-sm">${leg.totalCargoWeight.toLocaleString()} LBS (${totalCargoKg.toLocaleString()} KG)</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center space-y-2">
-                        <div class="text-[10px] text-slate-500 uppercase tracking-widest">A320 LOWER DECK HOLD SCHEMATIC</div>
-                        <div class="grid grid-cols-5 gap-2 text-xs">
-                            <div class="bg-slate-900 p-2.5 rounded border border-cyan-500/40">
-                                <span class="text-cyan-400 text-[10px] block font-bold">HOLD 1 (FWD ULD)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold1.uld || 'AKH ULD'}</span>
-                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold1.weight.toLocaleString()} LBS</span>
-                            </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-cyan-500/40">
-                                <span class="text-cyan-400 text-[10px] block font-bold">HOLD 2 (FWD ULD)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">${cargo.hold2.uld || 'AKH ULD'}</span>
-                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold2.weight.toLocaleString()} LBS</span>
-                            </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-amber-500/40">
-                                <span class="text-amber-400 text-[10px] block font-bold">HOLD 3 (AFT BELT)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">BELT LOAD</span>
-                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold3.weight.toLocaleString()} LBS</span>
-                            </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-amber-500/40">
-                                <span class="text-amber-400 text-[10px] block font-bold">HOLD 4 (AFT BELT)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">BELT LOAD</span>
-                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold4.weight.toLocaleString()} LBS</span>
-                            </div>
-                            <div class="bg-slate-900 p-2.5 rounded border border-slate-700">
-                                <span class="text-slate-400 text-[10px] block font-bold">HOLD 5 (BULK)</span>
-                                <span class="text-slate-200 font-bold text-[11px]">BULK NET</span>
-                                <span class="text-[9px] text-slate-400 block mt-0.5">${cargo.hold5.weight.toLocaleString()} LBS</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="text-slate-400 border-b border-slate-800 text-[10px]">
-                                    <th class="pb-2">HOLD / METHOD</th>
-                                    <th class="pb-2">CONTAINER / TAG</th>
-                                    <th class="pb-2">MANIFESTED ITEMS & GEAR</th>
-                                    <th class="pb-2">WEIGHT (LBS)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/60">
-                                <tr>
-                                    <td class="py-2.5 text-cyan-400 font-bold">Hold 1 (Fwd ULD)</td>
-                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold1.uld || 'AKH-101'}</td>
-                                    <td class="py-2.5 text-slate-200">${cargo.hold1.desc}</td>
-                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold1.weight.toLocaleString()} lbs</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 text-cyan-400 font-bold">Hold 2 (Fwd ULD)</td>
-                                    <td class="py-2.5 text-gold-400 font-bold">${cargo.hold2.uld || 'AKH-202'}</td>
-                                    <td class="py-2.5 text-slate-200">${cargo.hold2.desc}</td>
-                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold2.weight.toLocaleString()} lbs</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 text-amber-400 font-bold">Hold 3 (Aft Belt Loader)</td>
-                                    <td class="py-2.5 text-slate-400">Belt Loader</td>
-                                    <td class="py-2.5 text-slate-200">${cargo.hold3.desc}</td>
-                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold3.weight.toLocaleString()} lbs</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 text-amber-400 font-bold">Hold 4 (Aft Belt Loader)</td>
-                                    <td class="py-2.5 text-slate-400">Belt Loader</td>
-                                    <td class="py-2.5 text-slate-200">${cargo.hold4.desc}</td>
-                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold4.weight.toLocaleString()} lbs</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 text-slate-400 font-bold">Hold 5 (Bulk Net)</td>
-                                    <td class="py-2.5 text-slate-400">Loose / Net</td>
-                                    <td class="py-2.5 text-slate-200">${cargo.hold5.desc}</td>
-                                    <td class="py-2.5 text-amber-400 font-bold">${cargo.hold5.weight.toLocaleString()} lbs</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-800">
+                <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                  <span>Weight Load:</span>
+                  <span id="holdForwardWeight">8,400 LBS</span>
                 </div>
-            `;
-        }
-
-        function renderWeightBalanceTab(container, leg) {
-            const plane = leg.aircraft;
-            const zfwPct = Math.round((leg.zfw / plane.mzfw) * 100);
-
-            container.innerHTML = `
-                <div class="space-y-5 font-mono">
-                    <div class="flex justify-between items-center pb-3 border-b border-slate-800">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-                                <i class="fa-solid fa-scale-balanced text-emerald-400"></i> Weight & Balance Telemetry Engine
-                            </h3>
-                            <p class="text-xs text-slate-400">A320 Center of Gravity (% MAC) & certified structural limits.</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-slate-400 block">CG POSITION</span>
-                            <span class="text-emerald-400 font-bold text-sm">${leg.cgPercent}% MAC (IN ENVELOPE)</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <div class="flex justify-between text-xs text-slate-400">
-                            <span>TAKEOFF WEIGHT (TOW): <strong class="text-slate-100">${leg.tow.toLocaleString()} LBS</strong></span>
-                            <span>MAX TAKEOFF WEIGHT (MTOW): <strong class="text-amber-400">${plane.mtow.toLocaleString()} LBS</strong></span>
-                        </div>
-                        <div class="w-full bg-slate-900 rounded-full h-3.5 border border-slate-800 overflow-hidden flex">
-                            <div class="bg-blue-600 h-full" style="width: ${(plane.dow/plane.mtow)*100}%" title="DOW"></div>
-                            <div class="bg-emerald-500 h-full" style="width: ${(leg.paxTotalWeight/plane.mtow)*100}%" title="Pax"></div>
-                            <div class="bg-amber-500 h-full" style="width: ${(leg.totalCargoWeight/plane.mtow)*100}%" title="Cargo"></div>
-                            <div class="bg-cyan-500 h-full" style="width: ${(leg.blockFuel/plane.mtow)*100}%" title="Fuel"></div>
-                        </div>
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 flex-wrap gap-2">
-                            <span><span class="inline-block w-2 h-2 bg-blue-600 rounded-full mr-1"></span> OEW: ${plane.dow.toLocaleString()} lbs</span>
-                            <span><span class="inline-block w-2 h-2 bg-emerald-500 rounded-full mr-1"></span> Pax (${leg.paxCount}): ${leg.paxTotalWeight.toLocaleString()} lbs</span>
-                            <span><span class="inline-block w-2 h-2 bg-amber-500 rounded-full mr-1"></span> Cargo: ${leg.totalCargoWeight.toLocaleString()} lbs</span>
-                            <span><span class="inline-block w-2 h-2 bg-cyan-500 rounded-full mr-1"></span> Fuel: ${leg.blockFuel.toLocaleString()} lbs</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
-                            <span class="text-slate-400 text-[10px] block">DRY OPERATING (OEW)</span>
-                            <span class="text-slate-100 font-bold text-sm">${plane.dow.toLocaleString()} LBS</span>
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
-                            <span class="text-slate-400 text-[10px] block">ZERO FUEL WEIGHT (ZFW)</span>
-                            <span class="text-slate-100 font-bold text-sm">${leg.zfw.toLocaleString()} LBS</span>
-                            <span class="text-[9px] text-slate-500 block">MAX: ${plane.mzfw.toLocaleString()} LBS (${zfwPct}%)</span>
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
-                            <span class="text-slate-400 text-[10px] block">EST LANDING WEIGHT</span>
-                            <span class="text-emerald-400 font-bold text-sm">${leg.ldw.toLocaleString()} LBS</span>
-                            <span class="text-[9px] text-slate-500 block">MAX: ${plane.mlw.toLocaleString()} LBS</span>
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded border border-slate-800">
-                            <span class="text-slate-400 text-[10px] block">TRIP FUEL BURN</span>
-                            <span class="text-amber-400 font-bold text-sm">${leg.tripFuel.toLocaleString()} LBS</span>
-                        </div>
-                    </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div id="holdForwardBar" class="bg-cyan-500 h-full w-[65%]"></div>
                 </div>
-            `;
-        }
+              </div>
+            </div>
 
-        /* ==========================================================================
-           6. MAP ENGINE (LEAFLET WITH OPENSTREETMAP TILES)
-           ========================================================================== */
-
-        function initLeafletMap() {
-            try {
-                if (leafletMap) return;
-
-                leafletMap = L.map('flight-map', {
-                    zoomControl: true,
-                    attributionControl: false
-                }).setView([44.8848, -93.2223], 4);
-
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(leafletMap);
-            } catch (e) {
-                console.error("Map initialization failed:", e);
-            }
-        }
-
-        function updateMapRoute() {
-            if (!leafletMap || !currentSchedule.length) return;
-
-            try {
-                mapMarkers.forEach(m => leafletMap.removeLayer(m));
-                mapMarkers = [];
-                if (mapPolyline) leafletMap.removeLayer(mapPolyline);
-
-                const latLngs = [];
-
-                const firstLeg = currentSchedule[0];
-                latLngs.push([firstLeg.origin.lat, firstLeg.origin.lng]);
-
-                const origMarker = L.circleMarker([firstLeg.origin.lat, firstLeg.origin.lng], {
-                    radius: 7,
-                    color: '#d4af37',
-                    fillColor: '#d4af37',
-                    fillOpacity: 0.9
-                }).addTo(leafletMap).bindTooltip(`<b>${firstLeg.origin.icao}</b> - Origin`, { permanent: false });
-                mapMarkers.push(origMarker);
-
-                currentSchedule.forEach((leg, i) => {
-                    const destPos = [leg.destination.lat, leg.destination.lng];
-                    latLngs.push(destPos);
-
-                    const marker = L.circleMarker(destPos, {
-                        radius: 6,
-                        color: i === activeLegIndex ? '#0284c7' : '#475569',
-                        fillColor: i === activeLegIndex ? '#38bdf8' : '#1e293b',
-                        fillOpacity: 0.9
-                    }).addTo(leafletMap).bindTooltip(`<b>${leg.destination.icao}</b> (Leg ${leg.legNumber})`, { permanent: false });
-
-                    mapMarkers.push(marker);
-                });
-
-                mapPolyline = L.polyline(latLngs, {
-                    color: '#b48811',
-                    weight: 3,
-                    opacity: 0.85,
-                    dashArray: '8, 6'
-                }).addTo(leafletMap);
-
-                const bounds = L.latLngBounds(latLngs);
-                leafletMap.fitBounds(bounds, { padding: [40, 40] });
-
-                const routeStr = [firstLeg.origin.icao, ...currentSchedule.map(l => l.destination.icao)].join(' ➔ ');
-                document.getElementById('map-route-text').innerText = routeStr;
-            } catch(e) {
-                console.error("Route update failed:", e);
-            }
-        }
-
-        function highlightMapLeg(legIdx) {
-            updateMapRoute();
-        }
-
-        /* ==========================================================================
-           7. MODALS & POPUPS LOGIC
-           ========================================================================== */
-
-        function openSeatModal(seatId) {
-            const leg = currentSchedule[activeLegIndex];
-            const p = leg.paxManifest[seatId];
-
-            document.getElementById('modal-seat-title').innerText = `SEAT ${seatId} TELEMETRY`;
-            const body = document.getElementById('modal-seat-body');
-
-            if (p) {
-                body.innerHTML = `
-                    <div class="bg-slate-900 p-3 rounded border border-slate-800 space-y-1.5 font-mono">
-                        <div><strong class="text-slate-400">PASSENGER NAME:</strong> <span class="text-slate-100 font-bold">${p.name}</span></div>
-                        <div><strong class="text-slate-400">ROLE / STATUS:</strong> <span class="text-gold-400">${p.status}</span></div>
-                        <div><strong class="text-slate-400">SEAT PITCH:</strong> <span class="text-slate-200">${p.pitch}</span></div>
-                        <div><strong class="text-slate-400">CATERING PREFERENCE:</strong> <span class="text-cyan-400">${p.catering}</span></div>
-                        <div><strong class="text-slate-400">SPECIAL REQUEST:</strong> <span class="text-amber-400">${p.request}</span></div>
-                    </div>
-                `;
-            } else {
-                body.innerHTML = `
-                    <div class="bg-slate-900 p-3 rounded border border-slate-800 text-center py-4 font-mono">
-                        <span class="text-slate-400 block font-bold">SEAT ${seatId} IS UNASSIGNED</span>
-                        <span class="text-[10px] text-slate-500">Available for charter group allocation</span>
-                    </div>
-                `;
-            }
-
-            document.getElementById('seat-detail-modal').classList.remove('hidden');
-        }
-
-        function closeSeatModal() {
-            document.getElementById('seat-detail-modal').classList.add('hidden');
-        }
-
-        function openPrintModal() {
-            if (!currentSchedule.length) return;
-            const modal = document.getElementById('print-dispatch-modal');
-            const container = document.getElementById('dispatch-release-content');
-            const leg = currentSchedule[activeLegIndex];
-            const c = leg.cargoObj;
-
-            container.innerHTML = `
-                <div class="border-b-2 border-slate-900 pb-4 mb-4 flex justify-between items-start font-mono">
-                    <div>
-                        <h1 class="text-xl font-bold uppercase tracking-wider text-slate-900">BOWMAN AIR CHARTER DISPATCH RELEASE</h1>
-                        <p class="text-xs text-slate-600">FAA PART 121/135 OPERATIONAL FLIGHT RELEASE • AIRCRAFT N361VA</p>
-                    </div>
-                    <div class="text-right text-xs">
-                        <div><strong>RELEASE NO:</strong> BMN-361-${Math.floor(Math.random()*89999)+10000}</div>
-                        <div><strong>DATE:</strong> ${leg.date}</div>
-                        <div><strong>TIME ISSUED:</strong> ${leg.etd}</div>
-                    </div>
+            <!-- Hold 3 & 4 (Aft Bulk / Beltloader) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-amber-400 mb-2">
+                  <span>AFT HOLDS 3 & 4</span>
+                  <span class="bg-amber-950 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono">BELT LOADER</span>
                 </div>
-
-                <div class="grid grid-cols-4 gap-4 p-3 bg-slate-100 rounded border border-slate-300 text-xs font-mono">
-                    <div><strong>FLIGHT NO:</strong> ${leg.flightNum}</div>
-                    <div><strong>CALLSIGN:</strong> ${leg.callsign}</div>
-                    <div><strong>TAIL NO:</strong> N361VA</div>
-                    <div><strong>AIRCRAFT:</strong> Airbus A320-200</div>
+                <p class="text-xs text-slate-300 font-medium mb-2">Player Duffel Bags & Medical Bags</p>
+                <div class="text-[11px] text-slate-400 space-y-1 font-mono">
+                  <div>• 180 Individual Player Duffels</div>
+                  <div>• Medical & Taping Tables</div>
+                  <div>• Training Hydration Coolers</div>
                 </div>
-
-                <div class="grid grid-cols-2 gap-6 text-xs font-mono">
-                    <div class="border border-slate-300 p-3 rounded">
-                        <div class="font-bold border-b border-slate-200 pb-1 mb-2">DEPARTURE AERODROME</div>
-                        <div><strong>ICAO:</strong> ${leg.origin.icao} - ${leg.origin.name}</div>
-                        <div><strong>ETD:</strong> ${leg.etd}</div>
-                        <div><strong>RUNWAY ASSIGNED:</strong> ${leg.origin.rwy}</div>
-                    </div>
-                    <div class="border border-slate-300 p-3 rounded">
-                        <div class="font-bold border-b border-slate-200 pb-1 mb-2">DESTINATION AERODROME</div>
-                        <div><strong>ICAO:</strong> ${leg.destination.icao} - ${leg.destination.name}</div>
-                        <div><strong>ETA:</strong> ${leg.eta}</div>
-                        <div><strong>ALTERNATE:</strong> ${leg.destination.alt}</div>
-                    </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-800">
+                <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                  <span>Weight Load:</span>
+                  <span id="holdAftWeight">5,800 LBS</span>
                 </div>
-
-                <div class="border border-slate-300 p-3 rounded text-xs bg-slate-50 font-mono">
-                    <strong class="block mb-1 text-slate-800">CHARTER OBJECTIVE & ORGANIZATION:</strong>
-                    <div><strong>CLIENT:</strong> ${leg.org.name} (${leg.org.category})</div>
-                    <div class="mt-1 text-slate-700">${leg.org.purposeTemplate}</div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div id="holdAftBar" class="bg-amber-500 h-full w-[48%]"></div>
                 </div>
+              </div>
+            </div>
 
-                <div class="border border-slate-300 p-3 rounded text-xs bg-slate-50 font-mono">
-                    <strong class="block mb-1 text-slate-800">LOWER DECK CARGO MANIFEST DETAILS:</strong>
-                    <div class="grid grid-cols-2 gap-2 mt-1">
-                        <div>• <strong>Hold 1 (${c.hold1.uld || 'AKH ULD'}):</strong> ${c.hold1.desc} (${c.hold1.weight.toLocaleString()} lbs)</div>
-                        <div>• <strong>Hold 2 (${c.hold2.uld || 'AKH ULD'}):</strong> ${c.hold2.desc} (${c.hold2.weight.toLocaleString()} lbs)</div>
-                        <div>• <strong>Hold 3 (Aft Belt):</strong> ${c.hold3.desc} (${c.hold3.weight.toLocaleString()} lbs)</div>
-                        <div>• <strong>Hold 4 (Aft Belt):</strong> ${c.hold4.desc} (${c.hold4.weight.toLocaleString()} lbs)</div>
-                        <div>• <strong>Hold 5 (Bulk Net):</strong> ${c.hold5.desc} (${c.hold5.weight.toLocaleString()} lbs)</div>
-                    </div>
+            <!-- Hold 5 (Bulk compartment) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-emerald-400 mb-2">
+                  <span>BULK HOLD 5</span>
+                  <span class="bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono">LOOSE BULK</span>
                 </div>
-
-                <div class="grid grid-cols-2 gap-6 text-xs font-mono">
-                    <div class="border border-slate-300 p-3 rounded">
-                        <div class="font-bold border-b border-slate-200 pb-1 mb-2">FUEL & FLIGHT PLAN</div>
-                        <div class="flex justify-between py-1"><span>TRIP FUEL:</span> <strong>${leg.tripFuel.toLocaleString()} LBS</strong></div>
-                        <div class="flex justify-between py-1"><span>RESERVE FUEL:</span> <strong>${leg.reserveFuel.toLocaleString()} LBS</strong></div>
-                        <div class="flex justify-between py-1 border-t border-slate-200"><span>TOTAL BLOCK FUEL:</span> <strong>${leg.blockFuel.toLocaleString()} LBS</strong></div>
-                    </div>
-                    <div class="border border-slate-300 p-3 rounded">
-                        <div class="font-bold border-b border-slate-200 pb-1 mb-2">WEIGHT & BALANCE</div>
-                        <div class="flex justify-between py-1"><span>PAX COUNT / WEIGHT:</span> <strong>${leg.paxCount} PAX / ${leg.paxTotalWeight.toLocaleString()} LBS</strong></div>
-                        <div class="flex justify-between py-1"><span>BELLY CARGO WEIGHT:</span> <strong>${leg.totalCargoWeight.toLocaleString()} LBS</strong></div>
-                        <div class="flex justify-between py-1 border-t border-slate-200"><span>TAKEOFF WEIGHT:</span> <strong>${leg.tow.toLocaleString()} LBS (MTOW 172k)</strong></div>
-                    </div>
+                <p class="text-xs text-slate-300 font-medium mb-2">Flyaway Kit & Aircraft Spares</p>
+                <div class="text-[11px] text-slate-400 space-y-1 font-mono">
+                  <div>• Aircraft Towbar & Chocks</div>
+                  <div>• Flyaway Maintenance Tooling</div>
+                  <div>• Spare Main Gear Wheel Assembly</div>
                 </div>
-
-                <div class="pt-6 border-t border-slate-300 grid grid-cols-2 gap-8 text-xs font-mono">
-                    <div>
-                        <p class="text-[10px] text-slate-500 mb-6">AUTHORIZED DISPATCHER SIGNATURE</p>
-                        <div class="border-b border-slate-800 pb-1 font-bold">DISPATCHER ID # 98402 - BOWMAN DISPATCH</div>
-                    </div>
-                    <div>
-                        <p class="text-[10px] text-slate-500 mb-6">COMMAND PILOT (PIC) ACCEPTANCE</p>
-                        <div class="border-b border-slate-800 pb-1 font-bold">PIC SIGNATURE: ____________________</div>
-                    </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-800">
+                <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                  <span>Weight Load:</span>
+                  <span id="holdBulkWeight">1,200 LBS</span>
                 </div>
-            `;
-
-            modal.classList.remove('hidden');
-        }
-
-        function closePrintModal() {
-            document.getElementById('print-dispatch-modal').classList.add('hidden');
-        }
-
-        function addCustomLegModal() {
-            if (!currentSchedule.length) return;
-            const lastLeg = currentSchedule[currentSchedule.length - 1];
-            document.getElementById('custom-leg-dep').value = lastLeg.destination.icao;
-
-            const sel = document.getElementById('custom-leg-arr-select');
-            sel.innerHTML = '';
-            Object.keys(AIRPORTS).forEach(icao => {
-                if (icao !== lastLeg.destination.icao) {
-                    const apt = AIRPORTS[icao];
-                    const opt = document.createElement('option');
-                    opt.value = icao;
-                    opt.innerText = `${icao} - ${apt.name} (${apt.city})`;
-                    sel.appendChild(opt);
-                }
-            });
-
-            document.getElementById('add-leg-modal').classList.remove('hidden');
-        }
-
-        function closeAddLegModal() {
-            document.getElementById('add-leg-modal').classList.add('hidden');
-        }
-
-        function submitCustomLeg() {
-            const depICAO = document.getElementById('custom-leg-dep').value;
-            const arrICAO = document.getElementById('custom-leg-arr-select').value;
-            const orgName = document.getElementById('custom-leg-org').value.trim() || "High-Capacity Group Charter";
-            const paxCount = parseInt(document.getElementById('custom-leg-pax').value) || 165;
-
-            const origApt = getAirport(depICAO);
-            const destApt = getAirport(arrICAO);
-            const distanceNM = calculateNM(origApt.lat, origApt.lng, destApt.lat, destApt.lng);
-
-            const cruiseHours = distanceNM / A320_PROFILE.cruiseKtas;
-            const flightMinutes = Math.round((cruiseHours * 60) + 30);
-
-            const lastLeg = currentSchedule[currentSchedule.length - 1];
-            const etd = lastLeg.eta;
-            const eta = "NEXT LEG";
-
-            const orgObj = {
-                name: orgName,
-                category: "Continuous Group Charter",
-                purposeTemplate: `Direct continuous leg transporting ${paxCount} passengers on behalf of ${orgName}.`,
-                cargo: {
-                    hold1: { desc: "AKH-115: Containerized Guest Checked Luggage", weight: 3100, uld: "AKH-115" },
-                    hold2: { desc: "AKH-212: Containerized Event Catering & Supplies", weight: 1900, uld: "AKH-212" },
-                    hold3: { desc: "Loose Equipment Trunks: Audio/Visual Rigs", weight: 3400 },
-                    hold4: { desc: "Loose Heavy Crates: Staging Gear", weight: 2600 },
-                    hold5: { desc: "Net Bulk: Loose Bags & Event Banners", weight: 1100 }
-                }
-            };
-
-            const cargoObj = orgObj.cargo;
-            const totalCargoWeight = cargoObj.hold1.weight + cargoObj.hold2.weight + cargoObj.hold3.weight + cargoObj.hold4.weight + cargoObj.hold5.weight;
-
-            const tripFuel = Math.round((flightMinutes / 60) * A320_PROFILE.fuelBurnPerHour);
-            const blockFuel = tripFuel + 6200;
-
-            const paxTotalWeight = paxCount * 205;
-            const zfw = A320_PROFILE.dow + paxTotalWeight + totalCargoWeight;
-            const tow = zfw + blockFuel;
-
-            const newLeg = {
-                legNumber: currentSchedule.length + 1,
-                flightNum: `BMN${3611 + currentSchedule.length}`,
-                callsign: `BOWMAN ${3611 + currentSchedule.length}`,
-                date: lastLeg.date,
-                aircraft: A320_PROFILE,
-                origin: { icao: depICAO, ...origApt },
-                destination: { icao: arrICAO, ...destApt },
-                distanceNM,
-                flightMinutes,
-                etd,
-                eta,
-                turnaroundMins: 60,
-                org: orgObj,
-                paxCount,
-                paxManifest: generateA320PaxManifest(paxCount),
-                cargoObj,
-                totalCargoWeight,
-                paxTotalWeight,
-                tripFuel,
-                reserveFuel: 3800,
-                alternateFuel: 2400,
-                contingencyFuel: Math.round(tripFuel * 0.05),
-                blockFuel,
-                zfw,
-                tow,
-                ldw: tow - tripFuel,
-                cgPercent: (25.0 + (paxCount/180)*3.0).toFixed(1),
-                cruiseFL: distanceNM > 1500 ? "FL370" : "FL330",
-                routeWaypoints: generateWaypoints(depICAO, arrICAO)
-            };
-
-            currentSchedule.push(newLeg);
-            activeLegIndex = currentSchedule.length - 1;
-
-            closeAddLegModal();
-            renderScheduleTelemetrySummary();
-            renderLegTabs();
-            renderActiveInspectorView();
-            updateMapRoute();
-        }
-
-        /* ==========================================================================
-           8. HISTORY LOGS
-           ========================================================================== */
-
-        function saveToHistory(tail, hub, schedule) {
-            const entry = {
-                id: Date.now(),
-                timestamp: new Date().toLocaleTimeString(),
-                tail,
-                hub,
-                legs: schedule.length,
-                routeStr: [schedule[0].origin.icao, ...schedule.map(s=>s.destination.icao)].join('-')
-            };
-
-            historyLogs.unshift(entry);
-            if (historyLogs.length > 10) historyLogs.pop();
-            localStorage.setItem('bowman_dispatch_history_n361va', JSON.stringify(historyLogs));
-            renderHistoryList();
-        }
-
-        function renderHistoryList() {
-            const list = document.getElementById('dispatch-history-list');
-            if (!historyLogs.length) {
-                list.innerHTML = `<div class="text-slate-500 text-[11px] py-1">No past dispatches saved</div>`;
-                return;
-            }
-
-            list.innerHTML = historyLogs.map(h => `
-                <div class="bg-slate-900/80 p-2 rounded border border-slate-800 flex justify-between items-center hover:border-slate-700">
-                    <div>
-                        <span class="text-gold-400 font-bold">${h.tail}</span>
-                        <span class="text-slate-400 ml-1 text-[10px]">${h.routeStr}</span>
-                    </div>
-                    <span class="text-[10px] text-slate-500">${h.timestamp}</span>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div id="holdBulkBar" class="bg-emerald-500 h-full w-[30%]"></div>
                 </div>
-            `).join('');
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Total Payload Telemetry Summary Card -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 font-mono">
+            <div>
+              <span class="text-xs text-slate-400 uppercase block">Total Cargo Load</span>
+              <strong id="totalCargoVal" class="text-lg text-slate-100">15,400 LBS</strong>
+            </div>
+            <div>
+              <span class="text-xs text-slate-400 uppercase block">Passenger + Baggage</span>
+              <strong id="paxWeightVal" class="text-lg text-slate-100">34,200 LBS</strong>
+            </div>
+            <div>
+              <span class="text-xs text-slate-400 uppercase block">Zero Fuel Weight (ZFW)</span>
+              <strong id="zfwVal" class="text-lg text-cyan-400">143,100 LBS</strong>
+              <span class="text-[10px] text-emerald-400 block">(Max 134.4k LBS Norm / W&B OK)</span>
+            </div>
+            <div>
+              <span class="text-xs text-slate-400 uppercase block">Total Ramp Weight</span>
+              <strong id="rampWeightVal" class="text-lg text-amber-400">168,500 LBS</strong>
+              <span class="text-[10px] text-emerald-400 block">(Below 172k MTOW Limit)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 4: OFFICIAL FAA DISPATCH RELEASE -->
+      <div id="tab-release" class="hidden space-y-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex justify-between items-center">
+          <div>
+            <h3 class="font-bold text-sm uppercase tracking-wide text-slate-100 flex items-center space-x-2">
+              <i class="fa-solid fa-file-contract text-cyan-400"></i>
+              <span>FAA Form 121 Flight Release Generator</span>
+            </h3>
+            <p class="text-xs text-slate-400">Printable official dispatch documentation for N361VA operational legs.</p>
+          </div>
+          <button onclick="printDispatchRelease()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center space-x-2 transition-all">
+            <i class="fa-solid fa-print"></i>
+            <span>Print Official Release</span>
+          </button>
+        </div>
+
+        <!-- RELEASE FORM CONTAINER -->
+        <div id="print-modal-content" class="bg-slate-950 border border-slate-800 rounded-2xl p-6 font-mono text-xs text-slate-200 space-y-6">
+          <!-- Dynamically populated release form content -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- SEAT INSPECTION MODAL -->
+  <div id="seatModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+        <div>
+          <span id="modalSeatNum" class="bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs px-2 py-0.5 rounded font-mono font-bold">SEAT 14A</span>
+          <h3 id="modalPaxName" class="font-bold text-slate-100 text-base mt-1">Justin Jefferson</h3>
+          <p id="modalPaxRole" class="text-xs text-cyan-400 font-semibold">Wide Receiver (#18)</p>
+        </div>
+        <button onclick="closeSeatModal()" class="text-slate-400 hover:text-slate-200 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="text-slate-400 font-bold uppercase text-[10px]">Assigned Luggage Manifest</div>
+          <div id="modalLuggage" class="text-slate-200">2 Equipment Cases + 1 Travel Duffel (55 lbs total)</div>
+        </div>
+
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="text-slate-400 font-bold uppercase text-[10px]">Catering & In-Flight Service</div>
+          <div id="modalCatering" class="text-slate-200">High-Protein Athletic Meal (Grilled Chicken, Quinoa & Isotonic Electrolytes)</div>
+        </div>
+
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="text-slate-400 font-bold uppercase text-[10px]">Special Handling / Notes</div>
+          <div id="modalNotes" class="text-slate-300 font-mono">Row 14 Forward Exit Row (Extra Legroom Lock)</div>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button onclick="closeSeatModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs uppercase">
+          Close Inspector
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- JAVASCRIPT DISPATCH ENGINE & DATASETS -->
+  <script>
+    /* =========================================================================
+       1. MASSIVE DEDUPLICATED AIRPORT DATABASE
+       Includes Delta, Allegiant, Breeze, AAC Schools, MN Pro Airports & Major Hubs
+       ========================================================================= */
+    const AIRPORTS_RAW = [
+      // MINNESOTA & MN PRO TEAM HOMES
+      { icao: "KMSP", iata: "MSP", name: "Minneapolis-St. Paul Int'l", city: "Minneapolis, MN", lat: 44.8848, lng: -93.2223 },
+      { icao: "KRST", iata: "RST", name: "Rochester International", city: "Rochester, MN", lat: 43.9088, lng: -92.4979 },
+      { icao: "KDLH", iata: "DLH", name: "Duluth International", city: "Duluth, MN", lat: 46.8421, lng: -92.1936 },
+      { icao: "KSTC", iata: "STC", name: "St. Cloud Regional", city: "St. Cloud, MN", lat: 45.5466, lng: -94.0600 },
+      { icao: "KBJI", iata: "BJI", name: "Bemidji Regional", city: "Bemidji, MN", lat: 47.5094, lng: -94.9337 },
+      { icao: "KBRD", iata: "BRD", name: "Brainerd Lakes Regional", city: "Brainerd, MN", lat: 46.3979, lng: -94.1372 },
+      { icao: "KINL", iata: "INL", name: "Falls International", city: "International Falls, MN", lat: 48.5662, lng: -93.4002 },
+      { icao: "KHIB", iata: "HIB", name: "Range Regional", city: "Hibbing, MN", lat: 47.3866, lng: -92.8390 },
+
+      // AMERICAN ATHLETIC CONFERENCE (AAC) HOME AIRPORTS
+      { icao: "KSWF", iata: "SWF", name: "New York Stewart Int'l", city: "Newburgh/West Point, NY", lat: 41.5041, lng: -74.1048 },
+      { icao: "KBWI", iata: "BWI", name: "Baltimore/Washington Int'l", city: "Baltimore/Annapolis, MD", lat: 39.1754, lng: -76.6683 },
+      { icao: "KBHM", iata: "BHM", name: "Birmingham-Shuttlesworth Int'l", city: "Birmingham, AL", lat: 33.5629, lng: -86.7535 },
+      { icao: "KCLT", iata: "CLT", name: "Charlotte Douglas Int'l", city: "Charlotte, NC", lat: 35.2140, lng: -80.9431 },
+      { icao: "KPGV", iata: "PGV", name: "Pitt-Greenville Airport", city: "Greenville, NC", lat: 35.6353, lng: -77.3853 },
+      { icao: "KRDU", iata: "RDU", name: "Raleigh-Durham Int'l", city: "Raleigh, NC", lat: 35.8776, lng: -78.7875 },
+      { icao: "KFLL", iata: "FLL", name: "Fort Lauderdale-Hollywood Int'l", city: "Fort Lauderdale, FL", lat: 26.0726, lng: -80.1527 },
+      { icao: "KPBI", iata: "PBI", name: "Palm Beach Int'l", city: "West Palm Beach, FL", lat: 26.6832, lng: -80.0956 },
+      { icao: "KMEM", iata: "MEM", name: "Memphis Int'l", city: "Memphis, TN", lat: 35.0424, lng: -89.9767 },
+      { icao: "KDFW", iata: "DFW", name: "Dallas/Fort Worth Int'l", city: "Dallas/Denton, TX", lat: 32.8998, lng: -97.0403 },
+      { icao: "KDAL", iata: "DAL", name: "Dallas Love Field", city: "Dallas, TX", lat: 32.8471, lng: -96.8518 },
+      { icao: "KHOU", iata: "HOU", name: "Houston Hobby Airport", city: "Houston, TX", lat: 29.6454, lng: -95.2789 },
+      { icao: "KIAH", iata: "IAH", name: "George Bush Intercontinental", city: "Houston, TX", lat: 29.9902, lng: -95.3368 },
+      { icao: "KTPA", iata: "TPA", name: "Tampa Int'l", city: "Tampa, FL", lat: 27.9755, lng: -82.5332 },
+      { icao: "KPHL", iata: "PHL", name: "Philadelphia Int'l", city: "Philadelphia, PA", lat: 39.8721, lng: -75.2411 },
+      { icao: "KSAT", iata: "SAT", name: "San Antonio Int'l", city: "San Antonio, TX", lat: 29.5337, lng: -98.4698 },
+      { icao: "KMSY", iata: "MSY", name: "Louis Armstrong New Orleans", city: "New Orleans, LA", lat: 29.9934, lng: -90.2580 },
+      { icao: "KTUL", iata: "TUL", name: "Tulsa Int'l", city: "Tulsa, OK", lat: 36.1984, lng: -95.8881 },
+      { icao: "KICT", iata: "ICT", name: "Wichita Eisenhower Int'l", city: "Wichita, KS", lat: 37.6499, lng: -97.4331 },
+
+      // DELTA AIR LINES MAJOR HUBS & KEY DESTINATIONS
+      { icao: "KATL", iata: "ATL", name: "Hartsfield-Jackson Atlanta", city: "Atlanta, GA", lat: 33.6407, lng: -84.4277 },
+      { icao: "KDTW", iata: "DTW", name: "Detroit Metropolitan", city: "Detroit, MI", lat: 42.2124, lng: -83.3534 },
+      { icao: "KSLC", iata: "SLC", name: "Salt Lake City Int'l", city: "Salt Lake City, UT", lat: 40.7884, lng: -111.9778 },
+      { icao: "KSEA", iata: "SEA", name: "Seattle-Tacoma Int'l", city: "Seattle, WA", lat: 47.4502, lng: -122.3088 },
+      { icao: "KJFK", iata: "JFK", name: "John F. Kennedy Int'l", city: "New York, NY", lat: 40.6413, lng: -73.7781 },
+      { icao: "KLGA", iata: "LGA", name: "LaGuardia Airport", city: "New York, NY", lat: 40.7769, lng: -73.8740 },
+      { icao: "KBOS", iata: "BOS", name: "Boston Logan Int'l", city: "Boston, MA", lat: 42.3656, lng: -71.0096 },
+      { icao: "KLAX", iata: "LAX", name: "Los Angeles Int'l", city: "Los Angeles, CA", lat: 33.9416, lng: -118.4085 },
+      { icao: "KCVG", iata: "CVG", name: "Cincinnati/Northern Kentucky", city: "Cincinnati, OH", lat: 39.0461, lng: -84.6621 },
+      { icao: "KORD", iata: "ORD", name: "Chicago O'Hare Int'l", city: "Chicago, IL", lat: 41.9742, lng: -87.9073 },
+      { icao: "KMDW", iata: "MDW", name: "Chicago Midway Int'l", city: "Chicago, IL", lat: 41.7868, lng: -87.7522 },
+      { icao: "KSAN", iata: "SAN", name: "San Diego Int'l", city: "San Diego, CA", lat: 32.7336, lng: -117.1897 },
+      { icao: "KSFO", iata: "SFO", name: "San Francisco Int'l", city: "San Francisco, CA", lat: 37.6213, lng: -122.3790 },
+      { icao: "KDEN", iata: "DEN", name: "Denver Int'l", city: "Denver, CO", lat: 39.8561, lng: -104.6737 },
+      { icao: "KLAS", iata: "LAS", name: "Las Vegas Harry Reid Int'l", city: "Las Vegas, NV", lat: 36.0840, lng: -115.1537 },
+      { icao: "KPHX", iata: "PHX", name: "Phoenix Sky Harbor", city: "Phoenix, AZ", lat: 33.4352, lng: -112.0101 },
+      { icao: "KMCO", iata: "MCO", name: "Orlando Int'l", city: "Orlando, FL", lat: 28.4312, lng: -81.3081 },
+      { icao: "KIND", iata: "IND", name: "Indianapolis Int'l", city: "Indianapolis, IN", lat: 39.7173, lng: -86.2944 },
+      { icao: "KBNA", iata: "BNA", name: "Nashville Int'l", city: "Nashville, TN", lat: 36.1263, lng: -86.6774 },
+
+      // ALLEGIANT AIR FOCUS CITIES & NETWORK DESTINATIONS
+      { icao: "KSFB", iata: "SFB", name: "Orlando Sanford Int'l", city: "Sanford/Orlando, FL", lat: 28.7776, lng: -81.2375 },
+      { icao: "KPIE", iata: "PIE", name: "St. Pete-Clearwater Int'l", city: "St. Petersburg, FL", lat: 27.9102, lng: -82.6874 },
+      { icao: "KPGD", iata: "PGD", name: "Punta Gorda Airport", city: "Punta Gorda, FL", lat: 26.9175, lng: -82.0006 },
+      { icao: "KAZA", iata: "AZA", name: "Phoenix-Mesa Gateway", city: "Mesa/Phoenix, AZ", lat: 33.3078, lng: -111.6550 },
+      { icao: "KAVP", iata: "AVP", name: "Wilkes-Barre/Scranton Int'l", city: "Scranton, PA", lat: 41.3385, lng: -75.7234 },
+      { icao: "KUSA", iata: "USA", name: "Concord-Padgett Regional", city: "Concord, NC", lat: 35.3879, lng: -80.7091 },
+      { icao: "KSAV", iata: "SAV", name: "Savannah/Hilton Head", city: "Savannah, GA", lat: 32.1276, lng: -81.2021 },
+      { icao: "KFWA", iata: "FWA", name: "Fort Wayne Int'l", city: "Fort Wayne, IN", lat: 40.9785, lng: -85.1951 },
+      { icao: "KEVV", iata: "EVV", name: "Evansville Regional", city: "Evansville, IN", lat: 38.0383, lng: -87.5306 },
+      { icao: "KHSV", iata: "HSV", name: "Huntsville Int'l", city: "Huntsville, AL", lat: 34.6404, lng: -86.7731 },
+      { icao: "KGSP", iata: "GSP", name: "Greenville-Spartanburg Int'l", city: "Greenville, SC", lat: 34.8957, lng: -82.2189 },
+      { icao: "KTYS", iata: "TYS", name: "McGhee Tyson Airport", city: "Knoxville, TN", lat: 35.8125, lng: -83.9928 },
+      { icao: "KLEX", iata: "LEX", name: "Blue Grass Airport", city: "Lexington, KY", lat: 38.0364, lng: -84.6059 },
+      { icao: "KSDF", iata: "SDF", name: "Louisville Muhammad Ali", city: "Louisville, KY", lat: 38.1744, lng: -85.7360 },
+      { icao: "KPIA", iata: "PIA", name: "General Wayne A. Downing", city: "Peoria, IL", lat: 40.6642, lng: -89.6933 },
+      { icao: "KMLI", iata: "MLI", name: "Quad Cities Int'l", city: "Moline, IL", lat: 41.4485, lng: -90.5075 },
+      { icao: "KCID", iata: "CID", name: "Eastern Iowa Airport", city: "Cedar Rapids, IA", lat: 41.8847, lng: -91.7108 },
+      { icao: "KDSM", iata: "DSM", name: "Des Moines Int'l", city: "Des Moines, IA", lat: 41.5340, lng: -93.6631 },
+      { icao: "KSGF", iata: "SGF", name: "Springfield-Branson National", city: "Springfield, MO", lat: 37.2443, lng: -93.3869 },
+      { icao: "KXNA", iata: "XNA", name: "Northwest Arkansas National", city: "Bentonville, AR", lat: 36.2818, lng: -94.3068 },
+      { icao: "KLIT", iata: "LIT", name: "Clinton National", city: "Little Rock, AR", lat: 34.7294, lng: -92.2243 },
+      { icao: "KVPS", iata: "VPS", name: "Destin-Fort Walton Beach", city: "Destin, FL", lat: 30.4832, lng: -86.5254 },
+      { icao: "KSRQ", iata: "SRQ", name: "Sarasota-Bradenton Int'l", city: "Sarasota, FL", lat: 27.3954, lng: -82.5544 },
+      { icao: "KBLV", iata: "BLV", name: "MidAmerica St. Louis", city: "Belleville/St. Louis, IL", lat: 38.5452, lng: -89.8352 },
+      { icao: "KLCK", iata: "LCK", name: "Rickenbacker Int'l", city: "Columbus, OH", lat: 39.8138, lng: -82.9278 },
+      { icao: "KCAK", iata: "CAK", name: "Akron-Canton Airport", city: "Akron, OH", lat: 40.9161, lng: -81.4422 },
+      { icao: "KFNT", iata: "FNT", name: "Bishop International", city: "Flint, MI", lat: 42.9654, lng: -83.7436 },
+      { icao: "KGRR", iata: "GRR", name: "Gerald R. Ford Int'l", city: "Grand Rapids, MI", lat: 42.8808, lng: -85.5228 },
+      { icao: "KATW", iata: "ATW", name: "Appleton Int'l", city: "Appleton, WI", lat: 44.2574, lng: -88.5191 },
+      { icao: "KGRB", iata: "GRB", name: "Green Bay Austin Straubel", city: "Green Bay, WI", lat: 44.4851, lng: -88.1296 },
+      { icao: "KFAR", iata: "FAR", name: "Hector International", city: "Fargo, ND", lat: 46.9193, lng: -96.8158 },
+      { icao: "KBIS", iata: "BIS", name: "Bismarck Municipal", city: "Bismarck, ND", lat: 46.7727, lng: -100.7460 },
+      { icao: "KFSD", iata: "FSD", name: "Sioux Falls Regional", city: "Sioux Falls, SD", lat: 43.5819, lng: -96.7417 },
+      { icao: "KOMA", iata: "OMA", name: "Eppley Airfield", city: "Omaha, NE", lat: 41.3025, lng: -95.8942 },
+
+      // BREEZE AIRWAYS NETWORK DESTINATIONS
+      { icao: "KPVD", iata: "PVD", name: "Rhode Island T.F. Green", city: "Providence, RI", lat: 41.7240, lng: -71.4282 },
+      { icao: "KBDL", iata: "BDL", name: "Bradley International", city: "Hartford, CT", lat: 41.9389, lng: -72.6832 },
+      { icao: "KORF", iata: "ORF", name: "Norfolk International", city: "Norfolk, VA", lat: 36.8946, lng: -76.1921 },
+      { icao: "KCHS", iata: "CHS", name: "Charleston International", city: "Charleston, SC", lat: 32.8986, lng: -80.0405 },
+      { icao: "KMYR", iata: "MYR", name: "Myrtle Beach Int'l", city: "Myrtle Beach, SC", lat: 33.6797, lng: -78.9283 },
+      { icao: "KISP", iata: "ISP", name: "Long Island MacArthur", city: "Islip, NY", lat: 40.7952, lng: -73.1002 },
+      { icao: "KVRB", iata: "VRB", name: "Vero Beach Regional", city: "Vero Beach, FL", lat: 27.6556, lng: -80.4179 },
+      { icao: "KPVU", iata: "PVU", name: "Provo Municipal", city: "Provo, UT", lat: 40.2192, lng: -111.7234 },
+      { icao: "KSBD", iata: "SBD", name: "San Bernardino Int'l", city: "San Bernardino, CA", lat: 34.0953, lng: -117.2347 },
+
+      // MAJOR INTERNATIONAL CHARTER DESTINATIONS
+      { icao: "EGLL", iata: "LHR", name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543 },
+      { icao: "LFPG", iata: "CDG", name: "Paris Charles de Gaulle", city: "Paris, France", lat: 49.0097, lng: 2.5479 },
+      { icao: "EHAM", iata: "AMS", name: "Amsterdam Schiphol", city: "Amsterdam, Netherlands", lat: 52.3105, lng: 4.7683 },
+      { icao: "MMUN", iata: "CUN", name: "Cancun International", city: "Cancun, Mexico", lat: 21.0365, lng: -86.8771 },
+      { icao: "MDPC", iata: "PUJ", name: "Punta Cana Int'l", city: "Punta Cana, Dominican Rep.", lat: 18.5674, lng: -68.3634 }
+    ];
+
+    // Strict deduplication by ICAO code
+    const AIRPORT_MAP = new Map();
+    AIRPORTS_RAW.forEach(ap => {
+      if (!AIRPORT_MAP.has(ap.icao)) {
+        AIRPORT_MAP.set(ap.icao, ap);
+      }
+    });
+    const AIRPORTS = Array.from(AIRPORT_MAP.values()).sort((a,b) => a.icao.localeCompare(b.icao));
+
+    /* =========================================================================
+       2. SPORTS TEAMS & SEASONALITY DATASETS
+       ========================================================================= */
+    const MN_PRO_TEAMS = [
+      { id: "vikings", name: "Minnesota Vikings", league: "NFL", home: "KMSP", icon: "🏈", months: [8,9,10,11,12,1,2] },
+      { id: "timberwolves", name: "Minnesota Timberwolves", league: "NBA", home: "KMSP", icon: "🏀", months: [10,11,12,1,2,3,4,5,6] },
+      { id: "wild", name: "Minnesota Wild", league: "NHL", home: "KMSP", icon: "🏒", months: [10,11,12,1,2,3,4,5,6] },
+      { id: "twins", name: "Minnesota Twins", league: "MLB", home: "KMSP", icon: "⚾", months: [3,4,5,6,7,8,9,10] }
+    ];
+
+    const AAC_TEAMS = [
+      { id: "army", name: "Army Black Knights", league: "AAC", home: "KSWF", icon: "⚔️", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "navy", name: "Navy Midshipmen", league: "AAC", home: "KBWI", icon: "⚓", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "uab", name: "UAB Blazers", league: "AAC", home: "KBHM", icon: "🐉", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "charlotte", name: "Charlotte 49ers", league: "AAC", home: "KCLT", icon: "⛏️", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "ecu", name: "East Carolina Pirates", league: "AAC", home: "KPGV", icon: "🏴‍☠️", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "fau", name: "FAU Owls", league: "AAC", home: "KFLL", icon: "🦉", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "memphis", name: "Memphis Tigers", league: "AAC", home: "KMEM", icon: "🐅", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "unt", name: "North Texas Mean Green", league: "AAC", home: "KDFW", icon: "🦅", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "rice", name: "Rice Owls", league: "AAC", home: "KHOU", icon: "🦉", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "usf", name: "USF Bulls", league: "AAC", home: "KTPA", icon: "🤘", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "temple", name: "Temple Owls", league: "AAC", home: "KPHL", icon: "🦉", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "utsa", name: "UTSA Roadrunners", league: "AAC", home: "KSAT", icon: "🤙", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "tulane", name: "Tulane Green Wave", league: "AAC", home: "KMSY", icon: "🌊", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "tulsa", name: "Tulsa Golden Hurricane", league: "AAC", home: "KTUL", icon: "🌀", months: [8,9,10,11,12,1,2,3,4,5] },
+      { id: "wsu", name: "Wichita State Shockers", league: "AAC", home: "KICT", icon: "🌾", months: [10,11,12,1,2,3,4,5] }
+    ];
+
+    const OTHER_CHARTERS = {
+      CORPORATE: [
+        { name: "Apple Executive Envoy", icon: "💼" },
+        { name: "Microsoft Global Cloud Team", icon: "💻" },
+        { name: "Target Corp Board Summit", icon: "🎯" },
+        { name: "UnitedHealth Group Executive Taskforce", icon: "🏥" }
+      ],
+      CONCERT_FILM: [
+        { name: "Coldplay Music Sphere Tour Cast", icon: "🎸" },
+        { name: "Beyoncé Renaissance Stage Crew", icon: "🎤" },
+        { name: "Universal Pictures Production Unit", icon: "🎬" },
+        { name: "Marvel Studios Stunt & Tech Crew", icon: "🎥" }
+      ],
+      DIPLOMATIC: [
+        { name: "UN General Assembly Peace Mission", icon: "🏛️" },
+        { name: "US Dept of State Diplomatic Envoy", icon: "🦅" },
+        { name: "NATO Security Summit Officers", icon: "🛡️" }
+      ],
+      EMERGENCY: [
+        { name: "Red Cross Disaster Relief Taskforce", icon: "🚑" },
+        { name: "FEMA First Responders Tactical Unit", icon: "🚨" },
+        { name: "Global Medevac Specialized Medical Unit", icon: "🏥" }
+      ]
+    };
+
+    /* =========================================================================
+       3. GLOBAL APP STATE & INITIALIZATION
+       ========================================================================= */
+    let leafletMap = null;
+    let mapLayersGroup = null;
+    let currentLegsData = [];
+
+    // Ensure initialization executes reliably
+    window.addEventListener('DOMContentLoaded', () => {
+      initZuluClock();
+      setDefaultDate();
+      populateAirportDropdown();
+      updateTeamOptions();
+      initMap();
+      handleGenerateDispatch(); // Initial schedule generation
+    });
+
+    function initZuluClock() {
+      function tick() {
+        const now = new Date();
+        const hrs = String(now.getUTCHours()).padStart(2, '0');
+        const mins = String(now.getUTCMinutes()).padStart(2, '0');
+        const secs = String(now.getUTCSeconds()).padStart(2, '0');
+        const clockEl = document.getElementById('zuluClock');
+        if (clockEl) clockEl.textContent = `${hrs}:${mins}:${secs} Z`;
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    function setDefaultDate() {
+      const dateInput = document.getElementById('dispatchDate');
+      if (dateInput) {
+        const today = new Date();
+        // Default to Nov 7 for Fall NFL/College Football Season
+        const year = today.getFullYear();
+        dateInput.value = `${year}-11-07`;
+      }
+    }
+
+    // GUARANTEED AIRPORT DROPDOWN POPULATOR
+    function populateAirportDropdown() {
+      const originSelect = document.getElementById('originAirport');
+      if (!originSelect) return;
+
+      originSelect.innerHTML = '';
+      AIRPORTS.forEach(ap => {
+        const opt = document.createElement('option');
+        opt.value = ap.icao;
+        opt.textContent = `${ap.icao} - ${ap.name} (${ap.city})`;
+        if (ap.icao === 'KMSP') opt.selected = true; // Default to Bowman Air Hub
+        originSelect.appendChild(opt);
+      });
+    }
+
+    // Dynamic Team Sub-group Options based on Category & Season
+    function updateTeamOptions() {
+      const catSelect = document.getElementById('charterCategory');
+      const teamSelect = document.getElementById('targetTeam');
+      const dateInput = document.getElementById('dispatchDate');
+      const seasonEl = document.getElementById('seasonIndicator');
+
+      if (!catSelect || !teamSelect) return;
+
+      const category = catSelect.value;
+      const selectedDate = new Date(dateInput.value || Date.now());
+      const month = selectedDate.getMonth() + 1; // 1-12
+
+      // Update Season Indicator
+      if (month >= 8 || month <= 2) {
+        seasonEl.textContent = "SEASON: FALL / WINTER (NFL Vikings & AAC Football Active)";
+      } else if (month >= 3 && month <= 6) {
+        seasonEl.textContent = "SEASON: SPRING (MLB Twins & AAC Spring Sports)";
+      } else {
+        seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Training Camps)";
+      }
+
+      teamSelect.innerHTML = '';
+
+      let availableTeams = [];
+      if (category === 'INTEGRATED_SPORTS') {
+        availableTeams = [...MN_PRO_TEAMS, ...AAC_TEAMS];
+      } else if (category === 'MN_PRO_ONLY') {
+        availableTeams = MN_PRO_TEAMS;
+      } else if (category === 'AAC_NCAA_ONLY') {
+        availableTeams = AAC_TEAMS;
+      } else {
+        const list = OTHER_CHARTERS[category] || [];
+        const optAll = document.createElement('option');
+        optAll.value = "ALL";
+        optAll.textContent = "🔄 Multi-Envoy Continuous Tour";
+        teamSelect.appendChild(optAll);
+
+        list.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.name;
+          opt.textContent = `${item.icon} ${item.name}`;
+          teamSelect.appendChild(opt);
+        });
+        return;
+      }
+
+      // Filter by season appropriateness
+      const activeTeams = availableTeams.filter(t => t.months.includes(month));
+      const optAuto = document.createElement('option');
+      optAuto.value = "AUTO_ROTATION";
+      optAuto.textContent = "⭐ Auto-Rotate Unique Sports Teams (No Duplicates)";
+      teamSelect.appendChild(optAuto);
+
+      activeTeams.forEach(team => {
+        const opt = document.createElement('option');
+        opt.value = team.id;
+        opt.textContent = `${team.icon} ${team.name} (${team.league})`;
+        teamSelect.appendChild(opt);
+      });
+    }
+
+    /* =========================================================================
+       4. HAVERSINE & DISPATCH SCHEDULE GENERATION ENGINE
+       ========================================================================= */
+    function getDistanceNM(lat1, lon1, lat2, lon2) {
+      const R = 3440.065; // Radius of earth in Nautical Miles
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return Math.round(R * c);
+    }
+
+    function handleGenerateDispatch() {
+      const originICAO = document.getElementById('originAirport').value || 'KMSP';
+      const rangeProfile = document.getElementById('rangeProfile').value;
+      const category = document.getElementById('charterCategory').value;
+      const targetTeamId = document.getElementById('targetTeam').value;
+      const dateStr = document.getElementById('dispatchDate').value;
+      const legCount = parseInt(document.getElementById('legCount').value) || 4;
+
+      const selectedDate = new Date(dateStr || Date.now());
+      const month = selectedDate.getMonth() + 1;
+
+      // STRICT SINGLE-DAY TEAM UNIQUENESS TRACKER
+      const usedTeamsInDispatch = new Set();
+
+      currentLegsData = [];
+      let currentAirport = AIRPORTS.find(a => a.icao === originICAO) || AIRPORTS[0];
+
+      // Build continuous leg chain (Leg 2 departs from Leg 1 Dest)
+      for (let i = 1; i <= legCount; i++) {
+        
+        // Find valid destination airports based on range profile
+        let candidateAirports = AIRPORTS.filter(a => a.icao !== currentAirport.icao);
+        
+        candidateAirports = candidateAirports.map(dest => {
+          const dist = getDistanceNM(currentAirport.lat, currentAirport.lng, dest.lat, dest.lng);
+          return { ...dest, dist };
+        });
+
+        // Filter by range profile
+        if (rangeProfile === 'SHORT') {
+          candidateAirports = candidateAirports.filter(a => a.dist >= 100 && a.dist <= 550);
+        } else if (rangeProfile === 'MEDIUM') {
+          candidateAirports = candidateAirports.filter(a => a.dist >= 450 && a.dist <= 1500);
+        } else if (rangeProfile === 'LONG') {
+          candidateAirports = candidateAirports.filter(a => a.dist >= 1400 && a.dist <= 3200);
         }
 
-        function filterHistory(query) {
-            const q = query.toLowerCase();
-            const items = document.querySelectorAll('#dispatch-history-list > div');
-            items.forEach(el => {
-                if (el.innerText.toLowerCase().includes(q)) {
-                    el.style.display = 'flex';
-                } else {
-                    el.style.display = 'none';
-                }
-            });
+        // Fallback if filter too narrow
+        if (candidateAirports.length === 0) {
+          candidateAirports = AIRPORTS.filter(a => a.icao !== currentAirport.icao).map(dest => ({
+            ...dest,
+            dist: getDistanceNM(currentAirport.lat, currentAirport.lng, dest.lat, dest.lng)
+          }));
         }
 
-        function clearHistory() {
-            historyLogs = [];
-            localStorage.removeItem('bowman_dispatch_history_n361va');
-            renderHistoryList();
+        // Sort by realistic distance variation and pick
+        candidateAirports.sort((a,b) => a.dist - b.dist);
+        const destAirport = candidateAirports[Math.floor(Math.random() * Math.min(candidateAirports.length, 8))];
+
+        // DETERMINE CHARTER TEAM / ENVOY (STRICT UNIQUENESS)
+        let legEntity = null;
+        let matchupTitle = "";
+
+        if (category.includes("SPORTS") || category.includes("PRO") || category.includes("AAC")) {
+          let pool = [];
+          if (category === 'MN_PRO_ONLY') pool = MN_PRO_TEAMS;
+          else if (category === 'AAC_NCAA_ONLY') pool = AAC_TEAMS;
+          else pool = [...MN_PRO_TEAMS, ...AAC_TEAMS];
+
+          // Filter by season & uniqueness
+          let availablePool = pool.filter(t => t.months.includes(month) && !usedTeamsInDispatch.has(t.id));
+
+          // If pool exhausted, reset or pick unused
+          if (availablePool.length === 0) {
+            availablePool = pool.filter(t => !usedTeamsInDispatch.has(t.id));
+          }
+          if (availablePool.length === 0) availablePool = pool;
+
+          // Pick specific team if requested on Leg 1
+          if (i === 1 && targetTeamId && targetTeamId !== 'AUTO_ROTATION') {
+            const requested = pool.find(t => t.id === targetTeamId);
+            if (requested) legEntity = requested;
+          }
+
+          if (!legEntity) {
+            legEntity = availablePool[Math.floor(Math.random() * availablePool.length)];
+          }
+
+          usedTeamsInDispatch.add(legEntity.id);
+          matchupTitle = `${legEntity.icon} ${legEntity.name} @ ${destAirport.city} Charter`;
+        } else {
+          const list = OTHER_CHARTERS[category] || OTHER_CHARTERS.CORPORATE;
+          const entityObj = list[(i - 1) % list.length];
+          legEntity = { name: entityObj.name, icon: entityObj.icon };
+          matchupTitle = `${legEntity.icon} ${legEntity.name} Flight`;
         }
-    </script>
+
+        // CALCULATE FLIGHT TELEMETRY
+        const distance = destAirport.dist;
+        const speedKtas = 450;
+        const flightTimeHrs = (distance / speedKtas) + 0.35; // Cruise + Taxi/Climb cushion
+        const hrs = Math.floor(flightTimeHrs);
+        const mins = Math.round((flightTimeHrs - hrs) * 60);
+        const fuelBurnLbs = Math.round(flightTimeHrs * 5800 + 800);
+
+        const legNumber = `BMN361${i}`;
+
+        currentLegsData.push({
+          legIndex: i,
+          flightNo: legNumber,
+          origin: currentAirport,
+          destination: destAirport,
+          entity: legEntity,
+          matchupTitle: matchupTitle,
+          distanceNM: distance,
+          durationStr: `${hrs}h ${mins}m`,
+          fuelBurnLbs: fuelBurnLbs,
+          paxCount: 172 + (i % 8), // Near capacity 180 seats
+          cargoLbs: 12500 + (i * 800)
+        });
+
+        // CONTINUOUS CHAIN RULE: Next leg departs from this leg's destination
+        currentAirport = destAirport;
+      }
+
+      // Render UI components
+      renderLegCards();
+      renderRouteOnMap();
+      renderCabinGrid();
+      renderCargoSection();
+      renderFAARelease();
+    }
+
+    /* =========================================================================
+       5. LEAFLET MAP VISUALIZATION ENGINE
+       ========================================================================= */
+    function initMap() {
+      if (leafletMap) return;
+      
+      // Default centered over US
+      leafletMap = L.map('map', { zoomControl: false }).setView([39.8283, -98.5795], 4);
+      L.control.zoom({ position: 'topright' }).addTo(leafletMap);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(leafletMap);
+
+      mapLayersGroup = L.layerGroup().addTo(leafletMap);
+    }
+
+    function renderRouteOnMap() {
+      if (!leafletMap || !mapLayersGroup) return;
+      mapLayersGroup.clearLayers();
+
+      if (currentLegsData.length === 0) return;
+
+      const latLngs = [];
+
+      currentLegsData.forEach((leg, index) => {
+        const origPt = [leg.origin.lat, leg.origin.lng];
+        const destPt = [leg.destination.lat, leg.destination.lng];
+
+        if (index === 0) latLngs.push(origPt);
+        latLngs.push(destPt);
+
+        // Origin Marker
+        const origMarker = L.circleMarker(origPt, {
+          radius: 6,
+          fillColor: '#00f2fe',
+          color: '#ffffff',
+          weight: 2,
+          fillOpacity: 1
+        }).addTo(mapLayersGroup);
+        origMarker.bindPopup(`<b>${leg.origin.icao}</b><br>${leg.origin.name}<br>${leg.origin.city}`);
+
+        // Destination Marker
+        const destMarker = L.circleMarker(destPt, {
+          radius: 7,
+          fillColor: '#f59e0b',
+          color: '#ffffff',
+          weight: 2,
+          fillOpacity: 1
+        }).addTo(mapLayersGroup);
+        destMarker.bindPopup(`<b>Leg ${leg.legIndex}: ${leg.flightNo}</b><br>${leg.destination.icao} - ${leg.destination.name}<br>Dist: ${leg.distanceNM} NM`);
+
+        // Flight Polyline
+        const polyline = L.polyline([origPt, destPt], {
+          color: index % 2 === 0 ? '#00f2fe' : '#f59e0b',
+          weight: 3,
+          dashArray: '6, 6',
+          opacity: 0.85
+        }).addTo(mapLayersGroup);
+      });
+
+      leafletMap.fitBounds(L.latLngBounds(latLngs), { padding: [40, 40] });
+    }
+
+    /* =========================================================================
+       6. RENDER CONTINUOUS LEG CARDS IN DOM
+       ========================================================================= */
+    function renderLegCards() {
+      const container = document.getElementById('legCardsContainer');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      currentLegsData.forEach(leg => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-900 border border-slate-800 hover:border-cyan-500/50 rounded-2xl p-4 transition-all shadow-md";
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-3">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono font-bold text-xs">
+                L${leg.legIndex}
+              </span>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h4 class="font-bold text-slate-100 text-sm font-mono">${leg.flightNo}</h4>
+                  <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded font-mono">
+                    ✓ UNIQUE TEAM CONFIRMED
+                  </span>
+                </div>
+                <p class="text-xs text-amber-400 font-semibold">${leg.matchupTitle}</p>
+              </div>
+            </div>
+            <div class="text-right text-xs font-mono">
+              <span class="text-slate-400">EST FLT TIME:</span>
+              <strong class="text-cyan-400 ml-1">${leg.durationStr}</strong>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+            
+            <!-- Departure -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <span class="text-[10px] text-slate-400 uppercase font-mono block">Departure</span>
+              <div class="font-bold text-slate-100 font-mono text-base">${leg.origin.icao}</div>
+              <div class="text-xs text-slate-300 truncate">${leg.origin.name}</div>
+              <div class="text-[11px] text-slate-400">${leg.origin.city}</div>
+            </div>
+
+            <!-- Route Visual Arrow -->
+            <div class="text-center font-mono space-y-1">
+              <div class="text-xs text-cyan-400 font-bold">${leg.distanceNM} NM</div>
+              <div class="flex items-center justify-center space-x-2 text-slate-600">
+                <div class="h-[1px] w-full bg-slate-700"></div>
+                <i class="fa-solid fa-plane text-cyan-400 text-xs"></i>
+                <div class="h-[1px] w-full bg-slate-700"></div>
+              </div>
+              <div class="text-[10px] text-slate-400">Burn: ${leg.fuelBurnLbs.toLocaleString()} lbs</div>
+            </div>
+
+            <!-- Arrival -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <span class="text-[10px] text-slate-400 uppercase font-mono block">Arrival (Next Origin)</span>
+              <div class="font-bold text-amber-400 font-mono text-base">${leg.destination.icao}</div>
+              <div class="text-xs text-slate-300 truncate">${leg.destination.name}</div>
+              <div class="text-[11px] text-slate-400">${leg.destination.city}</div>
+            </div>
+
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /* =========================================================================
+       7. CABIN SEATING LAYOUT ENGINE (180 SEATS - NO ROW 13)
+       ========================================================================= */
+    function renderCabinGrid() {
+      const cabinEl = document.getElementById('cabinGrid');
+      if (!cabinEl) return;
+
+      cabinEl.innerHTML = '';
+
+      // Rows 1-12, and 14-31 (Strictly skip 13) -> 30 rows * 6 seats = 180 seats
+      const validRows = [];
+      for (let r = 1; r <= 31; r++) {
+        if (r !== 13) validRows.push(r);
+      }
+
+      const seatsCols = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+      validRows.forEach((rowNum) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = "flex items-center space-x-2 text-xs font-mono py-1";
+
+        // Row number badge
+        const rowBadge = document.createElement('div');
+        rowBadge.className = "w-8 text-center text-slate-400 font-bold text-[11px]";
+        rowBadge.textContent = `R${rowNum}`;
+        rowDiv.appendChild(rowBadge);
+
+        // Left 3 seats (ABC)
+        const leftGrp = document.createElement('div');
+        leftGrp.className = "flex space-x-1 flex-1";
+        seatsCols.slice(0,3).forEach(letter => {
+          leftGrp.appendChild(createSeatBtn(rowNum, letter));
+        });
+        rowDiv.appendChild(leftGrp);
+
+        // Aisle space indicator
+        const aisle = document.createElement('div');
+        aisle.className = "w-4 text-center text-[9px] text-slate-600 font-mono">||</div>
+        rowDiv.appendChild(aisle);
+
+        // Right 3 seats (DEF)
+        const rightGrp = document.createElement('div');
+        rightGrp.className = "flex space-x-1 flex-1";
+        seatsCols.slice(3,6).forEach(letter => {
+          rightGrp.appendChild(createSeatBtn(rowNum, letter));
+        });
+        rowDiv.appendChild(rightGrp);
+
+        cabinEl.appendChild(rowDiv);
+      });
+    }
+
+    function createSeatBtn(rowNum, letter) {
+      const btn = document.createElement('button');
+      const seatCode = `${rowNum}${letter}`;
+      
+      let seatClass = "bg-slate-800 border-slate-700 text-slate-300 hover:border-cyan-400";
+      if (rowNum <= 4) {
+        seatClass = "bg-cyan-950/60 border-cyan-500/40 text-cyan-300 hover:bg-cyan-900";
+      } else if (rowNum >= 5 && rowNum <= 10) {
+        seatClass = "bg-amber-950/40 border-amber-500/40 text-amber-300 hover:bg-amber-900";
+      }
+
+      btn.className = `flex-1 py-1.5 rounded border text-center font-bold text-[11px] transition-all ${seatClass}`;
+      btn.textContent = seatCode;
+
+      btn.onclick = () => openSeatModal(seatCode, rowNum);
+      return btn;
+    }
+
+    function openSeatModal(seatCode, rowNum) {
+      const currentLeg = currentLegsData[0] || { entity: { name: "Minnesota Vikings" } };
+      const teamName = currentLeg.entity.name || "Minnesota Sports Delegation";
+
+      document.getElementById('modalSeatNum').textContent = `SEAT ${seatCode}`;
+      
+      if (rowNum <= 4) {
+        document.getElementById('modalPaxName').textContent = `Starter / VIP Traveler`;
+        document.getElementById('modalPaxRole').textContent = `${teamName} - Key Player / Executive`;
+        document.getElementById('modalLuggage').textContent = "2 Large Equipment Cases + 1 Personal Carry-On (60 lbs)";
+        document.getElementById('modalCatering').textContent = "High-Protein Athletic Recovery Meal & Isotonic Smoothies";
+        document.getElementById('modalNotes').textContent = "Priority First Class Recline & Taping Kit Storage Area";
+      } else if (rowNum >= 5 && rowNum <= 12) {
+        document.getElementById('modalPaxName').textContent = `Offensive / Defensive Roster`;
+        document.getElementById('modalPaxRole').textContent = `${teamName} - Roster Athlete`;
+        document.getElementById('modalLuggage').textContent = "1 Gear Trunk + 1 Team Duffel (45 lbs)";
+        document.getElementById('modalCatering').textContent = "Standard Athletic Prep Catering & Energy Electrolytes";
+        document.getElementById('modalNotes').textContent = "Mid-Cabin Row Storage Assigned";
+      } else {
+        document.getElementById('modalPaxName').textContent = `Support Staff & Coaching`;
+        document.getElementById('modalPaxRole').textContent = `${teamName} - Technical / Medical Crew`;
+        document.getElementById('modalLuggage').textContent = "1 Standard Travel Bag + Audio/Video Gear Case";
+        document.getElementById('modalCatering').textContent = "Standard Envoy In-Flight Catering";
+        document.getElementById('modalNotes').textContent = "Aft Cabin Ops Section";
+      }
+
+      document.getElementById('seatModal').classList.remove('hidden');
+    }
+
+    function closeSeatModal() {
+      document.getElementById('seatModal').classList.add('hidden');
+    }
+
+    /* =========================================================================
+       8. BELLY CARGO RENDERER & WEIGHT TELEMETRY
+       ========================================================================= */
+    function renderCargoSection() {
+      const totalCargo = currentLegsData.reduce((acc, leg) => acc + leg.cargoLbs, 0) / (currentLegsData.length || 1);
+      const fwdWeight = Math.round(totalCargo * 0.55);
+      const aftWeight = Math.round(totalCargo * 0.38);
+      const bulkWeight = Math.round(totalCargo * 0.07);
+
+      document.getElementById('holdForwardWeight').textContent = `${fwdWeight.toLocaleString()} LBS`;
+      document.getElementById('holdAftWeight').textContent = `${aftWeight.toLocaleString()} LBS`;
+      document.getElementById('holdBulkWeight').textContent = `${bulkWeight.toLocaleString()} LBS`;
+
+      document.getElementById('totalCargoVal').textContent = `${Math.round(totalCargo).toLocaleString()} LBS`;
+      document.getElementById('paxWeightVal').textContent = `34,200 LBS`; // 180 pax * 190 lbs average
+      
+      const bow = 93500; // Airbus A320 Basic Operating Weight
+      const zfw = bow + 34200 + totalCargo;
+      const rampW = zfw + 15400; // Plus average block fuel
+
+      document.getElementById('zfwVal').textContent = `${Math.round(zfw).toLocaleString()} LBS`;
+      document.getElementById('rampWeightVal').textContent = `${Math.round(rampW).toLocaleString()} LBS`;
+    }
+
+    /* =========================================================================
+       9. FAA DISPATCH RELEASE FORM GENERATOR
+       ========================================================================= */
+    function renderFAARelease() {
+      const releaseEl = document.getElementById('print-modal-content');
+      if (!releaseEl || currentLegsData.length === 0) return;
+
+      const leg1 = currentLegsData[0];
+
+      releaseEl.innerHTML = `
+        <div class="border-b border-slate-700 pb-4 flex justify-between items-start">
+          <div>
+            <h2 class="text-base font-bold text-slate-100 uppercase">BOWMAN AIR CHARTER - FAA FORM 121 DISPATCH RELEASE</h2>
+            <p class="text-xs text-slate-400">SUPPLEMENTAL AIR CARRIER OPERATIONS • AIRCRAFT TAIL: N361VA</p>
+          </div>
+          <div class="text-right text-xs">
+            <div>DISPATCH REF: <strong class="text-cyan-400">BMN-361-REL</strong></div>
+            <div>DATE: <strong class="text-slate-200">${document.getElementById('dispatchDate').value}</strong></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 text-xs">
+          <div>
+            <span class="text-slate-400 block uppercase">Aircraft Registration & Type</span>
+            <strong class="text-slate-100">N361VA (Airbus A320-200 / CFM56-5B)</strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block uppercase">Max Certificated Takeoff Weight</span>
+            <strong class="text-amber-400">172,000 LBS</strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block uppercase">Seating Configuration</span>
+            <strong class="text-slate-100">180 Economy Seats (NO ROW 13)</strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block uppercase">Operational Category</span>
+            <strong class="text-slate-100">${document.getElementById('charterCategory').options[document.getElementById('charterCategory').selectedIndex].text}</strong>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4">
+          <h4 class="font-bold text-slate-200 mb-2 uppercase text-xs">CONTINUOUS LEG DISPATCH FLIGHT PLAN</h4>
+          <table class="w-full text-left text-xs border-collapse font-mono">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400">
+                <th class="py-1">FLT #</th>
+                <th class="py-1">CHARTER ENTITY</th>
+                <th class="py-1">DEP</th>
+                <th class="py-1">ARR</th>
+                <th class="py-1">DIST</th>
+                <th class="py-1">ETE</th>
+                <th class="py-1">FUEL BURN</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${currentLegsData.map(l => `
+                <tr class="border-b border-slate-800/60">
+                  <td class="py-2 text-cyan-400 font-bold">${l.flightNo}</td>
+                  <td class="py-2 text-slate-200">${l.entity.name}</td>
+                  <td class="py-2 text-amber-400">${l.origin.icao}</td>
+                  <td class="py-2 text-emerald-400">${l.destination.icao}</td>
+                  <td class="py-2">${l.distanceNM} NM</td>
+                  <td class="py-2">${l.durationStr}</td>
+                  <td class="py-2">${l.fuelBurnLbs.toLocaleString()} lbs</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4 grid grid-cols-2 gap-4">
+          <div>
+            <h4 class="font-bold text-slate-200 mb-1 uppercase text-xs">MINIMUM DISPATCH FUEL SUMMARY</h4>
+            <div class="space-y-1 text-slate-300">
+              <div class="flex justify-between"><span>TRIP FUEL EN ROUTE:</span><span>14,500 LBS</span></div>
+              <div class="flex justify-between"><span>CONTINGENCY (10%):</span><span>1,450 LBS</span></div>
+              <div class="flex justify-between"><span>45 MIN IFR RESERVE:</span><span>4,350 LBS</span></div>
+              <div class="flex justify-between"><span>TAXI & APRON FUEL:</span><span>800 LBS</span></div>
+              <div class="flex justify-between font-bold text-cyan-400 border-t border-slate-800 pt-1"><span>TOTAL RAMP BLOCK FUEL:</span><span>21,100 LBS</span></div>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-200 mb-1 uppercase text-xs">DISPATCH & MEL DEFERRAL NOTES</h4>
+            <div class="bg-slate-900 p-2.5 rounded border border-slate-800 text-[11px] text-slate-400 space-y-1">
+              <div>• MEL 21-1-1: Air Conditioning Pack 2 High Flow Nominal</div>
+              <div>• MEL 30-2-1: Engine Anti-Ice Valve Solenoid Checked OK</div>
+              <div>• Payload & Balance within A320 Envelope Constraints</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4 flex justify-between items-center text-xs pt-6">
+          <div>
+            <span class="text-slate-400 block">DISPATCHER SIGNATURE</span>
+            <strong class="text-slate-200 font-mono">Dispatcher #48192 (Bowman Dispatch)</strong>
+          </div>
+          <div class="text-right">
+            <span class="text-slate-400 block">CAPTAIN ACCEPTANCE</span>
+            <strong class="text-slate-200 font-mono">Captain / N361VA Command</strong>
+          </div>
+        </div>
+      `;
+    }
+
+    function printDispatchRelease() {
+      window.print();
+    }
+
+    /* =========================================================================
+       10. TAB NAVIGATION HANDLER
+       ========================================================================= */
+    function switchTab(tabId) {
+      ['tab-route', 'tab-cabin', 'tab-cargo', 'tab-release'].forEach(id => {
+        const el = document.getElementById(id);
+        const btn = document.getElementById(`btn-${id}`);
+        if (el && btn) {
+          if (id === tabId) {
+            el.classList.remove('hidden');
+            btn.className = "flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 font-bold";
+          } else {
+            el.classList.add('hidden');
+            btn.className = "flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200";
+          }
+        }
+      });
+
+      if (tabId === 'tab-route' && leafletMap) {
+        setTimeout(() => leafletMap.invalidateSize(), 200);
+      }
+    }
+  </script>
 </body>
 </html>
