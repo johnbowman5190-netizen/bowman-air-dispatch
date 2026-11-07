@@ -38,7 +38,7 @@
     </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS & JS for Interactive Flight Maps -->
+    <!-- Leaflet CSS & JS for Interactive Route Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Google Fonts -->
@@ -71,7 +71,7 @@
             background: #d4af37;
         }
         .hud-glass {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(14px);
             border: 1px solid rgba(51, 65, 85, 0.6);
         }
@@ -94,7 +94,7 @@
             transition: all 0.15s ease-in-out;
         }
         .seat-btn:hover {
-            transform: scale(1.15);
+            transform: scale(1.18);
             z-index: 10;
         }
         /* Print Styles for Dispatch Release */
@@ -129,17 +129,17 @@
                     <i class="fa-solid font-bold text-slate-950 text-xl fa-plane"></i>
                 </div>
                 <div>
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2 flex-wrap gap-y-1">
                         <span class="text-xl font-bold tracking-wider text-slate-100 uppercase">Bowman Air</span>
                         <span class="px-2 py-0.5 text-xs font-semibold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">DISPATCH OPS</span>
                         <span class="px-2 py-0.5 text-xs font-bold font-mono rounded bg-gold-500/20 text-gold-400 border border-gold-500/40">N361VA (A320-200)</span>
                     </div>
-                    <p class="text-xs text-slate-400 font-mono">HIGH-CAPACITY AIRLINER DISPATCH & MANIFEST SYSTEM • 180 ECONOMY SEATS</p>
+                    <p class="text-xs text-slate-400 font-mono">HIGH-CAPACITY AIRLINER DISPATCH ENGINE • 180 ECONOMY SEATS</p>
                 </div>
             </div>
 
             <!-- TELEMETRY STRIP -->
-            <div class="flex flex-wrap items-center gap-4 text-xs font-mono">
+            <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
                 <div class="flex items-center space-x-2 bg-slate-900/90 px-3 py-1.5 rounded-md border border-slate-800">
                     <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="text-slate-400">STATUS:</span>
@@ -206,48 +206,53 @@
                     <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-gold-400"></i> Daily Dispatch Setup
                     </h2>
-                    <span class="text-xs text-slate-400 font-mono" id="dispatch-ref-no">REF: BMN-361-DISP</span>
+                    <span class="text-xs text-slate-400 font-mono">REF: BMN-361</span>
                 </div>
 
                 <form id="dispatch-form" onsubmit="event.preventDefault(); generateDispatchSchedule();" class="space-y-4">
 
-                    <!-- CURRENT LOCATION SELECTOR -->
+                    <!-- BASE / ORIGIN AIRPORT SELECTOR -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">Aircraft Base / Origin Location</label>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-2">
-                                <select id="select-location-preset" onchange="handleLocationPresetChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 focus:ring-2 focus:ring-gold-500 font-mono">
-                                    <option value="KATL" selected>KATL - Atlanta Hartsfield, GA</option>
-                                    <option value="KORD">KORD - Chicago O'Hare, IL</option>
-                                    <option value="KLAX">KLAX - Los Angeles Intl, CA</option>
-                                    <option value="KDFW">KDFW - Dallas/Fort Worth, TX</option>
-                                    <option value="KJFK">KJFK - New York JFK, NY</option>
-                                    <option value="KMIA">KMIA - Miami Intl, FL</option>
-                                    <option value="KDEN">KDEN - Denver Intl, CO</option>
-                                    <option value="KSFO">KSFO - San Francisco, CA</option>
-                                    <option value="KBOS">KBOS - Boston Logan, MA</option>
-                                    <option value="EGLL">EGLL - London Heathrow, UK</option>
-                                    <option value="CUSTOM">-- Custom ICAO --</option>
+                                <select id="select-location-preset" onchange="handleLocationPresetChange(this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 focus:ring-2 focus:ring-gold-500 font-mono">
+                                    <!-- Populated dynamically with 30+ airports -->
                                 </select>
                             </div>
                             <div>
-                                <input type="text" id="input-custom-icao" placeholder="ICAO" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KATL">
+                                <input type="text" id="input-custom-icao" placeholder="ICAO" maxlength="4" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono uppercase text-center focus:ring-2 focus:ring-gold-500" value="KATL">
                             </div>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Starting airport for N361VA daily charter rotations.</p>
+                        <p class="text-[10px] text-slate-500 mt-1">Starting airport for N361VA daily charter rotations.</p>
+                    </div>
+
+                    <!-- CHARTER MISSION TYPE CATEGORY SELECTOR -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Charter Mission Category</label>
+                        <select id="select-mission-type" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
+                            <option value="ALL" selected>⚡ All / Random Mixed Operations</option>
+                            <option value="SPORTS">🏆 Sports Team & Fan Excursions</option>
+                            <option value="CORPORATE">💼 Corporate & Tech Summit Delegation</option>
+                            <option value="ENTERTAINMENT">🎸 World Concert Tour & Film Cast</option>
+                            <option value="GOVERNMENT">🏛️ Diplomatic & Government Mission</option>
+                            <option value="MEDICAL">🚑 Medical & Emergency Relief Response</option>
+                            <option value="AEROSPACE">🚀 Aerospace Technical & Science Flight</option>
+                            <option value="VIP">💎 Private VIP & Luxury Casino Group</option>
+                        </select>
                     </div>
 
                     <!-- DISPATCH DATE -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">Dispatch Operating Date</label>
-                        <input type="date" id="input-dispatch-date" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
+                        <input type="date" id="input-dispatch-date" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono focus:ring-2 focus:ring-gold-500">
                     </div>
 
                     <!-- NUMBER OF LEGS & DISTANCE BIAS -->
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-300 mb-1">Legs Today</label>
-                            <select id="select-leg-count" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 font-mono">
+                            <select id="select-leg-count" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono">
                                 <option value="AUTO" selected>Auto (1-4 Legs)</option>
                                 <option value="1">1 Leg (Direct Charter)</option>
                                 <option value="2">2 Legs (Out & Return)</option>
@@ -256,17 +261,17 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Charter Range Profile</label>
-                            <select id="select-range-profile" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 font-mono">
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Range Profile</label>
+                            <select id="select-range-profile" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 font-mono">
                                 <option value="BALANCED">Balanced Mix</option>
-                                <option value="SHORT">Short Hops (&lt;700 NM)</option>
+                                <option value="SHORT">Short Hops (&lt;800 NM)</option>
                                 <option value="LONG">Transcontinental (&gt;1,200 NM)</option>
                             </select>
                         </div>
                     </div>
 
                     <!-- GENERATE ACTION BUTTON -->
-                    <button type="submit" class="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-gold-500 via-amber-500 to-gold-600 hover:from-gold-400 hover:to-amber-500 text-slate-950 font-bold text-sm shadow-lg shadow-gold-500/20 transition-all flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full mt-3 py-3 px-4 rounded-xl bg-gradient-to-r from-gold-500 via-amber-500 to-gold-600 hover:from-gold-400 hover:to-amber-500 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-gold-500/20 transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-compass-drafting text-lg"></i>
                         <span>GENERATE DISPATCH SCHEDULE (N361VA)</span>
                     </button>
@@ -280,7 +285,7 @@
                     <span id="itinerary-leg-count-badge" class="px-2 py-0.5 text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 rounded font-mono">0 LEGS</span>
                 </h3>
 
-                <div class="space-y-3 font-mono text-xs">
+                <div class="space-y-2.5 font-mono text-xs">
                     <div class="flex justify-between items-center bg-slate-900/70 p-2.5 rounded border border-slate-800">
                         <span class="text-slate-400">Total Route Distance:</span>
                         <span id="summary-total-dist" class="text-gold-400 font-bold">0 NM</span>
@@ -340,7 +345,7 @@
                         <i class="fa-solid fa-map-location-dot text-gold-400"></i>
                         <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider font-mono">Flight Route Visualizer (N361VA)</h2>
                     </div>
-                    <div id="map-route-text" class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+                    <div id="map-route-text" class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800 max-w-[50%] truncate">
                         NO ROUTE LOADED
                     </div>
                 </div>
@@ -354,7 +359,7 @@
                 <!-- Dynamic tabs inserted here -->
             </div>
 
-            <!-- INSPECTOR VIEW SUB-TABS (Overview, Seat Map, Lower Hold Freight, Weight & Balance, Release) -->
+            <!-- INSPECTOR VIEW SUB-TABS (Overview, Seat Map, Lower Hold Freight, Weight & Balance) -->
             <div class="hud-card rounded-xl border border-slate-800 shadow-xl overflow-hidden">
                 <div class="flex border-b border-slate-800 bg-slate-950/80 font-mono text-xs overflow-x-auto">
                     <button onclick="setActiveInspectorTab('overview')" id="tab-btn-overview" class="px-4 py-3 border-b-2 font-bold transition flex items-center gap-2 border-gold-500 text-gold-400 bg-slate-900">
@@ -420,21 +425,21 @@
             <div class="space-y-3 font-mono">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Origin Airport ICAO</label>
-                    <input type="text" id="custom-leg-dep" uppercase placeholder="e.g. KATL" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded p-2 font-mono uppercase">
+                    <input type="text" id="custom-leg-dep" placeholder="e.g. KATL" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono uppercase">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Destination Airport ICAO</label>
-                    <select id="custom-leg-arr-select" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded p-2 font-mono">
+                    <select id="custom-leg-arr-select" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
                         <!-- Populated by JS -->
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Charter Organization / Group Name</label>
-                    <input type="text" id="custom-leg-org" placeholder="e.g. NCAA March Madness Regional Squad" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded p-2 font-mono">
+                    <input type="text" id="custom-leg-org" placeholder="e.g. NCAA Regional Squad" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Passenger Count (Up to 180 PAX)</label>
-                    <input type="number" id="custom-leg-pax" min="20" max="180" value="165" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded p-2 font-mono">
+                    <input type="number" id="custom-leg-pax" min="20" max="180" value="165" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded p-2 font-mono">
                 </div>
             </div>
 
@@ -469,7 +474,7 @@
 
     <!-- FOOTER -->
     <footer class="mt-auto border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500 font-mono">
-        <p>Bowman Air Dispatch Operations Engine &copy; 2026 | Aircraft N361VA (Airbus A320-200 High-Capacity Airliner) | FAA Part 135 / Part 121 Compliant</p>
+        <p>Bowman Air Dispatch Operations Engine &copy; 2026 | Aircraft N361VA (Airbus A320-200 High-Capacity Airliner) | Part 121 / 135 Compliant</p>
     </footer>
 
     <!-- MAIN JAVASCRIPT LOGIC -->
@@ -495,7 +500,9 @@
             fuelBurnPerHour: 5800 // Avg fuel burn lbs/hr
         };
 
+        /* 30+ WORLDWIDE AIRPORTS DATABASE */
         const AIRPORTS = {
+            // NORTH AMERICA
             "KATL": { name: "Hartsfield-Jackson Atlanta", city: "Atlanta, GA, USA", lat: 33.6407, lng: -84.4277, elev: 1026, rwy: "08L/26R (9,000 ft)", alt: "KCLT" },
             "KORD": { name: "Chicago O'Hare Intl", city: "Chicago, IL, USA", lat: 41.9742, lng: -87.9073, elev: 668, rwy: "10L/28R (13,000 ft)", alt: "KMKE" },
             "KLAX": { name: "Los Angeles Intl", city: "Los Angeles, CA, USA", lat: 33.9425, lng: -118.4081, elev: 128, rwy: "25L/07R (12,091 ft)", alt: "KONT" },
@@ -505,59 +512,76 @@
             "KDEN": { name: "Denver Intl", city: "Denver, CO, USA", lat: 39.8561, lng: -104.6737, elev: 5431, rwy: "16R/34L (16,000 ft)", alt: "KCOS" },
             "KSFO": { name: "San Francisco Intl", city: "San Francisco, CA, USA", lat: 37.6213, lng: -122.3790, elev: 13, rwy: "28R/10L (11,870 ft)", alt: "KSJC" },
             "KBOS": { name: "Boston Logan Intl", city: "Boston, MA, USA", lat: 42.3656, lng: -71.0096, elev: 19, rwy: "33L/15R (10,083 ft)", alt: "KPVD" },
-            "CYVR": { name: "Vancouver Intl", city: "Vancouver, BC, Canada", lat: 49.1967, lng: -123.1815, elev: 14, rwy: "08R/26L (11,500 ft)", alt: "CYXX" },
-            "EGLL": { name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543, elev: 83, rwy: "27L/09R (12,802 ft)", alt: "EGSS" },
-            "LFPB": { name: "Paris Le Bourget", city: "Paris, France", lat: 48.9694, lng: 2.4414, elev: 218, rwy: "07/25 (9,843 ft)", alt: "LFPG" },
-            "MMUN": { name: "Cancún Intl", city: "Cancún, Mexico", lat: 21.0365, lng: -86.8770, elev: 20, rwy: "12L/30R (11,483 ft)", alt: "MIDD" },
-            "MYNN": { name: "Nassau Lynden Pindling", city: "Nassau, Bahamas", lat: 25.0389, lng: -77.4663, elev: 16, rwy: "14/32 (11,000 ft)", alt: "MYGF" },
-            "KMSP": { name: "Minneapolis-St. Paul", city: "Minneapolis, MN, USA", lat: 44.8848, lng: -93.2223, elev: 841, rwy: "12L/30R (10,000 ft)", alt: "KRST" },
             "KSEA": { name: "Seattle-Tacoma Intl", city: "Seattle, WA, USA", lat: 47.4502, lng: -122.3088, elev: 433, rwy: "16L/34R (11,901 ft)", alt: "KPDX" },
+            "KLAS": { name: "Harry Reid Intl", city: "Las Vegas, NV, USA", lat: 36.0840, lng: -115.1537, elev: 2181, rwy: "26L/08R (14,510 ft)", alt: "KONT" },
             "KPHX": { name: "Phoenix Sky Harbor", city: "Phoenix, AZ, USA", lat: 33.4352, lng: -112.0101, elev: 1135, rwy: "08/26 (11,489 ft)", alt: "KTUS" },
-            "KMSY": { name: "New Orleans Louis Armstrong", city: "New Orleans, LA, USA", lat: 29.9934, lng: -90.2580, elev: 4, rwy: "11/29 (10,104 ft)", alt: "KBTR" }
+            "KMSY": { name: "Louis Armstrong Intl", city: "New Orleans, LA, USA", lat: 29.9934, lng: -90.2580, elev: 4, rwy: "11/29 (10,104 ft)", alt: "KBTR" },
+            "KSAN": { name: "San Diego Intl", city: "San Diego, CA, USA", lat: 32.7338, lng: -117.1933, elev: 17, rwy: "09/27 (9,400 ft)", alt: "KLAX" },
+            "PHNL": { name: "Daniel K. Inouye Intl", city: "Honolulu, HI, USA", lat: 21.3187, lng: -157.9224, elev: 13, rwy: "08L/26R (12,300 ft)", alt: "OGGG" },
+            "PANC": { name: "Ted Stevens Anchorage", city: "Anchorage, AK, USA", lat: 61.1743, lng: -149.9963, elev: 152, rwy: "07L/25R (10,600 ft)", alt: "PAFA" },
+            "CYVR": { name: "Vancouver Intl", city: "Vancouver, BC, Canada", lat: 49.1967, lng: -123.1815, elev: 14, rwy: "08R/26L (11,500 ft)", alt: "CYXX" },
+            "CYYZ": { name: "Toronto Pearson Intl", city: "Toronto, ON, Canada", lat: 43.6777, lng: -79.6248, elev: 569, rwy: "05/23 (11,120 ft)", alt: "CYOW" },
+
+            // CARIBBEAN & LATIN AMERICA
+            "MYNN": { name: "Lynden Pindling Intl", city: "Nassau, Bahamas", lat: 25.0389, lng: -77.4663, elev: 16, rwy: "14/32 (11,000 ft)", alt: "MYGF" },
+            "MMUN": { name: "Cancún Intl", city: "Cancún, Mexico", lat: 21.0365, lng: -86.8770, elev: 20, rwy: "12L/30R (11,483 ft)", alt: "MIDD" },
+            "TJSJ": { name: "Luis Muñoz Marín Intl", city: "San Juan, Puerto Rico", lat: 18.4394, lng: -66.0018, elev: 9, rwy: "08/26 (10,400 ft)", alt: "TIST" },
+            "TNCM": { name: "Princess Juliana Intl", city: "St. Maarten", lat: 18.0410, lng: -63.1089, elev: 14, rwy: "10/28 (7,546 ft)", alt: "TJBQ" },
+            "MPTO": { name: "Tocumen Intl", city: "Panama City, Panama", lat: 9.0714, lng: -79.3834, elev: 135, rwy: "03L/21R (10,007 ft)", alt: "MROC" },
+
+            // EUROPE
+            "LFPB": { name: "Paris Le Bourget", city: "Paris, France", lat: 48.9694, lng: 2.4414, elev: 218, rwy: "07/25 (9,843 ft)", alt: "LFPG" },
+            "EGSS": { name: "London Stansted", city: "London, UK", lat: 51.8860, lng: 0.2389, elev: 348, rwy: "04/22 (10,003 ft)", alt: "EGLL" },
+            "EGGW": { name: "London Luton", city: "London, UK", lat: 51.8747, lng: -0.3683, elev: 526, rwy: "08/26 (7,086 ft)", alt: "EGSS" },
+            "EDDM": { name: "Munich Airport", city: "Munich, Germany", lat: 48.3537, lng: 11.7860, elev: 1487, rwy: "08L/26R (13,123 ft)", alt: "EDDF" },
+            "LEMD": { name: "Adolfo Suárez Madrid-Barajas", city: "Madrid, Spain", lat: 40.4839, lng: -3.5680, elev: 2000, rwy: "14L/32R (14,268 ft)", alt: "LEBL" },
+            "LIRF": { name: "Rome Fiumicino", city: "Rome, Italy", lat: 41.8003, lng: 12.2389, elev: 15, rwy: "16L/34R (12,795 ft)", alt: "LIRA" },
+
+            // MIDDLE EAST & ASIA
+            "OMDB": { name: "Dubai Intl", city: "Dubai, UAE", lat: 25.2532, lng: 55.3657, elev: 62, rwy: "12L/30R (14,600 ft)", alt: "OMAA" },
+            "VHHH": { name: "Hong Kong Intl", city: "Hong Kong", lat: 22.3080, lng: 113.9185, elev: 28, rwy: "07L/25R (12,467 ft)", alt: "VMMC" },
+            "RJTT": { name: "Tokyo Haneda", city: "Tokyo, Japan", lat: 35.5494, lng: 139.7798, elev: 35, rwy: "34L/16R (11,024 ft)", alt: "RJAA" },
+            "WSSS": { name: "Singapore Changi", city: "Singapore", lat: 1.3644, lng: 103.9915, elev: 22, rwy: "02L/20R (13,123 ft)", alt: "WMKK" }
         };
 
-        const HIGH_CAPACITY_CHARTERS = [
-            {
-                name: "NCAA Basketball March Madness Championship Squad & Band",
-                category: "Collegiate Athletics",
-                purposeTemplate: "Direct high-capacity charter for 165 traveling team personnel, coaching staff, athletic trainers, cheer squad, and official university band."
-            },
-            {
-                name: "SpaceX Starship Launch Operations & Engineering Team",
-                category: "Aerospace Technical priority",
-                purposeTemplate: "Priority shuttle carrying 175 flight engineers, telemetry analysts, launch pad pad-mechanics, and sensitive guidance telemetry components."
-            },
-            {
-                name: "International Concert World Tour Production Crew & Cast",
-                category: "Entertainment & Media Logistics",
-                purposeTemplate: "Charter transport for 180 stadium tour technicians, audio visual engineers, stage riggers, and orchestra accompaniment personnel."
-            },
-            {
-                name: "Formula 1 Racing Technical & Pit Crew Delegation",
-                category: "Motorsport Logistics",
-                purposeTemplate: "Full team deployment carrying 170 pit crew mechanics, telemetry server specialists, and composite wing spare assemblies."
-            },
-            {
-                name: "FEMA & Red Cross Emergency First Responder Taskforce",
-                category: "Humanitarian / Emergency Relief",
-                purposeTemplate: "Rapid airlift of 180 disaster relief specialists, search-and-rescue teams, mobile satellite nodes, and trauma surgical kits."
-            },
-            {
-                name: "Global Tech Summit Executive & Developer Delegation",
-                category: "Corporate Conference",
-                purposeTemplate: "Executive charter shuttle carrying 155 keynote speakers, tech leaders, and confidential hardware demo test modules."
-            },
-            {
-                name: "London Symphony Orchestra & Choir North American Tour",
-                category: "Arts & Culture International",
-                purposeTemplate: "Transport of 175 musicians, conductors, choir vocalists, and custom climate-controlled instrument flight trunks."
-            },
-            {
-                name: "Major League Soccer (MLS) Executive & Fan Charter",
-                category: "Professional Sports Delegation",
-                purposeTemplate: "Playoff charter carrying 170 squad members, coaching staff, media team, and official fan club VIP delegates."
-            }
-        ];
+        const CHARTER_MISSIONS = {
+            "SPORTS": [
+                { name: "NCAA Basketball March Madness Championship Squad", category: "Collegiate Athletics", purposeTemplate: "Direct charter for 168 traveling team personnel, coaching staff, athletic trainers, cheer squad, and band." },
+                { name: "FIFA World Cup 2026 National Delegation & Staff", category: "Professional Soccer", purposeTemplate: "Priority shuttle carrying 175 national team players, FIFA officials, training apparatus, and medical staff." },
+                { name: "NFL Regional Championship Team & Executive Delegation", category: "Professional Football", purposeTemplate: "Full roster team deployment with 172 players, coaches, media team, and specialized equipment." },
+                { name: "Formula 1 Racing Team Pit Crew & Telemetry Staff", category: "Motorsport Logistics", purposeTemplate: "Transport of 170 pit crew mechanics, telemetry server specialists, and composite wing spare assemblies." }
+            ],
+            "CORPORATE": [
+                { name: "Global Tech Summit Executive Keynote Delegation", category: "Technology Corporate", purposeTemplate: "Executive charter carrying 165 keynote speakers, AI developers, and confidential prototype hardware demo units." },
+                { name: "Offshore Energy & Technical Field Inspection Crew", category: "Energy Sector", purposeTemplate: "High-capacity crew rotation transporting 175 engineers, safety inspectors, and specialized drilling telemetry sensors." },
+                { name: "Wall Street Financial Leadership Annual Conference", category: "Financial Services", purposeTemplate: "Corporate shuttle transport for 160 investment directors, analysts, and executive security personnel." }
+            ],
+            "ENTERTAINMENT": [
+                { name: "World Concert Stadium Arena Production Crew", category: "Entertainment Logistics", purposeTemplate: "Charter transport for 180 stadium tour technicians, audio visual engineers, stage riggers, and backup cast." },
+                { name: "Major Motion Picture Production Cast & Crew", category: "Film & Media", purposeTemplate: "Filming relocation charter carrying 165 actors, director crew, camera operators, and wardrobe trunks." },
+                { name: "International Symphony Orchestra & Choral Society", category: "Arts & Culture", purposeTemplate: "Transport of 175 musicians, conductors, choir vocalists, and custom climate-controlled instrument flight trunks." }
+            ],
+            "GOVERNMENT": [
+                { name: "United Nations Diplomatic Delegation & Security", category: "Diplomatic Mission", purposeTemplate: "High-level diplomatic charter carrying 155 international delegates, translators, and state security details." },
+                { name: "Embassy Relocation & Consular Emergency Taskforce", category: "Government Operations", purposeTemplate: "Rapid deployment of 170 diplomatic personnel, secure communications nodes, and consular files." },
+                { name: "Global Trade Summit Presidential Support Team", category: "Government Affairs", purposeTemplate: "Transport for 165 trade summit advance staff, press corps, and diplomatic liaison personnel." }
+            ],
+            "MEDICAL": [
+                { name: "Red Cross Disaster Relief Emergency Response Taskforce", category: "Humanitarian / Emergency", purposeTemplate: "Rapid airlift of 180 emergency first responders, search-and-rescue teams, mobile satellite nodes, and trauma surgical kits." },
+                { name: "Specialist Medical & Surgical Deployment Team", category: "Global Health", purposeTemplate: "Chartered transport carrying 160 surge surgeons, epidemiology specialists, and mobile ICU diagnostic monitors." },
+                { name: "Global Vaccine & Emergency Medical Supply Logistics", category: "Humanitarian Medical", purposeTemplate: "Combined passenger flight carrying 150 medical logistics directors alongside critical cold-chain plasma storage units." }
+            ],
+            "AEROSPACE": [
+                { name: "SpaceX Starship Launch Flight Control & Engineering Crew", category: "Aerospace Operations", purposeTemplate: "Priority shuttle carrying 175 flight engineers, telemetry analysts, launch pad mechanics, and guidance components." },
+                { name: "NASA Planetary Exploration & Science Mission Team", category: "Space Exploration", purposeTemplate: "Airborne deployment of 165 planetary scientists, satellite technicians, and high-altitude calibration apparatus." },
+                { name: "Arctic Climatology Airborne Research Expedition", category: "Scientific Research", purposeTemplate: "Scientific charter transporting 155 polar meteorologists, glaciologists, and ice-core drill equipment." }
+            ],
+            "VIP": [
+                { name: "Luxury Caribbean Resort Executive VIP Group", category: "Private Hospitality", purposeTemplate: "Exclusive high-capacity resort flight for 160 corporate VIP award winners, families, and concierge staff." },
+                { name: "Destination VIP International Wedding Delegation", category: "Private Luxury Event", purposeTemplate: "Private airliner charter carrying 170 wedding guests, catering chefs, event planners, and luxury decor trunks." },
+                { name: "High-Roller Casino Executive Invitational Delegation", category: "Hospitality & Gaming", purposeTemplate: "VIP charter flight transporting 150 elite gaming guests, security escorts, and luxury hospitality staff." }
+            ]
+        };
 
         const BELLY_HOLD_ITEMS_POOL = [
             { desc: "Athletic Equipment Trunks & Training Kits", weight: 3400, hold: "Hold 1 (Fwd)", uld: "AKH-104", hazmat: "NONE" },
@@ -571,8 +595,8 @@
             { desc: "Loose Oversized Cargo & Emergency Kits", weight: 1400, hold: "Hold 5 (Bulk)", uld: "NET-BULK", hazmat: "NONE" }
         ];
 
-        const VIP_NAMES_FIRST = ["Jordan", "Taylor", "Morgan", "Alex", "Cameron", "Devon", "Casey", "Riley", "Avery", "Sam", "Chris", "Pat"];
-        const VIP_NAMES_LAST = ["Brooks", "Hayes", "Vaugn", "Mercer", "Sinclair", "Sterling", "Dalton", "Elliot", "Fletcher", "Ramirez", "Novak", "Chen"];
+        const VIP_NAMES_FIRST = ["Jordan", "Taylor", "Morgan", "Alex", "Cameron", "Devon", "Casey", "Riley", "Avery", "Sam", "Chris", "Pat", "Julian", "Marcus", "Elena"];
+        const VIP_NAMES_LAST = ["Brooks", "Hayes", "Vaughn", "Mercer", "Sinclair", "Sterling", "Dalton", "Elliot", "Fletcher", "Ramirez", "Novak", "Chen", "Kovacs", "O'Connor", "Dupont"];
 
         /* ==========================================================================
            2. GLOBAL STATE
@@ -591,6 +615,8 @@
            ========================================================================== */
 
         window.onload = function() {
+            populateAirportDropdown();
+            
             const dateInput = document.getElementById('input-dispatch-date');
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -599,19 +625,50 @@
             dateInput.value = `${yyyy}-${mm}-${dd}`;
 
             populateCustomLegSelect();
-            initLeafletMap();
             startZuluClock();
             renderHistoryList();
 
+            // Initialize Map safely inside try/catch block
+            initLeafletMap();
+
+            // Generate initial dispatch schedule
             generateDispatchSchedule();
         };
 
+        function populateAirportDropdown() {
+            const select = document.getElementById('select-location-preset');
+            select.innerHTML = '';
+            Object.keys(AIRPORTS).forEach(icao => {
+                const apt = AIRPORTS[icao];
+                const opt = document.createElement('option');
+                opt.value = icao;
+                opt.innerText = `${icao} - ${apt.name} (${apt.city})`;
+                if (icao === 'KATL') opt.selected = true;
+                select.appendChild(opt);
+            });
+            const customOpt = document.createElement('option');
+            customOpt.value = 'CUSTOM';
+            customOpt.innerText = '-- Custom ICAO --';
+            select.appendChild(customOpt);
+        }
+
         function startZuluClock() {
-            setInterval(() => {
-                const now = new Date();
-                const zuluStr = now.toISOString().substring(11, 19) + ' Z';
-                document.getElementById('zulu-clock').innerText = zuluStr;
-            }, 1000);
+            function updateClock() {
+                try {
+                    const now = new Date();
+                    const hh = String(now.getUTCHours()).padStart(2, '0');
+                    const mm = String(now.getUTCMinutes()).padStart(2, '0');
+                    const ss = String(now.getUTCSeconds()).padStart(2, '0');
+                    const clockElem = document.getElementById('zulu-clock');
+                    if (clockElem) {
+                        clockElem.innerText = `${hh}:${mm}:${ss} Z`;
+                    }
+                } catch(e) {
+                    console.error("Zulu clock error:", e);
+                }
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
         }
 
         function handleLocationPresetChange(val) {
@@ -626,6 +683,7 @@
 
         function populateCustomLegSelect() {
             const sel = document.getElementById('custom-leg-arr-select');
+            if (!sel) return;
             sel.innerHTML = '';
             Object.keys(AIRPORTS).forEach(icao => {
                 const apt = AIRPORTS[icao];
@@ -644,7 +702,7 @@
                       Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
                       Math.sin(dLon/2) * Math.sin(dLon/2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return Math.round(R * c);
+            return Math.max(80, Math.round(R * c));
         }
 
         function formatMinutesToHHMM(mins) {
@@ -675,6 +733,7 @@
             const dispatchDate = document.getElementById('input-dispatch-date').value || "2026-11-07";
             const legCountSetting = document.getElementById('select-leg-count').value;
             const rangeProfile = document.getElementById('select-range-profile').value;
+            const missionCategory = document.getElementById('select-mission-type').value;
 
             let numLegs = 2;
             if (legCountSetting === 'AUTO') {
@@ -686,15 +745,15 @@
             const airportKeys = Object.keys(AIRPORTS);
             let currentICAO = startICAO;
             let schedule = [];
-            let totalMinuteTracker = 60; // 08:00 Z
+            let totalMinuteTracker = 60; // 08:00 Z start
 
             for (let i = 0; i < numLegs; i++) {
                 let possibleDests = airportKeys.filter(k => k !== currentICAO);
 
                 if (rangeProfile === 'SHORT') {
-                    possibleDests = possibleDests.filter(k => calculateNM(AIRPORTS[currentICAO].lat, AIRPORTS[currentICAO].lng, AIRPORTS[k].lat, AIRPORTS[k].lng) < 700);
+                    possibleDests = possibleDests.filter(k => calculateNM(AIRPORTS[currentICAO].lat, AIRPORTS[currentICAO].lng, AIRPORTS[k].lat, AIRPORTS[k].lng) < 800);
                 } else if (rangeProfile === 'LONG') {
-                    possibleDests = possibleDests.filter(k => calculateNM(AIRPORTS[currentICAO].lat, AIRPORTS[currentICAO].lng, AIRPORTS[k].lat, AIRPORTS[k].lng) > 1100);
+                    possibleDests = possibleDests.filter(k => calculateNM(AIRPORTS[currentICAO].lat, AIRPORTS[currentICAO].lng, AIRPORTS[k].lat, AIRPORTS[k].lng) > 1200);
                 }
                 if (possibleDests.length === 0) possibleDests = airportKeys.filter(k => k !== currentICAO);
 
@@ -704,19 +763,20 @@
                 const destApt = AIRPORTS[destICAO];
                 const distanceNM = calculateNM(origApt.lat, origApt.lng, destApt.lat, destApt.lng);
 
-                // A320 Flight time calculation (450 KTAS + 30 mins climb/descent vectoring)
+                // A320 Flight time calculation (450 KTAS cruise speed + 30 mins vectors/climb/descent)
                 const cruiseHours = distanceNM / A320_PROFILE.cruiseKtas;
                 const flightMinutes = Math.round((cruiseHours * 60) + 30);
 
                 const etd = formatFlightTime(dispatchDate, totalMinuteTracker);
                 const eta = formatFlightTime(dispatchDate, totalMinuteTracker + flightMinutes);
-                const turnaround = Math.floor(Math.random() * 45) + 60; // 60 - 105 min ground turn for A320
+                const turnaround = Math.floor(Math.random() * 45) + 60; // 60 - 105 min turn
 
-                const orgObj = HIGH_CAPACITY_CHARTERS[(i + Math.floor(Math.random() * HIGH_CAPACITY_CHARTERS.length)) % HIGH_CAPACITY_CHARTERS.length];
+                // Pick Charter Mission according to Category selection
+                const orgObj = getRandomCharterMission(missionCategory, i);
                 const flightNum = `BMN${3611 + i}`;
                 const callsign = `BOWMAN ${3611 + i}`;
 
-                // Pax count between 140 and 180 (Full capacity setup for A320)
+                // Pax count between 140 and 180 (Full capacity economy setup)
                 const paxCount = Math.floor(Math.random() * 41) + 140; 
                 const paxManifest = generateA320PaxManifest(paxCount);
 
@@ -725,12 +785,12 @@
                 const totalCargoWeight = cargoManifest.reduce((acc, item) => acc + item.weight, 0);
 
                 // Weights
-                const paxTotalWeight = paxCount * 205; // 205 lbs standard per pax + carry-on/luggage
+                const paxTotalWeight = paxCount * 205; // 205 lbs standard per pax + luggage
                 const zfw = A320_PROFILE.dow + paxTotalWeight + totalCargoWeight;
 
                 // Fuel Plan
                 const tripFuel = Math.round((flightMinutes / 60) * A320_PROFILE.fuelBurnPerHour);
-                const reserveFuel = 3800; // 45 min FAR reserve
+                const reserveFuel = 3800; // FAR 45 min reserve
                 const alternateFuel = 2400; // Alternate diversion fuel
                 const contingencyFuel = Math.round(tripFuel * 0.05); // 5% contingency
                 const blockFuel = tripFuel + reserveFuel + alternateFuel + contingencyFuel;
@@ -738,7 +798,7 @@
                 const tow = zfw + blockFuel;
                 const ldw = tow - tripFuel;
 
-                // % MAC Center of Gravity (A320 safe envelope: 15% to 40% MAC)
+                // Center of Gravity (% MAC) - A320 normal range 15% to 40%
                 const cgPercent = (24.5 + ((paxCount / 180) * 3.5) + ((totalCargoWeight / 25000) * 2.1)).toFixed(1);
 
                 schedule.push({
@@ -788,8 +848,20 @@
             saveToHistory(A320_PROFILE.tail, startICAO, schedule);
         }
 
+        function getRandomCharterMission(category, index) {
+            let pool = [];
+            if (category === 'ALL' || !CHARTER_MISSIONS[category]) {
+                Object.keys(CHARTER_MISSIONS).forEach(cat => {
+                    pool = pool.concat(CHARTER_MISSIONS[cat]);
+                });
+            } else {
+                pool = CHARTER_MISSIONS[category];
+            }
+            return pool[(index + Math.floor(Math.random() * pool.length)) % pool.length];
+        }
+
         function generateWaypoints(orig, dest) {
-            const fixes = ["JFK", "DIXIE", "GDM", "BOS", "HNK", "ALB", "BUF", "JOT", "OBK", "BNE", "TUL", "PXR", "FLG", "DAG", "SFO", "KATL", "KCLT", "MEM"];
+            const fixes = ["JFK", "DIXIE", "GDM", "BOS", "HNK", "ALB", "BUF", "JOT", "OBK", "BNE", "TUL", "PXR", "FLG", "DAG", "SFO", "KATL", "KCLT", "MEM", "MOD", "RBL"];
             const selected = [];
             for (let i = 0; i < 3; i++) {
                 selected.push(fixes[Math.floor(Math.random() * fixes.length)]);
@@ -809,7 +881,6 @@
                 });
             }
 
-            // Shuffle seats for realistic seating dispersion
             const shuffledSeats = [...seats].sort(() => 0.5 - Math.random());
 
             for (let i = 0; i < count; i++) {
@@ -820,8 +891,8 @@
                 paxMap[seatNo] = {
                     seat: seatNo,
                     name: `${first} ${last}`,
-                    status: i === 0 ? "Lead VIP / Delegation Director" : (i < 8 ? "Senior Executive Staff" : "Passenger"),
-                    catering: i % 5 === 0 ? "Executive Hot Meal + Espresso" : "Standard Charter Meal Box",
+                    status: i === 0 ? "Lead VIP / Delegation Director" : (i < 8 ? "Senior Staff Lead" : "Passenger"),
+                    catering: i % 5 === 0 ? "Executive Hot Meal + Espresso" : "Standard Charter Box Meal",
                     bags: Math.floor(Math.random() * 2) + 1,
                     isOccupied: true
                 };
@@ -883,7 +954,7 @@
                     renderActiveInspectorView();
                     highlightMapLeg(idx);
                 };
-                btn.className = `flex-1 min-w-[140px] px-3 py-2.5 rounded-lg border font-mono text-xs text-left transition-all ${
+                btn.className = `flex-1 min-w-[130px] px-3 py-2.5 rounded-lg border font-mono text-xs text-left transition-all ${
                     isActive 
                         ? 'bg-gradient-to-r from-gold-500/20 to-amber-500/10 border-gold-500 text-gold-400 font-bold shadow' 
                         : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
@@ -1023,13 +1094,16 @@
                         <p class="text-xs text-slate-300 leading-relaxed">${leg.org.purposeTemplate}</p>
                     </div>
 
-                    <!-- ROUTE WAYPOINTS STRING -->
-                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs flex items-center justify-between">
-                        <div class="flex items-center space-x-2 overflow-hidden">
-                            <span class="text-slate-500 text-[10px]">ROUTE:</span>
-                            <span class="truncate text-cyan-400 font-semibold">${leg.routeWaypoints}</span>
+                    <!-- ROUTE WAYPOINTS & WEATHER BRIEF -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <div class="text-slate-500 text-[10px] font-bold mb-1">ATC ROUTE WAYPOINTS</div>
+                            <div class="truncate text-cyan-400 font-semibold">${leg.routeWaypoints}</div>
                         </div>
-                        <span class="text-[10px] text-slate-400 whitespace-nowrap"><i class="fa-solid fa-gas-pump text-amber-400 mr-1"></i> ${leg.blockFuel.toLocaleString()} LBS BLOCK FUEL</span>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <div class="text-slate-500 text-[10px] font-bold mb-1">SIMULATED DEPARTURE METAR</div>
+                            <div class="text-slate-300 font-mono text-[11px]">${leg.origin.icao} 071850Z 18012KT 10SM FEW040 22/14 A3002 NOSIG</div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1229,7 +1303,6 @@
         /* WEIGHT & BALANCE TAB RENDERER */
         function renderWeightBalanceTab(container, leg) {
             const plane = leg.aircraft;
-            const towPct = Math.round((leg.tow / plane.mtow) * 100);
             const zfwPct = Math.round((leg.zfw / plane.mzfw) * 100);
 
             container.innerHTML = `
@@ -1255,11 +1328,11 @@
                         </div>
                         <div class="w-full bg-slate-900 rounded-full h-3.5 border border-slate-800 overflow-hidden flex">
                             <div class="bg-blue-600 h-full" style="width: ${(plane.dow/plane.mtow)*100}%" title="DOW"></div>
-                            <div class="bg-emerald-500 h-full" style="width: ${(leg.paxTotalWeight/plane.mtow)*100}%" title="PAX"></div>
+                            <div class="bg-emerald-500 h-full" style="width: ${(leg.paxTotalWeight/plane.mtow)*100}%" title="Pax"></div>
                             <div class="bg-amber-500 h-full" style="width: ${(leg.totalCargoWeight/plane.mtow)*100}%" title="Cargo"></div>
                             <div class="bg-cyan-500 h-full" style="width: ${(leg.blockFuel/plane.mtow)*100}%" title="Fuel"></div>
                         </div>
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 flex-wrap gap-2">
                             <span><span class="inline-block w-2 h-2 bg-blue-600 rounded-full mr-1"></span> DOW: ${plane.dow.toLocaleString()} lbs</span>
                             <span><span class="inline-block w-2 h-2 bg-emerald-500 rounded-full mr-1"></span> Pax (${leg.paxCount}): ${leg.paxTotalWeight.toLocaleString()} lbs</span>
                             <span><span class="inline-block w-2 h-2 bg-amber-500 rounded-full mr-1"></span> Cargo: ${leg.totalCargoWeight.toLocaleString()} lbs</span>
@@ -1293,70 +1366,78 @@
         }
 
         /* ==========================================================================
-           6. MAP ENGINE (LEAFLET)
+           6. MAP ENGINE (LEAFLET WITH RELIABLE OPENSTREETMAP TILES)
            ========================================================================== */
 
         function initLeafletMap() {
-            if (leafletMap) return;
+            try {
+                if (leafletMap) return;
 
-            leafletMap = L.map('flight-map', {
-                zoomControl: true,
-                attributionControl: false
-            }).setView([39.8283, -98.5795], 4);
+                leafletMap = L.map('flight-map', {
+                    zoomControl: true,
+                    attributionControl: false
+                }).setView([39.8283, -98.5795], 4);
 
-            L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-              attribution: '&copy; Google Maps',
-              maxZoom: 20
-            }).addTo(map);
-
+                // Use Standard OpenStreetMap Tiles (100% reliable across mobile & desktop)
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(leafletMap);
+            } catch (e) {
+                console.error("Map initialization failed:", e);
+            }
         }
 
         function updateMapRoute() {
             if (!leafletMap || !currentSchedule.length) return;
 
-            mapMarkers.forEach(m => leafletMap.removeLayer(m));
-            mapMarkers = [];
-            if (mapPolyline) leafletMap.removeLayer(mapPolyline);
+            try {
+                mapMarkers.forEach(m => leafletMap.removeLayer(m));
+                mapMarkers = [];
+                if (mapPolyline) leafletMap.removeLayer(mapPolyline);
 
-            const latLngs = [];
+                const latLngs = [];
 
-            const firstLeg = currentSchedule[0];
-            latLngs.push([firstLeg.origin.lat, firstLeg.origin.lng]);
+                const firstLeg = currentSchedule[0];
+                latLngs.push([firstLeg.origin.lat, firstLeg.origin.lng]);
 
-            const origMarker = L.circleMarker([firstLeg.origin.lat, firstLeg.origin.lng], {
-                radius: 7,
-                color: '#d4af37',
-                fillColor: '#d4af37',
-                fillOpacity: 0.9
-            }).addTo(leafletMap).bindTooltip(`<b>${firstLeg.origin.icao}</b> - Origin`, { permanent: false });
-            mapMarkers.push(origMarker);
-
-            currentSchedule.forEach((leg, i) => {
-                const destPos = [leg.destination.lat, leg.destination.lng];
-                latLngs.push(destPos);
-
-                const marker = L.circleMarker(destPos, {
-                    radius: 6,
-                    color: i === activeLegIndex ? '#38bdf8' : '#64748b',
-                    fillColor: i === activeLegIndex ? '#38bdf8' : '#334155',
+                const origMarker = L.circleMarker([firstLeg.origin.lat, firstLeg.origin.lng], {
+                    radius: 7,
+                    color: '#d4af37',
+                    fillColor: '#d4af37',
                     fillOpacity: 0.9
-                }).addTo(leafletMap).bindTooltip(`<b>${leg.destination.icao}</b> (Leg ${leg.legNumber})`, { permanent: false });
+                }).addTo(leafletMap).bindTooltip(`<b>${firstLeg.origin.icao}</b> - Origin`, { permanent: false });
+                mapMarkers.push(origMarker);
 
-                mapMarkers.push(marker);
-            });
+                currentSchedule.forEach((leg, i) => {
+                    const destPos = [leg.destination.lat, leg.destination.lng];
+                    latLngs.push(destPos);
 
-            mapPolyline = L.polyline(latLngs, {
-                color: '#d4af37',
-                weight: 3,
-                opacity: 0.8,
-                dashArray: '8, 6'
-            }).addTo(leafletMap);
+                    const marker = L.circleMarker(destPos, {
+                        radius: 6,
+                        color: i === activeLegIndex ? '#0284c7' : '#475569',
+                        fillColor: i === activeLegIndex ? '#38bdf8' : '#1e293b',
+                        fillOpacity: 0.9
+                    }).addTo(leafletMap).bindTooltip(`<b>${leg.destination.icao}</b> (Leg ${leg.legNumber})`, { permanent: false });
 
-            const bounds = L.latLngBounds(latLngs);
-            leafletMap.fitBounds(bounds, { padding: [40, 40] });
+                    mapMarkers.push(marker);
+                });
 
-            const routeStr = [firstLeg.origin.icao, ...currentSchedule.map(l => l.destination.icao)].join(' ➔ ');
-            document.getElementById('map-route-text').innerText = routeStr;
+                mapPolyline = L.polyline(latLngs, {
+                    color: '#b48811',
+                    weight: 3,
+                    opacity: 0.85,
+                    dashArray: '8, 6'
+                }).addTo(leafletMap);
+
+                const bounds = L.latLngBounds(latLngs);
+                leafletMap.fitBounds(bounds, { padding: [40, 40] });
+
+                const routeStr = [firstLeg.origin.icao, ...currentSchedule.map(l => l.destination.icao)].join(' ➔ ');
+                document.getElementById('map-route-text').innerText = routeStr;
+            } catch(e) {
+                console.error("Route update failed:", e);
+            }
         }
 
         function highlightMapLeg(legIdx) {
@@ -1364,7 +1445,7 @@
         }
 
         /* ==========================================================================
-           7. MODALS & POPUPS logic
+           7. MODALS & POPUPS LOGIC
            ========================================================================== */
 
         function openSeatModal(seatId) {
