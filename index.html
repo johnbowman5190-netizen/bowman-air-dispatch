@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,9 +73,6 @@
     .leaflet-container {
       background: #090e17 !important;
     }
-    .dark-tiles .leaflet-tile {
-      filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
-    }
     /* Printable Dispatch Release */
     @media print {
       body * {
@@ -115,7 +112,7 @@
             <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">DISPATCH OPS</span>
             <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2 py-0.5 rounded font-mono font-semibold">N361VA (A320-200)</span>
           </div>
-          <p class="text-xs text-slate-400 font-medium">CONTINUOUS LEG ENGINE • MINNESOTA PRO & NCAA SPORTS • 180 SEATS (NO ROW 13)</p>
+          <p class="text-xs text-slate-400 font-medium">CONTINUOUS LEG ENGINE • MINNESOTA PRO & AAC SPORTS • 180 SEATS (NO ROW 13)</p>
         </div>
       </div>
 
@@ -134,7 +131,7 @@
         <div class="bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-lg text-xs font-mono text-cyan-300 flex items-center space-x-2">
           <i class="fa-regular fa-clock text-cyan-400"></i>
           <span>ZULU:</span>
-          <span id="zuluClock" class="font-bold">--:--:-- Z</span>
+          <span id="zuluClock" class="font-bold text-slate-100">19:28:45 Z</span>
         </div>
 
         <!-- MTOW Limit Badge -->
@@ -181,18 +178,40 @@
 
         <form id="dispatchForm" onsubmit="event.preventDefault(); handleGenerateDispatch();" class="space-y-4">
           
-          <!-- Origin Airport Dropdown (Guaranteed Populated) -->
+          <!-- Origin Airport Dropdown (PRE-POPULATED IN HTML + ENHANCED BY JS) -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Leg 1 Origin Airport (Operating Hub)
             </label>
             <div class="relative">
-              <select id="originAirport" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-medium">
-                <!-- Javascript will populate this on DOMContentLoaded -->
-                <option value="">Loading Airports...</option>
+              <select id="originAirport" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-medium">
+                <option value="KMSP" selected>KMSP - Minneapolis-St. Paul Int'l (Minneapolis, MN)</option>
+                <option value="KATL">KATL - Hartsfield-Jackson Atlanta Int'l (Atlanta, GA)</option>
+                <option value="KDTW">KDTW - Detroit Metropolitan Wayne County (Detroit, MI)</option>
+                <option value="KSLC">KSLC - Salt Lake City Int'l (Salt Lake City, UT)</option>
+                <option value="KSEA">KSEA - Seattle-Tacoma Int'l (Seattle, WA)</option>
+                <option value="KJFK">KJFK - John F. Kennedy Int'l (New York, NY)</option>
+                <option value="KBOS">KBOS - Boston Logan Int'l (Boston, MA)</option>
+                <option value="KLAX">KLAX - Los Angeles Int'l (Los Angeles, CA)</option>
+                <option value="KORD">KORD - Chicago O'Hare Int'l (Chicago, IL)</option>
+                <option value="KDFW">KDFW - Dallas/Fort Worth Int'l (Dallas, TX)</option>
+                <option value="KMEM">KMEM - Memphis Int'l (Memphis, TN)</option>
+                <option value="KBWI">KBWI - Baltimore/Washington Int'l (Baltimore, MD)</option>
+                <option value="KSWF">KSWF - New York Stewart Int'l (West Point/Newburgh, NY)</option>
+                <option value="KBHM">KBHM - Birmingham-Shuttlesworth Int'l (Birmingham, AL)</option>
+                <option value="KCLT">KCLT - Charlotte Douglas Int'l (Charlotte, NC)</option>
+                <option value="KPGV">KPGV - Pitt-Greenville Airport (Greenville, NC)</option>
+                <option value="KFLL">KFLL - Fort Lauderdale-Hollywood Int'l (Fort Lauderdale, FL)</option>
+                <option value="KHOU">KHOU - Houston Hobby Airport (Houston, TX)</option>
+                <option value="KTPA">KTPA - Tampa Int'l (Tampa, FL)</option>
+                <option value="KPHL">KPHL - Philadelphia Int'l (Philadelphia, PA)</option>
+                <option value="KSAT">KSAT - San Antonio Int'l (San Antonio, TX)</option>
+                <option value="KMSY">KMSY - Louis Armstrong New Orleans Int'l (New Orleans, LA)</option>
+                <option value="KTUL">KTUL - Tulsa Int'l (Tulsa, OK)</option>
+                <option value="KICT">KICT - Wichita Eisenhower Int'l (Wichita, KS)</option>
               </select>
             </div>
-            <p class="text-[10px] text-slate-400 mt-1">Select from 100+ Delta, Allegiant, Breeze, AAC, & MN sports hubs.</p>
+            <p class="text-[10px] text-slate-400 mt-1">Includes 110+ Delta, Allegiant, Breeze, AAC, & MN sports hubs.</p>
           </div>
 
           <!-- Leg Distance / Range Profile -->
@@ -214,13 +233,15 @@
               Charter Mission Category
             </label>
             <select id="charterCategory" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
-              <option value="INTEGRATED_SPORTS" selected>⚽ Integrated Sports Charters (MN Pro & AAC College Road Trips)</option>
-              <option value="MN_PRO_ONLY">⭐ Minnesota Pro Teams Only (Vikings, Wolves, Wild, Twins)</option>
-              <option value="AAC_NCAA_ONLY">🎓 NCAA AAC Conference Only (American Athletic Conference)</option>
+              <option value="INTEGRATED_SPORTS" selected>⚽ Integrated Sports Charters (MN Pro & AAC Road Trips)</option>
+              <option value="MN_PRO_ONLY">⭐ Minnesota Pro Teams (Vikings, Wolves, Wild, Twins)</option>
+              <option value="AAC_NCAA_ONLY">🎓 NCAA AAC Conference Teams (American Athletic Conference)</option>
               <option value="CORPORATE">💼 Corporate & Tech Executive Envoys</option>
-              <option value="CONCERT_FILM">🎸 World Concert Tours & Entertainment Cast</option>
-              <option value="DIPLOMATIC">🏛️ Diplomatic & UN Government Missions</option>
-              <option value="EMERGENCY">🚑 Emergency & Medical Humanitarian</option>
+              <option value="CONCERT_FILM">🎸 World Concert Tours & Film Production Cast</option>
+              <option value="DIPLOMATIC">🏛️ Diplomatic & UN Government Envoys</option>
+              <option value="EMERGENCY">🚑 Emergency & Medical Humanitarian Logistics</option>
+              <option value="AEROSPACE">🚀 Aerospace & Scientific Engineering Missions</option>
+              <option value="LUXURY_VIP">💎 Luxury VIP High-Yield Charters</option>
             </select>
           </div>
 
@@ -230,7 +251,7 @@
               Target Charter Team / Sub-Group
             </label>
             <select id="targetTeam" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
-              <!-- Dynamically populated based on category & season -->
+              <option value="AUTO_ROTATION" selected>⭐ Auto-Rotate Unique Sports Teams (No Duplicates)</option>
             </select>
           </div>
 
@@ -239,8 +260,8 @@
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Dispatch Operating Date (Controls Seasonality)
             </label>
-            <input type="date" id="dispatchDate" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
-            <p id="seasonIndicator" class="text-[10px] text-amber-400 font-semibold mt-1">SEASON: FALL (NFL Vikings / College Football)</p>
+            <input type="date" id="dispatchDate" value="2026-11-07" onchange="updateTeamOptions()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-mono">
+            <p id="seasonIndicator" class="text-[10px] text-amber-400 font-semibold mt-1">SEASON: FALL (NFL Vikings / College Football Active)</p>
           </div>
 
           <!-- Sequential Continuous Leg Chain Count -->
@@ -281,23 +302,23 @@
     <!-- RIGHT MAIN DISPLAY AREA (8 COLS) -->
     <section class="lg:col-span-8 flex flex-col space-y-4">
       
-      <!-- NAV TABS -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 flex flex-wrap gap-1 text-xs font-semibold">
-        <button onclick="switchTab('tab-route')" id="btn-tab-route" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30">
+      <!-- 4-TAB NAVIGATION BAR (2x2 on Mobile, 4-col on Desktop) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 grid grid-cols-2 sm:grid-cols-4 gap-1 text-xs font-semibold">
+        <button onclick="switchTab('tab-route')" id="btn-tab-route" class="py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30">
           <i class="fa-solid fa-map-location-dot"></i>
-          <span>Route Map & Legs</span>
+          <span class="truncate">Route Map & Legs</span>
         </button>
-        <button onclick="switchTab('tab-cabin')" id="btn-tab-cabin" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
+        <button onclick="switchTab('tab-cabin')" id="btn-tab-cabin" class="py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
           <i class="fa-solid fa-chair"></i>
-          <span>180-Seat Cabin Layout</span>
+          <span class="truncate">180-Seat Cabin</span>
         </button>
-        <button onclick="switchTab('tab-cargo')" id="btn-tab-cargo" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
+        <button onclick="switchTab('tab-cargo')" id="btn-tab-cargo" class="py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
           <i class="fa-solid fa-boxes-packing"></i>
-          <span>Belly Cargo Holds</span>
+          <span class="truncate">Belly Cargo Holds</span>
         </button>
-        <button onclick="switchTab('tab-release')" id="btn-tab-release" class="flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
+        <button onclick="switchTab('tab-release')" id="btn-tab-release" class="py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200">
           <i class="fa-solid fa-file-contract"></i>
-          <span>FAA Dispatch Release</span>
+          <span class="truncate">FAA Dispatch Release</span>
         </button>
       </div>
 
@@ -306,10 +327,10 @@
         
         <!-- LEAFLET MAP CONTAINER -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 shadow-xl relative overflow-hidden">
-          <div id="map" class="w-full h-80 rounded-xl z-10 dark-tiles"></div>
+          <div id="map" class="w-full h-80 rounded-xl z-10"></div>
           <div class="absolute bottom-5 right-5 z-20 bg-slate-900/90 border border-slate-700/80 backdrop-blur text-[11px] font-mono px-3 py-1.5 rounded-lg text-slate-300 flex items-center space-x-2">
             <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-            <span>Continuous Flight Legs</span>
+            <span>Continuous Flight Chain</span>
           </div>
         </div>
 
@@ -352,7 +373,7 @@
 
           <!-- AIRCRAFT FUSELAGE Blueprint Layout -->
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-x-auto">
-            <div class="min-w-[500px] max-w-2xl mx-auto space-y-1" id="cabinGrid">
+            <div class="min-w-[450px] max-w-2xl mx-auto space-y-1" id="cabinGrid">
               <!-- Dynamically generated 30 rows x 6 seats (Rows 1-12, 14-31) -->
             </div>
           </div>
@@ -382,7 +403,7 @@
                   <span>FORWARD HOLDS 1 & 2</span>
                   <span class="bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded text-[10px] font-mono">AKH / LD3-45 ULD</span>
                 </div>
-                <p class="text-xs text-slate-300 font-medium mb-2">Sports Equipment Trunks & Gear Bins</p>
+                <p class="text-xs text-slate-300 font-medium mb-2">Containerized Team Gear & Uniform Trunks</p>
                 <div class="text-[11px] text-slate-400 space-y-1 font-mono">
                   <div>• 4x AKH Sealed Containers</div>
                   <div>• Team Uniform Hampers</div>
@@ -407,7 +428,7 @@
                   <span>AFT HOLDS 3 & 4</span>
                   <span class="bg-amber-950 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono">BELT LOADER</span>
                 </div>
-                <p class="text-xs text-slate-300 font-medium mb-2">Player Duffel Bags & Medical Bags</p>
+                <p class="text-xs text-slate-300 font-medium mb-2">Player Duffel Bags & Medical Chests</p>
                 <div class="text-[11px] text-slate-400 space-y-1 font-mono">
                   <div>• 180 Individual Player Duffels</div>
                   <div>• Medical & Taping Tables</div>
@@ -489,7 +510,7 @@
           </div>
           <button onclick="printDispatchRelease()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center space-x-2 transition-all">
             <i class="fa-solid fa-print"></i>
-            <span>Print Official Release</span>
+            <span>Print Release</span>
           </button>
         </div>
 
@@ -509,8 +530,8 @@
       <div class="flex justify-between items-start border-b border-slate-800 pb-3">
         <div>
           <span id="modalSeatNum" class="bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs px-2 py-0.5 rounded font-mono font-bold">SEAT 14A</span>
-          <h3 id="modalPaxName" class="font-bold text-slate-100 text-base mt-1">Justin Jefferson</h3>
-          <p id="modalPaxRole" class="text-xs text-cyan-400 font-semibold">Wide Receiver (#18)</p>
+          <h3 id="modalPaxName" class="font-bold text-slate-100 text-base mt-1">Passenger Name</h3>
+          <p id="modalPaxRole" class="text-xs text-cyan-400 font-semibold">Assigned Role</p>
         </div>
         <button onclick="closeSeatModal()" class="text-slate-400 hover:text-slate-200 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -525,12 +546,12 @@
 
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
           <div class="text-slate-400 font-bold uppercase text-[10px]">Catering & In-Flight Service</div>
-          <div id="modalCatering" class="text-slate-200">High-Protein Athletic Meal (Grilled Chicken, Quinoa & Isotonic Electrolytes)</div>
+          <div id="modalCatering" class="text-slate-200">High-Protein Athletic Meal & Electrolytes</div>
         </div>
 
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
           <div class="text-slate-400 font-bold uppercase text-[10px]">Special Handling / Notes</div>
-          <div id="modalNotes" class="text-slate-300 font-mono">Row 14 Forward Exit Row (Extra Legroom Lock)</div>
+          <div id="modalNotes" class="text-slate-300 font-mono">Row Seat Assignment Verified</div>
         </div>
       </div>
 
@@ -546,8 +567,7 @@
   <!-- JAVASCRIPT DISPATCH ENGINE & DATASETS -->
   <script>
     /* =========================================================================
-       1. MASSIVE DEDUPLICATED AIRPORT DATABASE
-       Includes Delta, Allegiant, Breeze, AAC Schools, MN Pro Airports & Major Hubs
+       1. COMPLETE AIRPORT DATABASE (DELTA, ALLEGIANT, BREEZE, AAC, MN SPORTS)
        ========================================================================= */
     const AIRPORTS_RAW = [
       // MINNESOTA & MN PRO TEAM HOMES
@@ -556,9 +576,6 @@
       { icao: "KDLH", iata: "DLH", name: "Duluth International", city: "Duluth, MN", lat: 46.8421, lng: -92.1936 },
       { icao: "KSTC", iata: "STC", name: "St. Cloud Regional", city: "St. Cloud, MN", lat: 45.5466, lng: -94.0600 },
       { icao: "KBJI", iata: "BJI", name: "Bemidji Regional", city: "Bemidji, MN", lat: 47.5094, lng: -94.9337 },
-      { icao: "KBRD", iata: "BRD", name: "Brainerd Lakes Regional", city: "Brainerd, MN", lat: 46.3979, lng: -94.1372 },
-      { icao: "KINL", iata: "INL", name: "Falls International", city: "International Falls, MN", lat: 48.5662, lng: -93.4002 },
-      { icao: "KHIB", iata: "HIB", name: "Range Regional", city: "Hibbing, MN", lat: 47.3866, lng: -92.8390 },
 
       // AMERICAN ATHLETIC CONFERENCE (AAC) HOME AIRPORTS
       { icao: "KSWF", iata: "SWF", name: "New York Stewart Int'l", city: "Newburgh/West Point, NY", lat: 41.5041, lng: -74.1048 },
@@ -571,17 +588,15 @@
       { icao: "KPBI", iata: "PBI", name: "Palm Beach Int'l", city: "West Palm Beach, FL", lat: 26.6832, lng: -80.0956 },
       { icao: "KMEM", iata: "MEM", name: "Memphis Int'l", city: "Memphis, TN", lat: 35.0424, lng: -89.9767 },
       { icao: "KDFW", iata: "DFW", name: "Dallas/Fort Worth Int'l", city: "Dallas/Denton, TX", lat: 32.8998, lng: -97.0403 },
-      { icao: "KDAL", iata: "DAL", name: "Dallas Love Field", city: "Dallas, TX", lat: 32.8471, lng: -96.8518 },
       { icao: "KHOU", iata: "HOU", name: "Houston Hobby Airport", city: "Houston, TX", lat: 29.6454, lng: -95.2789 },
-      { icao: "KIAH", iata: "IAH", name: "George Bush Intercontinental", city: "Houston, TX", lat: 29.9902, lng: -95.3368 },
       { icao: "KTPA", iata: "TPA", name: "Tampa Int'l", city: "Tampa, FL", lat: 27.9755, lng: -82.5332 },
       { icao: "KPHL", iata: "PHL", name: "Philadelphia Int'l", city: "Philadelphia, PA", lat: 39.8721, lng: -75.2411 },
       { icao: "KSAT", iata: "SAT", name: "San Antonio Int'l", city: "San Antonio, TX", lat: 29.5337, lng: -98.4698 },
-      { icao: "KMSY", iata: "MSY", name: "Louis Armstrong New Orleans", city: "New Orleans, LA", lat: 29.9934, lng: -90.2580 },
+      { icao: "KMSY", iata: "MSY", name: "Louis Armstrong New Orleans Int'l", city: "New Orleans, LA", lat: 29.9934, lng: -90.2580 },
       { icao: "KTUL", iata: "TUL", name: "Tulsa Int'l", city: "Tulsa, OK", lat: 36.1984, lng: -95.8881 },
       { icao: "KICT", iata: "ICT", name: "Wichita Eisenhower Int'l", city: "Wichita, KS", lat: 37.6499, lng: -97.4331 },
 
-      // DELTA AIR LINES MAJOR HUBS & KEY DESTINATIONS
+      // DELTA AIR LINES MAJOR HUBS & SPOKES
       { icao: "KATL", iata: "ATL", name: "Hartsfield-Jackson Atlanta", city: "Atlanta, GA", lat: 33.6407, lng: -84.4277 },
       { icao: "KDTW", iata: "DTW", name: "Detroit Metropolitan", city: "Detroit, MI", lat: 42.2124, lng: -83.3534 },
       { icao: "KSLC", iata: "SLC", name: "Salt Lake City Int'l", city: "Salt Lake City, UT", lat: 40.7884, lng: -111.9778 },
@@ -601,14 +616,13 @@
       { icao: "KMCO", iata: "MCO", name: "Orlando Int'l", city: "Orlando, FL", lat: 28.4312, lng: -81.3081 },
       { icao: "KIND", iata: "IND", name: "Indianapolis Int'l", city: "Indianapolis, IN", lat: 39.7173, lng: -86.2944 },
       { icao: "KBNA", iata: "BNA", name: "Nashville Int'l", city: "Nashville, TN", lat: 36.1263, lng: -86.6774 },
+      { icao: "KDCA", iata: "DCA", name: "Ronald Reagan Washington National", city: "Washington, DC", lat: 38.8512, lng: -77.0377 },
 
       // ALLEGIANT AIR FOCUS CITIES & NETWORK DESTINATIONS
       { icao: "KSFB", iata: "SFB", name: "Orlando Sanford Int'l", city: "Sanford/Orlando, FL", lat: 28.7776, lng: -81.2375 },
       { icao: "KPIE", iata: "PIE", name: "St. Pete-Clearwater Int'l", city: "St. Petersburg, FL", lat: 27.9102, lng: -82.6874 },
       { icao: "KPGD", iata: "PGD", name: "Punta Gorda Airport", city: "Punta Gorda, FL", lat: 26.9175, lng: -82.0006 },
       { icao: "KAZA", iata: "AZA", name: "Phoenix-Mesa Gateway", city: "Mesa/Phoenix, AZ", lat: 33.3078, lng: -111.6550 },
-      { icao: "KAVP", iata: "AVP", name: "Wilkes-Barre/Scranton Int'l", city: "Scranton, PA", lat: 41.3385, lng: -75.7234 },
-      { icao: "KUSA", iata: "USA", name: "Concord-Padgett Regional", city: "Concord, NC", lat: 35.3879, lng: -80.7091 },
       { icao: "KSAV", iata: "SAV", name: "Savannah/Hilton Head", city: "Savannah, GA", lat: 32.1276, lng: -81.2021 },
       { icao: "KFWA", iata: "FWA", name: "Fort Wayne Int'l", city: "Fort Wayne, IN", lat: 40.9785, lng: -85.1951 },
       { icao: "KEVV", iata: "EVV", name: "Evansville Regional", city: "Evansville, IN", lat: 38.0383, lng: -87.5306 },
@@ -617,24 +631,14 @@
       { icao: "KTYS", iata: "TYS", name: "McGhee Tyson Airport", city: "Knoxville, TN", lat: 35.8125, lng: -83.9928 },
       { icao: "KLEX", iata: "LEX", name: "Blue Grass Airport", city: "Lexington, KY", lat: 38.0364, lng: -84.6059 },
       { icao: "KSDF", iata: "SDF", name: "Louisville Muhammad Ali", city: "Louisville, KY", lat: 38.1744, lng: -85.7360 },
-      { icao: "KPIA", iata: "PIA", name: "General Wayne A. Downing", city: "Peoria, IL", lat: 40.6642, lng: -89.6933 },
-      { icao: "KMLI", iata: "MLI", name: "Quad Cities Int'l", city: "Moline, IL", lat: 41.4485, lng: -90.5075 },
       { icao: "KCID", iata: "CID", name: "Eastern Iowa Airport", city: "Cedar Rapids, IA", lat: 41.8847, lng: -91.7108 },
       { icao: "KDSM", iata: "DSM", name: "Des Moines Int'l", city: "Des Moines, IA", lat: 41.5340, lng: -93.6631 },
-      { icao: "KSGF", iata: "SGF", name: "Springfield-Branson National", city: "Springfield, MO", lat: 37.2443, lng: -93.3869 },
       { icao: "KXNA", iata: "XNA", name: "Northwest Arkansas National", city: "Bentonville, AR", lat: 36.2818, lng: -94.3068 },
-      { icao: "KLIT", iata: "LIT", name: "Clinton National", city: "Little Rock, AR", lat: 34.7294, lng: -92.2243 },
       { icao: "KVPS", iata: "VPS", name: "Destin-Fort Walton Beach", city: "Destin, FL", lat: 30.4832, lng: -86.5254 },
       { icao: "KSRQ", iata: "SRQ", name: "Sarasota-Bradenton Int'l", city: "Sarasota, FL", lat: 27.3954, lng: -82.5544 },
-      { icao: "KBLV", iata: "BLV", name: "MidAmerica St. Louis", city: "Belleville/St. Louis, IL", lat: 38.5452, lng: -89.8352 },
-      { icao: "KLCK", iata: "LCK", name: "Rickenbacker Int'l", city: "Columbus, OH", lat: 39.8138, lng: -82.9278 },
-      { icao: "KCAK", iata: "CAK", name: "Akron-Canton Airport", city: "Akron, OH", lat: 40.9161, lng: -81.4422 },
-      { icao: "KFNT", iata: "FNT", name: "Bishop International", city: "Flint, MI", lat: 42.9654, lng: -83.7436 },
       { icao: "KGRR", iata: "GRR", name: "Gerald R. Ford Int'l", city: "Grand Rapids, MI", lat: 42.8808, lng: -85.5228 },
-      { icao: "KATW", iata: "ATW", name: "Appleton Int'l", city: "Appleton, WI", lat: 44.2574, lng: -88.5191 },
       { icao: "KGRB", iata: "GRB", name: "Green Bay Austin Straubel", city: "Green Bay, WI", lat: 44.4851, lng: -88.1296 },
       { icao: "KFAR", iata: "FAR", name: "Hector International", city: "Fargo, ND", lat: 46.9193, lng: -96.8158 },
-      { icao: "KBIS", iata: "BIS", name: "Bismarck Municipal", city: "Bismarck, ND", lat: 46.7727, lng: -100.7460 },
       { icao: "KFSD", iata: "FSD", name: "Sioux Falls Regional", city: "Sioux Falls, SD", lat: 43.5819, lng: -96.7417 },
       { icao: "KOMA", iata: "OMA", name: "Eppley Airfield", city: "Omaha, NE", lat: 41.3025, lng: -95.8942 },
 
@@ -645,11 +649,8 @@
       { icao: "KCHS", iata: "CHS", name: "Charleston International", city: "Charleston, SC", lat: 32.8986, lng: -80.0405 },
       { icao: "KMYR", iata: "MYR", name: "Myrtle Beach Int'l", city: "Myrtle Beach, SC", lat: 33.6797, lng: -78.9283 },
       { icao: "KISP", iata: "ISP", name: "Long Island MacArthur", city: "Islip, NY", lat: 40.7952, lng: -73.1002 },
-      { icao: "KVRB", iata: "VRB", name: "Vero Beach Regional", city: "Vero Beach, FL", lat: 27.6556, lng: -80.4179 },
-      { icao: "KPVU", iata: "PVU", name: "Provo Municipal", city: "Provo, UT", lat: 40.2192, lng: -111.7234 },
-      { icao: "KSBD", iata: "SBD", name: "San Bernardino Int'l", city: "San Bernardino, CA", lat: 34.0953, lng: -117.2347 },
 
-      // MAJOR INTERNATIONAL CHARTER DESTINATIONS
+      // INTERNATIONAL CHARTER DESTINATIONS
       { icao: "EGLL", iata: "LHR", name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543 },
       { icao: "LFPG", iata: "CDG", name: "Paris Charles de Gaulle", city: "Paris, France", lat: 49.0097, lng: 2.5479 },
       { icao: "EHAM", iata: "AMS", name: "Amsterdam Schiphol", city: "Amsterdam, Netherlands", lat: 52.3105, lng: 4.7683 },
@@ -657,12 +658,10 @@
       { icao: "MDPC", iata: "PUJ", name: "Punta Cana Int'l", city: "Punta Cana, Dominican Rep.", lat: 18.5674, lng: -68.3634 }
     ];
 
-    // Strict deduplication by ICAO code
+    // Deduplicate AIRPORTS cleanly
     const AIRPORT_MAP = new Map();
     AIRPORTS_RAW.forEach(ap => {
-      if (!AIRPORT_MAP.has(ap.icao)) {
-        AIRPORT_MAP.set(ap.icao, ap);
-      }
+      if (!AIRPORT_MAP.has(ap.icao)) AIRPORT_MAP.set(ap.icao, ap);
     });
     const AIRPORTS = Array.from(AIRPORT_MAP.values()).sort((a,b) => a.icao.localeCompare(b.icao));
 
@@ -716,6 +715,14 @@
         { name: "Red Cross Disaster Relief Taskforce", icon: "🚑" },
         { name: "FEMA First Responders Tactical Unit", icon: "🚨" },
         { name: "Global Medevac Specialized Medical Unit", icon: "🏥" }
+      ],
+      AEROSPACE: [
+        { name: "SpaceX Launch Systems Engineering Team", icon: "🚀" },
+        { name: "NASA Goddard Space Flight Team", icon: "🛰️" }
+      ],
+      LUXURY_VIP: [
+        { name: "Global High-Net-Worth Delegation", icon: "💎" },
+        { name: "Monaco Grand Prix VIP Charter Group", icon: "🏎️" }
       ]
     };
 
@@ -726,14 +733,17 @@
     let mapLayersGroup = null;
     let currentLegsData = [];
 
-    // Ensure initialization executes reliably
+    // Initialize immediately
     window.addEventListener('DOMContentLoaded', () => {
-      initZuluClock();
-      setDefaultDate();
-      populateAirportDropdown();
-      updateTeamOptions();
-      initMap();
-      handleGenerateDispatch(); // Initial schedule generation
+      try {
+        initZuluClock();
+        populateAirportDropdown();
+        updateTeamOptions();
+        initMap();
+        handleGenerateDispatch();
+      } catch (err) {
+        console.error("Initialization error:", err);
+      }
     });
 
     function initZuluClock() {
@@ -749,17 +759,6 @@
       setInterval(tick, 1000);
     }
 
-    function setDefaultDate() {
-      const dateInput = document.getElementById('dispatchDate');
-      if (dateInput) {
-        const today = new Date();
-        // Default to Nov 7 for Fall NFL/College Football Season
-        const year = today.getFullYear();
-        dateInput.value = `${year}-11-07`;
-      }
-    }
-
-    // GUARANTEED AIRPORT DROPDOWN POPULATOR
     function populateAirportDropdown() {
       const originSelect = document.getElementById('originAirport');
       if (!originSelect) return;
@@ -769,12 +768,11 @@
         const opt = document.createElement('option');
         opt.value = ap.icao;
         opt.textContent = `${ap.icao} - ${ap.name} (${ap.city})`;
-        if (ap.icao === 'KMSP') opt.selected = true; // Default to Bowman Air Hub
+        if (ap.icao === 'KMSP') opt.selected = true;
         originSelect.appendChild(opt);
       });
     }
 
-    // Dynamic Team Sub-group Options based on Category & Season
     function updateTeamOptions() {
       const catSelect = document.getElementById('charterCategory');
       const teamSelect = document.getElementById('targetTeam');
@@ -787,13 +785,12 @@
       const selectedDate = new Date(dateInput.value || Date.now());
       const month = selectedDate.getMonth() + 1; // 1-12
 
-      // Update Season Indicator
       if (month >= 8 || month <= 2) {
         seasonEl.textContent = "SEASON: FALL / WINTER (NFL Vikings & AAC Football Active)";
       } else if (month >= 3 && month <= 6) {
         seasonEl.textContent = "SEASON: SPRING (MLB Twins & AAC Spring Sports)";
       } else {
-        seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Training Camps)";
+        seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Pre-Season Camps)";
       }
 
       teamSelect.innerHTML = '';
@@ -806,7 +803,7 @@
       } else if (category === 'AAC_NCAA_ONLY') {
         availableTeams = AAC_TEAMS;
       } else {
-        const list = OTHER_CHARTERS[category] || [];
+        const list = OTHER_CHARTERS[category] || OTHER_CHARTERS.CORPORATE;
         const optAll = document.createElement('option');
         optAll.value = "ALL";
         optAll.textContent = "🔄 Multi-Envoy Continuous Tour";
@@ -821,7 +818,6 @@
         return;
       }
 
-      // Filter by season appropriateness
       const activeTeams = availableTeams.filter(t => t.months.includes(month));
       const optAuto = document.createElement('option');
       optAuto.value = "AUTO_ROTATION";
@@ -840,7 +836,7 @@
        4. HAVERSINE & DISPATCH SCHEDULE GENERATION ENGINE
        ========================================================================= */
     function getDistanceNM(lat1, lon1, lat2, lon2) {
-      const R = 3440.065; // Radius of earth in Nautical Miles
+      const R = 3440.065;
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
       const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -867,10 +863,7 @@
       currentLegsData = [];
       let currentAirport = AIRPORTS.find(a => a.icao === originICAO) || AIRPORTS[0];
 
-      // Build continuous leg chain (Leg 2 departs from Leg 1 Dest)
       for (let i = 1; i <= legCount; i++) {
-        
-        // Find valid destination airports based on range profile
         let candidateAirports = AIRPORTS.filter(a => a.icao !== currentAirport.icao);
         
         candidateAirports = candidateAirports.map(dest => {
@@ -878,7 +871,6 @@
           return { ...dest, dist };
         });
 
-        // Filter by range profile
         if (rangeProfile === 'SHORT') {
           candidateAirports = candidateAirports.filter(a => a.dist >= 100 && a.dist <= 550);
         } else if (rangeProfile === 'MEDIUM') {
@@ -887,7 +879,6 @@
           candidateAirports = candidateAirports.filter(a => a.dist >= 1400 && a.dist <= 3200);
         }
 
-        // Fallback if filter too narrow
         if (candidateAirports.length === 0) {
           candidateAirports = AIRPORTS.filter(a => a.icao !== currentAirport.icao).map(dest => ({
             ...dest,
@@ -895,11 +886,9 @@
           }));
         }
 
-        // Sort by realistic distance variation and pick
         candidateAirports.sort((a,b) => a.dist - b.dist);
         const destAirport = candidateAirports[Math.floor(Math.random() * Math.min(candidateAirports.length, 8))];
 
-        // DETERMINE CHARTER TEAM / ENVOY (STRICT UNIQUENESS)
         let legEntity = null;
         let matchupTitle = "";
 
@@ -909,16 +898,13 @@
           else if (category === 'AAC_NCAA_ONLY') pool = AAC_TEAMS;
           else pool = [...MN_PRO_TEAMS, ...AAC_TEAMS];
 
-          // Filter by season & uniqueness
           let availablePool = pool.filter(t => t.months.includes(month) && !usedTeamsInDispatch.has(t.id));
 
-          // If pool exhausted, reset or pick unused
           if (availablePool.length === 0) {
             availablePool = pool.filter(t => !usedTeamsInDispatch.has(t.id));
           }
           if (availablePool.length === 0) availablePool = pool;
 
-          // Pick specific team if requested on Leg 1
           if (i === 1 && targetTeamId && targetTeamId !== 'AUTO_ROTATION') {
             const requested = pool.find(t => t.id === targetTeamId);
             if (requested) legEntity = requested;
@@ -929,7 +915,7 @@
           }
 
           usedTeamsInDispatch.add(legEntity.id);
-          matchupTitle = `${legEntity.icon} ${legEntity.name} @ ${destAirport.city} Charter`;
+          matchupTitle = `${legEntity.icon} ${legEntity.name} @ ${destAirport.city} Matchup`;
         } else {
           const list = OTHER_CHARTERS[category] || OTHER_CHARTERS.CORPORATE;
           const entityObj = list[(i - 1) % list.length];
@@ -937,14 +923,12 @@
           matchupTitle = `${legEntity.icon} ${legEntity.name} Flight`;
         }
 
-        // CALCULATE FLIGHT TELEMETRY
         const distance = destAirport.dist;
         const speedKtas = 450;
-        const flightTimeHrs = (distance / speedKtas) + 0.35; // Cruise + Taxi/Climb cushion
+        const flightTimeHrs = (distance / speedKtas) + 0.35;
         const hrs = Math.floor(flightTimeHrs);
         const mins = Math.round((flightTimeHrs - hrs) * 60);
         const fuelBurnLbs = Math.round(flightTimeHrs * 5800 + 800);
-
         const legNumber = `BMN361${i}`;
 
         currentLegsData.push({
@@ -957,15 +941,14 @@
           distanceNM: distance,
           durationStr: `${hrs}h ${mins}m`,
           fuelBurnLbs: fuelBurnLbs,
-          paxCount: 172 + (i % 8), // Near capacity 180 seats
+          paxCount: 172 + (i % 8),
           cargoLbs: 12500 + (i * 800)
         });
 
-        // CONTINUOUS CHAIN RULE: Next leg departs from this leg's destination
+        // CONTINUOUS CHAIN RULE
         currentAirport = destAirport;
       }
 
-      // Render UI components
       renderLegCards();
       renderRouteOnMap();
       renderCabinGrid();
@@ -978,17 +961,19 @@
        ========================================================================= */
     function initMap() {
       if (leafletMap) return;
-      
-      // Default centered over US
-      leafletMap = L.map('map', { zoomControl: false }).setView([39.8283, -98.5795], 4);
-      L.control.zoom({ position: 'topright' }).addTo(leafletMap);
+      try {
+        leafletMap = L.map('map', { zoomControl: false }).setView([39.8283, -98.5795], 4);
+        L.control.zoom({ position: 'topright' }).addTo(leafletMap);
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(leafletMap);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(leafletMap);
 
-      mapLayersGroup = L.layerGroup().addTo(leafletMap);
+        mapLayersGroup = L.layerGroup().addTo(leafletMap);
+      } catch (e) {
+        console.error("Map load error:", e);
+      }
     }
 
     function renderRouteOnMap() {
@@ -1006,28 +991,23 @@
         if (index === 0) latLngs.push(origPt);
         latLngs.push(destPt);
 
-        // Origin Marker
-        const origMarker = L.circleMarker(origPt, {
+        L.circleMarker(origPt, {
           radius: 6,
           fillColor: '#00f2fe',
           color: '#ffffff',
           weight: 2,
           fillOpacity: 1
-        }).addTo(mapLayersGroup);
-        origMarker.bindPopup(`<b>${leg.origin.icao}</b><br>${leg.origin.name}<br>${leg.origin.city}`);
+        }).addTo(mapLayersGroup).bindPopup(`<b>${leg.origin.icao}</b><br>${leg.origin.name}<br>${leg.origin.city}`);
 
-        // Destination Marker
-        const destMarker = L.circleMarker(destPt, {
+        L.circleMarker(destPt, {
           radius: 7,
           fillColor: '#f59e0b',
           color: '#ffffff',
           weight: 2,
           fillOpacity: 1
-        }).addTo(mapLayersGroup);
-        destMarker.bindPopup(`<b>Leg ${leg.legIndex}: ${leg.flightNo}</b><br>${leg.destination.icao} - ${leg.destination.name}<br>Dist: ${leg.distanceNM} NM`);
+        }).addTo(mapLayersGroup).bindPopup(`<b>Leg ${leg.legIndex}: ${leg.flightNo}</b><br>${leg.destination.icao} - ${leg.destination.name}<br>Dist: ${leg.distanceNM} NM`);
 
-        // Flight Polyline
-        const polyline = L.polyline([origPt, destPt], {
+        L.polyline([origPt, destPt], {
           color: index % 2 === 0 ? '#00f2fe' : '#f59e0b',
           weight: 3,
           dashArray: '6, 6',
@@ -1061,7 +1041,7 @@
                 <div class="flex items-center space-x-2">
                   <h4 class="font-bold text-slate-100 text-sm font-mono">${leg.flightNo}</h4>
                   <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded font-mono">
-                    ✓ UNIQUE TEAM CONFIRMED
+                    ✓ UNIQUE CHARTER TEAM
                   </span>
                 </div>
                 <p class="text-xs text-amber-400 font-semibold">${leg.matchupTitle}</p>
@@ -1075,7 +1055,6 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             
-            <!-- Departure -->
             <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
               <span class="text-[10px] text-slate-400 uppercase font-mono block">Departure</span>
               <div class="font-bold text-slate-100 font-mono text-base">${leg.origin.icao}</div>
@@ -1083,7 +1062,6 @@
               <div class="text-[11px] text-slate-400">${leg.origin.city}</div>
             </div>
 
-            <!-- Route Visual Arrow -->
             <div class="text-center font-mono space-y-1">
               <div class="text-xs text-cyan-400 font-bold">${leg.distanceNM} NM</div>
               <div class="flex items-center justify-center space-x-2 text-slate-600">
@@ -1094,7 +1072,6 @@
               <div class="text-[10px] text-slate-400">Burn: ${leg.fuelBurnLbs.toLocaleString()} lbs</div>
             </div>
 
-            <!-- Arrival -->
             <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
               <span class="text-[10px] text-slate-400 uppercase font-mono block">Arrival (Next Origin)</span>
               <div class="font-bold text-amber-400 font-mono text-base">${leg.destination.icao}</div>
@@ -1117,7 +1094,6 @@
 
       cabinEl.innerHTML = '';
 
-      // Rows 1-12, and 14-31 (Strictly skip 13) -> 30 rows * 6 seats = 180 seats
       const validRows = [];
       for (let r = 1; r <= 31; r++) {
         if (r !== 13) validRows.push(r);
@@ -1129,13 +1105,11 @@
         const rowDiv = document.createElement('div');
         rowDiv.className = "flex items-center space-x-2 text-xs font-mono py-1";
 
-        // Row number badge
         const rowBadge = document.createElement('div');
         rowBadge.className = "w-8 text-center text-slate-400 font-bold text-[11px]";
         rowBadge.textContent = `R${rowNum}`;
         rowDiv.appendChild(rowBadge);
 
-        // Left 3 seats (ABC)
         const leftGrp = document.createElement('div');
         leftGrp.className = "flex space-x-1 flex-1";
         seatsCols.slice(0,3).forEach(letter => {
@@ -1143,12 +1117,11 @@
         });
         rowDiv.appendChild(leftGrp);
 
-        // Aisle space indicator
         const aisle = document.createElement('div');
-        aisle.className = "w-4 text-center text-[9px] text-slate-600 font-mono">||</div>
+        aisle.className = "w-4 text-center text-[9px] text-slate-600 font-mono";
+        aisle.textContent = "||";
         rowDiv.appendChild(aisle);
 
-        // Right 3 seats (DEF)
         const rightGrp = document.createElement('div');
         rightGrp.className = "flex space-x-1 flex-1";
         seatsCols.slice(3,6).forEach(letter => {
@@ -1179,8 +1152,8 @@
     }
 
     function openSeatModal(seatCode, rowNum) {
-      const currentLeg = currentLegsData[0] || { entity: { name: "Minnesota Vikings" } };
-      const teamName = currentLeg.entity.name || "Minnesota Sports Delegation";
+      const currentLeg = currentLegsData[0] || { entity: { name: "Minnesota Sports Delegation" } };
+      const teamName = currentLeg.entity.name || "Sports Delegation";
 
       document.getElementById('modalSeatNum').textContent = `SEAT ${seatCode}`;
       
@@ -1189,19 +1162,19 @@
         document.getElementById('modalPaxRole').textContent = `${teamName} - Key Player / Executive`;
         document.getElementById('modalLuggage').textContent = "2 Large Equipment Cases + 1 Personal Carry-On (60 lbs)";
         document.getElementById('modalCatering').textContent = "High-Protein Athletic Recovery Meal & Isotonic Smoothies";
-        document.getElementById('modalNotes').textContent = "Priority First Class Recline & Taping Kit Storage Area";
+        document.getElementById('modalNotes').textContent = "Priority Recline & Taping Kit Storage Assigned";
       } else if (rowNum >= 5 && rowNum <= 12) {
         document.getElementById('modalPaxName').textContent = `Offensive / Defensive Roster`;
-        document.getElementById('modalPaxRole').textContent = `${teamName} - Roster Athlete`;
+        document.getElementById('modalPaxRole').textContent = `${teamName} - Active Roster Athlete`;
         document.getElementById('modalLuggage').textContent = "1 Gear Trunk + 1 Team Duffel (45 lbs)";
         document.getElementById('modalCatering').textContent = "Standard Athletic Prep Catering & Energy Electrolytes";
-        document.getElementById('modalNotes').textContent = "Mid-Cabin Row Storage Assigned";
+        document.getElementById('modalNotes').textContent = "Mid-Cabin Overhead Storage Assigned";
       } else {
         document.getElementById('modalPaxName').textContent = `Support Staff & Coaching`;
         document.getElementById('modalPaxRole').textContent = `${teamName} - Technical / Medical Crew`;
         document.getElementById('modalLuggage').textContent = "1 Standard Travel Bag + Audio/Video Gear Case";
         document.getElementById('modalCatering').textContent = "Standard Envoy In-Flight Catering";
-        document.getElementById('modalNotes').textContent = "Aft Cabin Ops Section";
+        document.getElementById('modalNotes').textContent = "Aft Cabin Operations Section";
       }
 
       document.getElementById('seatModal').classList.remove('hidden');
@@ -1225,11 +1198,11 @@
       document.getElementById('holdBulkWeight').textContent = `${bulkWeight.toLocaleString()} LBS`;
 
       document.getElementById('totalCargoVal').textContent = `${Math.round(totalCargo).toLocaleString()} LBS`;
-      document.getElementById('paxWeightVal').textContent = `34,200 LBS`; // 180 pax * 190 lbs average
+      document.getElementById('paxWeightVal').textContent = `34,200 LBS`;
       
-      const bow = 93500; // Airbus A320 Basic Operating Weight
+      const bow = 93500;
       const zfw = bow + 34200 + totalCargo;
-      const rampW = zfw + 15400; // Plus average block fuel
+      const rampW = zfw + 15400;
 
       document.getElementById('zfwVal').textContent = `${Math.round(zfw).toLocaleString()} LBS`;
       document.getElementById('rampWeightVal').textContent = `${Math.round(rampW).toLocaleString()} LBS`;
@@ -1241,8 +1214,6 @@
     function renderFAARelease() {
       const releaseEl = document.getElementById('print-modal-content');
       if (!releaseEl || currentLegsData.length === 0) return;
-
-      const leg1 = currentLegsData[0];
 
       releaseEl.innerHTML = `
         <div class="border-b border-slate-700 pb-4 flex justify-between items-start">
@@ -1353,10 +1324,10 @@
         if (el && btn) {
           if (id === tabId) {
             el.classList.remove('hidden');
-            btn.className = "flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 font-bold";
+            btn.className = "py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 font-bold";
           } else {
             el.classList.add('hidden');
-            btn.className = "flex-1 py-2 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200";
+            btn.className = "py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200 font-semibold";
           }
         }
       });
