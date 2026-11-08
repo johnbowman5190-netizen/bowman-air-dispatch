@@ -879,6 +879,10 @@
       initZuluClock();
       populateAirportDropdown();
       updateSubGroupOptions();
+      
+      const catSelect = document.getElementById('categorySelect') || document.querySelector('select[name="category"]');
+      if (catSelect) catSelect.addEventListener('change', updateSubGroupOptions);
+      
       initMap();
       handleGenerateDispatch();
     }
