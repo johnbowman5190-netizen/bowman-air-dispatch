@@ -162,16 +162,22 @@
 
         <form id="dispatchForm" onsubmit="event.preventDefault(); handleGenerateDispatch();" class="space-y-4">
           
-          <!-- AIRPORT DROPDOWN -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-              Leg 1 Origin Airport (Operating Hub)
-            </label>
-            <select id="originAirportSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-medium font-mono">
-              <!-- Dynamically populated from AIRPORTS dataset -->
-            </select>
-            <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, WestJet, Volaris & AAC network.</p>
-          </div>
+<!-- AIRPORT DROPDOWN -->
+<div>
+  <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+    Leg 1 Origin Airport (Operating Hub)
+  </label>
+  <select id="originAirportSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-medium font-mono">
+    <option value="KMSP" selected>KMSP - Minneapolis-St. Paul Int'l (Minneapolis, MN)</option>
+    <option value="KORD">KORD - Chicago O'Hare Int'l (Chicago, IL)</option>
+    <option value="KDFW">KDFW - Dallas/Fort Worth Int'l (Dallas, TX)</option>
+    <option value="KDEN">KDEN - Denver Int'l (Denver, CO)</option>
+    <option value="KLAX">KLAX - Los Angeles Int'l (Los Angeles, CA)</option>
+    <option value="KJFK">KJFK - John F. Kennedy Int'l (New York, NY)</option>
+    <option value="KATL">KATL - Hartsfield-Jackson Atlanta Int'l (Atlanta, GA)</option>
+  </select>
+  <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, WestJet, Volaris & AAC network.</p>
+</div>
 
           <!-- Range Profile -->
           <div>
@@ -985,33 +991,58 @@
     }
     window.updateSubGroupOptions = updateSubGroupOptions;
 
-    function initZuluClock() {
-      function tick() {
-        const now = new Date();
-        const hrs = String(now.getUTCHours()).padStart(2, '0');
-        const mins = String(now.getUTCMinutes()).padStart(2, '0');
-        const secs = String(now.getUTCSeconds()).padStart(2, '0');
-        const clockEl = document.getElementById('zuluClock');
-        if (clockEl) clockEl.textContent = `${hrs}:${mins}:${secs} Z`;
-      }
-      tick();
-      setInterval(tick, 1000);
-    }
+function initZuluClock() {
+  function tick() {
+    const now = new Date();
+    const hrs = String(now.getUTCHours()).padStart(2, '0');
+    const mins = String(now.getUTCMinutes()).padStart(2, '0');
+    const secs = String(now.getUTCSeconds()).padStart(2, '0');
+    const clockEl = document.getElementById('zuluClock');
+    if (clockEl) clockEl.textContent = `${hrs}:${mins}:${secs} Z`;
+  }
+  tick();
+  setInterval(tick, 1000);
+}
 
-    function populateAirportDropdown() {
-      const select = document.getElementById('originAirportSelect');
-      if (!select) return;
-      
-      const currentSelected = select.value || 'KMSP';
-      select.innerHTML = '';
-      
-      AIRPORTS.forEach(ap => {
-        const opt = document.createElement('option');
-        opt.value = ap.icao;
-        opt.textContent = `${ap.icao} - ${ap.name} (${ap.city})`;
-        if (ap.icao === currentSelected) opt.selected = true;
-        select.appendChild(opt);
-      });
+function populateAirportDropdown() {
+  const select = document.getElementById('originAirportSelect');
+  if (!select) return;
+  
+  const currentSelected = select.value || 'KMSP';
+  select.innerHTML = '';
+  
+  AIRPORTS.forEach(ap => {
+    const opt = document.createElement('option');
+    opt.value = ap.icao;
+    opt.textContent = `${ap.icao} - ${ap.name} (${ap.city})`;
+    if (ap.icao === currentSelected) opt.selected = true;
+    select.appendChild(opt);
+  });
+}
+
+function initApp() {
+  initZuluClock();
+  populateAirportDropdown();
+  updateSubGroupOptions();
+  
+  const catSelect = document.getElementById('charterCategory') || document.getElementById('categorySelect');
+  if (catSelect) catSelect.addEventListener('change', updateSubGroupOptions);
+  
+  initMap();
+  
+  // Safe execution guard to prevent script crashes
+  if (typeof handleGenerateDispatch === 'function') {
+    handleGenerateDispatch();
+  }
+}
+
+// Start Zulu clock immediately on script parse
+initZuluClock();
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
     }
 
     function getDistanceNM(lat1, lon1, lat2, lon2) {
@@ -1025,7 +1056,7 @@
       return Math.round(R * c);
     }
 
-    window.handleGenerateDispatch = function() {
+    function handleGenerateDispatch() {
       const originSelect = document.getElementById('originAirportSelect');
       const rangeSelect = document.getElementById('rangeProfile');
       const catSelect = document.getElementById('charterCategory') || document.getElementById('categorySelect');
