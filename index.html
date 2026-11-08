@@ -948,8 +948,8 @@
       return Math.round(R * c);
     }
 
-    /* =========================================================================
-       5. DISPATCH GENERATOR ENGINE FOR ALL 7 CATEGORIES (CALLSIGN BCJ)
+        /* =========================================================================
+       5. DISPATCH GENERATOR ENGINE FOR ALL 6 CATEGORIES (CALLSIGN BCJ)
        ========================================================================= */
     function handleGenerateDispatch() {
       const originICAO = document.getElementById('originAirportSelect').value || 'KMSP';
@@ -966,8 +966,6 @@
       activeLegIndex = 0;
 
       let currentAirport = AIRPORTS.find(a => a.icao === originICAO) || AIRPORTS[0];
-
-      // Track teams used on this daily dispatch to enforce single-day movement rule
       const usedTeamIds = new Set();
 
       for (let i = 1; i <= legCount; i++) {
@@ -978,7 +976,6 @@
         const legCallsign = `BCJ361${i}`;
 
         if (category === 'SPORTS') {
-          // 1. SPORTS TEAM & FRANCHISE CHARTERS
           let pool = [...MN_PRO_TEAMS, ...AAC_TEAMS];
           const activePool = pool.filter(t => t.months.includes(month));
           const availablePool = (activePool.length > 0 ? activePool : pool).filter(t => !usedTeamIds.has(t.id));
@@ -1030,21 +1027,43 @@
             paragraphSummary = `Leg ${i} (${legCallsign}) operates a fleet positioning sector moving N361VA from ${currentAirport.name} to ${destAirport.name} for scheduled maintenance and next-day charter staging.`;
           }
         }
-        else if (category === 'ACJ320_VIP') {
-          // 3. VIP, EXECUTIVE & HEAD-OF-STATE CHARTERS (ACJ320)
-          let vipCandidates = ACJ_VIP_HUBS.filter(icao => icao !== currentAirport.icao);
-          let chosenICAO = vipCandidates[Math.floor(Math.random() * vipCandidates.length)];
-          destAirport = AIRPORTS.find(a => a.icao === chosenICAO) || AIRPORTS.find(a => a.icao === 'LFMN');
+        else if (category === 'ACMI_LEASE') {
+          let carrierHubs = [];
+          let carrierName = "Partner Carrier";
+          
+          if (subGroupId === 'allegiant_sub') {
+            carrierName = "Allegiant Air";
+            carrierHubs = ['KPGD', 'KPIE', 'KSFB', 'KIWA', 'KAZA', 'KAVL', 'KMYR', 'KABE', 'KCVG', 'KLAS'];
+          } else if (subGroupId === 'frontier_sub') {
+            carrierName = "Frontier Airlines";
+            carrierHubs = ['KDEN', 'KMCO', 'KPHX', 'KATL', 'KDFW', 'KLAS', 'KPHL', 'KMDW', 'KTPA', 'KSAN'];
+          } else if (subGroupId === 'westjet_sub') {
+            carrierName = "WestJet";
+            carrierHubs = ['CYYC', 'CYYZ', 'CYVR', 'CYEG', 'CYWG', 'KMCO', 'KLAS', 'KMSP'];
+          } else if (subGroupId === 'transat_sub') {
+            carrierName = "Air Transat";
+            carrierHubs = ['CYUL', 'CYYZ', 'CYQB', 'MMUN', 'TJSJ', 'KMIA', 'KFLL', 'KMCO'];
+          } else if (subGroupId === 'volaris_sub') {
+            carrierName = "Volaris";
+            carrierHubs = ['MMMX', 'MMGL', 'MMUN', 'MMMTY', 'KLAX', 'KORD', 'KMIA', 'KDFW', 'KSFO', 'KSAT'];
+          } else {
+            carrierName = "ACMI Partner Carrier";
+            carrierHubs = ['KPGD', 'KDEN', 'CYYC', 'CYUL', 'MMMX', 'KLAX', 'KMCO', 'KLAS'];
+          }
 
-          const subList = CATEGORY_SUBGROUPS.ACJ320_VIP;
-          const chosenSub = subList.find(s => s.id === subGroupId) || subList[1 + ((i - 1) % (subList.length - 1))];
-          legEntity = { name: chosenSub.name, icon: chosenSub.icon };
+          let possibleDests = AIRPORTS.filter(ap => ap.icao !== currentAirport.icao);
+          if (carrierHubs.includes(currentAirport.icao)) {
+            destAirport = possibleDests[Math.floor(Math.random() * possibleDests.length)];
+          } else {
+            let hubAirports = possibleDests.filter(ap => carrierHubs.includes(ap.icao));
+            destAirport = hubAirports.length > 0 ? hubAirports[Math.floor(Math.random() * hubAirports.length)] : possibleDests[0];
+          }
 
-          matchupTitle = `${legEntity.icon} ${legEntity.name}`;
-          paragraphSummary = `Leg ${i} (${legCallsign}) operates a premium ACJ320 Head-of-State / VIP charter airlifting the ${legEntity.name} delegation from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). The cabin is configured with a high-end master suite, dining tables, and diplomatic conferencing facilities. Holds 1 & 2 transport sealed AKH containers carrying diplomatic pouches, armored valet trunks, and state gifts. Priority apron security is activated at ${destAirport.icao}.`;
+          legEntity = { name: `${carrierName} ACMI Sub-Service`, icon: "✈️" };
+          matchupTitle = `✈️ ${carrierName} ACMI Sub-Service (Flt ${legCallsign})`;
+          paragraphSummary = `Leg ${i} (${legCallsign}) operates as a turnkey ACMI wet lease sub-service on behalf of ${carrierName}, departing ${currentAirport.name} (${currentAirport.city}) bound for ${destAirport.name} (${destAirport.city}). Aircraft N361VA supplements mainline schedule integrity to cover operational AOG gaps and peak seasonal passenger demand. Holds 1 & 2 carry standard airline passenger baggage ULD containers.`;
         }
         else {
-          // 2. CORPORATE, 4. ENTERTAINMENT, 5. TOUR OPERATOR, 6. GOVERNMENT, 7. ACMI LEASE
           const subList = CATEGORY_SUBGROUPS[category] || CATEGORY_SUBGROUPS.CORPORATE;
           const chosenSub = subList.find(s => s.id === subGroupId) || subList[1 + ((i - 1) % (subList.length - 1))];
           legEntity = { name: chosenSub.name, icon: chosenSub.icon };
@@ -1075,10 +1094,8 @@
             paragraphSummary = `Leg ${i} (${legCallsign}) operates a multi-city concert and tour charter carrying the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Onboard cabin seats stage crew, production leads, and musicians, while Holds 1 & 2 are packed with AKH containers containing soundboards, lighting rigs, and wardrobe trunks.`;
           } else if (category === 'TOUR_OPERATOR') {
             paragraphSummary = `Leg ${i} (${legCallsign}) provides ad-hoc seasonal charter capacity moving 180 resort passengers for ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). This flight supplies direct non-stop vacation capacity during peak holiday demand, with Holds 3 & 4 loaded to capacity with passenger baggage.`;
-          } else if (category === 'GOVERNMENT') {
+          } else { // GOVERNMENT
             paragraphSummary = `Leg ${i} (${legCallsign}) executes an official government humanitarian airlift transporting the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Aircraft N361VA carries diplomatic envoys, medical staff, and emergency relief supplies in lower deck Holds 1 & 2.`;
-          } else { // ACMI_LEASE
-            paragraphSummary = `Leg ${i} (${legCallsign}) operates under an ACMI wet lease sub-service agreement for ${legEntity.name}, covering schedule gaps between ${currentAirport.name} (${currentAirport.city}) and ${destAirport.name} (${destAirport.city}). Bowman Air provides turnkey aircraft, crew, maintenance, and insurance replacement capacity seamlessly integrated into the partner airline network.`;
           }
         }
 
@@ -1115,6 +1132,7 @@
       renderActiveLegCabinAndCargo();
       renderFAARelease();
     }
+#
 
     /* =========================================================================
        6. ACTIVE LEG SELECTOR BAR & SYNCHRONIZATION
