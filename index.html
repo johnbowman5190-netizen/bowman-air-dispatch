@@ -186,7 +186,7 @@
             </select>
           </div>
 
-          <!-- 6 CHARTER CATEGORIES DROPDOWN (NO VIP) -->
+          <!-- 6 CHARTER CATEGORIES DROPDOWN -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Charter Mission Category
@@ -536,18 +536,17 @@
       </div>
     </div>
   </div>
+
+
   <!-- JAVASCRIPT DISPATCH ENGINE & DATASETS -->
   <script>
     /* =========================================================================
-       1. COMPREHENSIVE AIRPORT NETWORK (DELTA, ALLEGIANT, BREEZE, WESTJET, VOLARIS, TRANSAT, AAC, MN)
+       1. COMPREHENSIVE AIRPORT NETWORK
        ========================================================================= */
     const AIRPORTS_RAW = [
-      // MINNESOTA & MN PRO TEAM HOMES
       { icao: "KMSP", iata: "MSP", name: "Minneapolis-St. Paul Int'l", city: "Minneapolis, MN", lat: 44.8848, lng: -93.2223 },
       { icao: "KRST", iata: "RST", name: "Rochester International", city: "Rochester, MN", lat: 43.9088, lng: -92.4979 },
       { icao: "KDLH", iata: "DLH", name: "Duluth International", city: "Duluth, MN", lat: 46.8421, lng: -92.1936 },
-
-      // ALL 15 AMERICAN ATHLETIC CONFERENCE (AAC) HOME AIRPORTS
       { icao: "KSWF", iata: "SWF", name: "New York Stewart Int'l", city: "West Point/Army, NY", lat: 41.5041, lng: -74.1048 },
       { icao: "KBWI", iata: "BWI", name: "Baltimore/Washington Int'l", city: "Annapolis/Navy, MD", lat: 39.1754, lng: -76.6683 },
       { icao: "KBHM", iata: "BHM", name: "Birmingham-Shuttlesworth Int'l", city: "Birmingham/UAB, AL", lat: 33.5629, lng: -86.7535 },
@@ -563,8 +562,6 @@
       { icao: "KMSY", iata: "MSY", name: "Louis Armstrong New Orleans Int'l", city: "New Orleans/Tulane, LA", lat: 29.9934, lng: -90.2580 },
       { icao: "KTUL", iata: "TUL", name: "Tulsa Int'l", city: "Tulsa/Tulsa Golden Hurricane, OK", lat: 36.1984, lng: -95.8881 },
       { icao: "KICT", iata: "ICT", name: "Wichita Eisenhower Int'l", city: "Wichita/Wichita St, KS", lat: 37.6499, lng: -97.4331 },
-
-      // DELTA AIR LINES MAJOR HUBS & SPOKES
       { icao: "KATL", iata: "ATL", name: "Hartsfield-Jackson Atlanta Int'l", city: "Atlanta, GA", lat: 33.6407, lng: -84.4277 },
       { icao: "KDTW", iata: "DTW", name: "Detroit Metropolitan", city: "Detroit, MI", lat: 42.2124, lng: -83.3534 },
       { icao: "KSLC", iata: "SLC", name: "Salt Lake City Int'l", city: "Salt Lake City, UT", lat: 40.7884, lng: -111.9778 },
@@ -604,8 +601,6 @@
       { icao: "KRIC", iata: "RIC", name: "Richmond Int'l", city: "Richmond, VA", lat: 37.5052, lng: -77.3197 },
       { icao: "KIAD", iata: "IAD", name: "Washington Dulles Int'l", city: "Washington, DC", lat: 38.9531, lng: -77.4565 },
       { icao: "KBUF", iata: "BUF", name: "Buffalo Niagara Int'l", city: "Buffalo, NY", lat: 42.9405, lng: -78.7322 },
-
-      // ALLEGIANT, BREEZE, FRONTIER, WESTJET, TRANSAT & VOLARIS AIRPORTS
       { icao: "KABE", iata: "ABE", name: "Lehigh Valley Int'l", city: "Allentown, PA", lat: 40.6524, lng: -75.4404 },
       { icao: "KACY", iata: "ACY", name: "Atlantic City Int'l", city: "Atlantic City, NJ", lat: 39.4576, lng: -74.5772 },
       { icao: "KATW", iata: "ATW", name: "Appleton International", city: "Appleton/Green Bay, WI", lat: 44.2574, lng: -88.5191 },
@@ -641,8 +636,6 @@
       { icao: "KPNS", iata: "PNS", name: "Pensacola International", city: "Pensacola, FL", lat: 30.4734, lng: -87.1866 },
       { icao: "KSBD", iata: "SBD", name: "San Bernardino Int'l", city: "San Bernardino, CA", lat: 34.0953, lng: -117.2350 },
       { icao: "KILM", iata: "ILM", name: "Wilmington Int'l", city: "Wilmington, NC", lat: 34.2706, lng: -77.9026 },
-
-      // WESTJET & AIR TRANSAT CANADIAN HUBS
       { icao: "CYYC", iata: "YYC", name: "Calgary International", city: "Calgary, AB", lat: 51.1215, lng: -114.0076 },
       { icao: "CYYZ", iata: "YYZ", name: "Toronto Pearson Int'l", city: "Toronto, ON", lat: 43.6777, lng: -79.6248 },
       { icao: "CYVR", iata: "YVR", name: "Vancouver International", city: "Vancouver, BC", lat: 49.1967, lng: -123.1815 },
@@ -650,8 +643,6 @@
       { icao: "CYWG", iata: "YWG", name: "Winnipeg Richardson Int'l", city: "Winnipeg, MB", lat: 49.9100, lng: -97.2399 },
       { icao: "CYUL", iata: "YUL", name: "Montreal-Trudeau Int'l", city: "Montreal, QC", lat: 45.4706, lng: -73.7408 },
       { icao: "CYQB", iata: "YQB", name: "Quebec City Jean Lesage", city: "Quebec City, QC", lat: 46.7911, lng: -71.3933 },
-
-      // VOLARIS & TRANSBOUNDARY LEISURE HUBS
       { icao: "MMMX", iata: "MEX", name: "Mexico City Benito Juarez", city: "Mexico City, Mexico", lat: 19.4363, lng: -99.0721 },
       { icao: "MMGL", iata: "GDL", name: "Guadalajara International", city: "Guadalajara, Mexico", lat: 20.5218, lng: -103.3112 },
       { icao: "MMUN", iata: "CUN", name: "Cancun International", city: "Cancun, Mexico", lat: 21.0365, lng: -86.8771 },
@@ -659,7 +650,6 @@
       { icao: "TJSJ", iata: "SJU", name: "Luis Munoz Marin Int'l", city: "San Juan, Puerto Rico", lat: 18.4394, lng: -66.0018 }
     ];
 
-    // Deduplicate Airports
     const AIRPORT_MAP = new Map();
     AIRPORTS_RAW.forEach(ap => {
       if (!AIRPORT_MAP.has(ap.icao)) AIRPORT_MAP.set(ap.icao, ap);
@@ -667,7 +657,7 @@
     const AIRPORTS = Array.from(AIRPORT_MAP.values()).sort((a,b) => a.icao.localeCompare(b.icao));
 
     /* =========================================================================
-       2. ANCHORED TEAMS & CATEGORY SUB-GROUPS DATABASE
+       2. TEAMS & CATEGORY SUB-GROUPS DATABASE
        ========================================================================= */
     const MN_PRO_TEAMS = [
       { 
@@ -833,15 +823,18 @@
       if (!catSelect || !subSelect) return;
 
       const category = catSelect.value;
-      const selectedDate = new Date(dateInput.value || Date.now());
+      const dateVal = dateInput ? dateInput.value : '2026-11-07';
+      const selectedDate = new Date(dateVal.replace(/-/g, '/'));
       const month = selectedDate.getMonth() + 1;
 
-      if (month >= 8 || month <= 2) {
-        seasonEl.textContent = "SEASON: FALL / WINTER (NFL Vikings, NBA Timberwolves & AAC Football Active)";
-      } else if (month >= 3 && month <= 6) {
-        seasonEl.textContent = "SEASON: SPRING (MLB Twins & AAC Spring Sports Active)";
-      } else {
-        seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Pre-Season Training Camps)";
+      if (seasonEl) {
+        if (month >= 8 || month <= 2) {
+          seasonEl.textContent = "SEASON: FALL / WINTER (NFL Vikings, NBA Timberwolves & AAC Football Active)";
+        } else if (month >= 3 && month <= 6) {
+          seasonEl.textContent = "SEASON: SPRING (MLB Twins & AAC Spring Sports Active)";
+        } else {
+          seasonEl.textContent = "SEASON: SUMMER (MLB Twins & Pre-Season Training Camps)";
+        }
       }
 
       subSelect.innerHTML = '';
@@ -870,17 +863,24 @@
     }
 
     /* =========================================================================
-       5. DISPATCH GENERATOR ENGINE FOR ALL 6 CATEGORIES (CALLSIGN BCJ)
+       5. DISPATCH GENERATOR ENGINE FOR ALL 6 CATEGORIES
        ========================================================================= */
     function handleGenerateDispatch() {
-      const originICAO = document.getElementById('originAirportSelect').value || 'KMSP';
-      const rangeProfile = document.getElementById('rangeProfile').value;
-      const category = document.getElementById('charterCategory').value;
-      const subGroupId = document.getElementById('targetSubGroup').value;
-      const dateStr = document.getElementById('dispatchDate').value;
-      const legCount = parseInt(document.getElementById('legCount').value) || 4;
+      const originSelect = document.getElementById('originAirportSelect');
+      const rangeSelect = document.getElementById('rangeProfile');
+      const catSelect = document.getElementById('charterCategory');
+      const subSelect = document.getElementById('targetSubGroup');
+      const dateInput = document.getElementById('dispatchDate');
+      const legSelect = document.getElementById('legCount');
 
-      const selectedDate = new Date(dateStr || Date.now());
+      const originICAO = originSelect ? originSelect.value : 'KMSP';
+      const rangeProfile = rangeSelect ? rangeSelect.value : 'MIXED';
+      const category = catSelect ? catSelect.value : 'SPORTS';
+      const subGroupId = subSelect ? subSelect.value : 'AUTO_ROTATION';
+      const dateStr = dateInput ? dateInput.value : '2026-11-07';
+      const legCount = legSelect ? parseInt(legSelect.value) : 4;
+
+      const selectedDate = new Date(dateStr.replace(/-/g, '/'));
       const month = selectedDate.getMonth() + 1;
 
       currentLegsData = [];
@@ -917,12 +917,12 @@
               const chosenOpp = oppAAC[Math.floor(Math.random() * oppAAC.length)];
               destAirport = AIRPORTS.find(a => a.icao === chosenOpp.home) || AIRPORTS[0];
               matchupTitle = `${homeTeam.icon} ${homeTeam.name} vs. ${chosenOpp.name}`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} athletic traveling party from their home base at ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) for an away AAC fixture against the ${chosenOpp.name}. Aircraft N361VA transports 174 roster athletes and coaching staff. Holds 1 & 2 load containerized uniform hampers and video equipment, with mobile belt loaders pre-staged at ${destAirport.icao}.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} athletic party from home at ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) for an away AAC fixture against ${chosenOpp.name}. N361VA transports 174 roster athletes and coaching staff. Holds 1 & 2 load containerized uniform hampers and video equipment.`;
             } else {
               const oppObj = homeTeam.opponents[Math.floor(Math.random() * homeTeam.opponents.length)];
               destAirport = AIRPORTS.find(a => a.icao === oppObj.home) || AIRPORTS[0];
               matchupTitle = `${homeTeam.icon} ${homeTeam.name} vs. ${oppObj.name}`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} from their base at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for an away road game against the ${oppObj.name}. Onboard seating accommodates players, trainers, and media staff, with Holds 1 & 2 carrying AKH uniform hampers and trainer tables.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) dispatches the ${homeTeam.name} from base at ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}) for an away game against ${oppObj.name}. Onboard seating accommodates players, trainers, and media staff.`;
             }
           }
           else if (availablePool.length > 0) {
@@ -931,21 +931,21 @@
               destAirport = AIRPORTS.find(a => a.icao === nextTeam.home) || AIRPORTS[0];
               legEntity = { name: "BCJ Operational Positioning Ferry", icon: "✈️" };
               matchupTitle = `✈️ BCJ Positioning Ferry (${currentAirport.icao} → ${destAirport.icao})`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) operates a BCJ Operational Ferry sector positioning aircraft N361VA from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}) to stage for the upcoming ${nextTeam.name} charter pickup. Flight operates with crew only and minimal ballast weight.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) operates a BCJ Positioning sector moving N361VA from ${currentAirport.name} to ${destAirport.name} to stage for upcoming ${nextTeam.name} charter pickup.`;
             } else {
               const chosenTeam = availablePool[Math.floor(Math.random() * availablePool.length)];
               usedTeamIds.add(chosenTeam.id);
               legEntity = chosenTeam;
               destAirport = AIRPORTS.find(a => a.icao === chosenTeam.home) || AIRPORTS[0];
               matchupTitle = `${chosenTeam.icon} ${chosenTeam.name} Charter Leg`;
-              paragraphSummary = `Leg ${i} (${legCallsign}) executes a dedicated team charter airlifting the ${chosenTeam.name} delegation from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Payload includes players, technical staff, and full lower deck equipment loading.`;
+              paragraphSummary = `Leg ${i} (${legCallsign}) executes a dedicated team charter airlifting ${chosenTeam.name} from ${currentAirport.name} to ${destAirport.name}.`;
             }
           } else {
             let candidates = AIRPORTS.filter(a => a.icao !== currentAirport.icao);
             destAirport = candidates[Math.floor(Math.random() * candidates.length)];
             legEntity = { name: "BCJ Fleet Ferry Flight", icon: "✈️" };
             matchupTitle = `✈️ BCJ Fleet Positioning (${currentAirport.icao} → ${destAirport.icao})`;
-            paragraphSummary = `Leg ${i} (${legCallsign}) operates a fleet positioning sector moving N361VA from ${currentAirport.name} to ${destAirport.name} for scheduled maintenance and next-day charter staging.`;
+            paragraphSummary = `Leg ${i} (${legCallsign}) operates a positioning sector moving N361VA from ${currentAirport.name} to ${destAirport.name} for scheduled maintenance and staging.`;
           }
         }
         else if (category === 'ACMI_LEASE') {
@@ -954,7 +954,7 @@
           
           if (subGroupId === 'allegiant_sub') {
             carrierName = "Allegiant Air";
-            carrierHubs = ['KPGD', 'KPIE', 'KSFB', 'KIWA', 'KAZA', 'KAVL', 'KMYR', 'KABE', 'KCVG', 'KLAS'];
+            carrierHubs = ['KPGD', 'KPIE', 'KSFB', 'KIWA', 'KAVL', 'KMYR', 'KABE', 'KCVG', 'KLAS'];
           } else if (subGroupId === 'frontier_sub') {
             carrierName = "Frontier Airlines";
             carrierHubs = ['KDEN', 'KMCO', 'KPHX', 'KATL', 'KDFW', 'KLAS', 'KPHL', 'KMDW', 'KTPA', 'KSAN'];
@@ -982,7 +982,7 @@
 
           legEntity = { name: `${carrierName} ACMI Sub-Service`, icon: "✈️" };
           matchupTitle = `✈️ ${carrierName} ACMI Sub-Service (Flt ${legCallsign})`;
-          paragraphSummary = `Leg ${i} (${legCallsign}) operates as a turnkey ACMI wet lease sub-service on behalf of ${carrierName}, departing ${currentAirport.name} (${currentAirport.city}) bound for ${destAirport.name} (${destAirport.city}). Aircraft N361VA supplements mainline schedule integrity to cover operational AOG gaps and peak seasonal passenger demand. Holds 1 & 2 carry standard airline passenger baggage ULD containers.`;
+          paragraphSummary = `Leg ${i} (${legCallsign}) operates as ACMI wet lease sub-service for ${carrierName}, departing ${currentAirport.name} bound for ${destAirport.name} to supplement peak demand. Holds 1 & 2 carry airline ULD containers.`;
         }
         else {
           const subList = CATEGORY_SUBGROUPS[category] || CATEGORY_SUBGROUPS.CORPORATE;
@@ -1010,19 +1010,18 @@
           matchupTitle = `${legEntity.icon} ${legEntity.name}`;
 
           if (category === 'CORPORATE') {
-            paragraphSummary = `Leg ${i} (${legCallsign}) dispatches a corporate group charter airlifting 160 executives and key personnel for ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). The flight keeps the entire corporate delegation together on a single schedule, with Holds 1 & 2 carrying custom keynote AV equipment, branded display racks, and executive luggage.`;
+            paragraphSummary = `Leg ${i} (${legCallsign}) dispatches a corporate group charter airlifting 160 executives for ${legEntity.name} from ${currentAirport.name} to ${destAirport.name}. Holds 1 & 2 carry AV equipment, display racks, and executive luggage.`;
           } else if (category === 'ENTERTAINMENT') {
-            paragraphSummary = `Leg ${i} (${legCallsign}) operates a multi-city concert and tour charter carrying the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Onboard cabin seats stage crew, production leads, and musicians, while Holds 1 & 2 are packed with AKH containers containing soundboards, lighting rigs, and wardrobe trunks.`;
+            paragraphSummary = `Leg ${i} (${legCallsign}) operates a concert tour charter carrying ${legEntity.name} from ${currentAirport.name} to ${destAirport.name}. Holds 1 & 2 contain AV gear, soundboards, and wardrobe trunks.`;
           } else if (category === 'TOUR_OPERATOR') {
-            paragraphSummary = `Leg ${i} (${legCallsign}) provides ad-hoc seasonal charter capacity moving 180 resort passengers for ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) directly to ${destAirport.name} (${destAirport.city}). This flight supplies direct non-stop vacation capacity during peak holiday demand, with Holds 3 & 4 loaded to capacity with passenger baggage.`;
-          } else { // GOVERNMENT
-            paragraphSummary = `Leg ${i} (${legCallsign}) executes an official government humanitarian airlift transporting the ${legEntity.name} from ${currentAirport.name} (${currentAirport.city}) to ${destAirport.name} (${destAirport.city}). Aircraft N361VA carries diplomatic envoys, medical staff, and emergency relief supplies in lower deck Holds 1 & 2.`;
+            paragraphSummary = `Leg ${i} (${legCallsign}) provides ad-hoc seasonal charter capacity for ${legEntity.name} moving resort passengers from ${currentAirport.name} to ${destAirport.name}.`;
+          } else {
+            paragraphSummary = `Leg ${i} (${legCallsign}) executes an official government humanitarian airlift for ${legEntity.name} from ${currentAirport.name} to ${destAirport.name}. Holds 1 & 2 load relief supplies and field gear.`;
           }
         }
 
         const distance = getDistanceNM(currentAirport.lat, currentAirport.lng, destAirport.lat, destAirport.lng);
-        const speedKtas = 450;
-        const flightTimeHrs = (distance / speedKtas) + 0.35;
+        const flightTimeHrs = (distance / 450) + 0.35;
         const hrs = Math.floor(flightTimeHrs);
         const mins = Math.round((flightTimeHrs - hrs) * 60);
         const fuelBurnLbs = Math.round(flightTimeHrs * 5800 + 800);
@@ -1043,7 +1042,6 @@
           cargoLbs: 12800 + (i * 750)
         });
 
-        // Continuous leg chaining rule
         currentAirport = destAirport;
       }
 
@@ -1137,7 +1135,7 @@
           color: '#ffffff',
           weight: 2,
           fillOpacity: 1
-        }).addTo(mapLayersGroup).bindPopup(`<b>${leg.origin.icao}</b><br>${leg.origin.name}<br>${leg.origin.city}`);
+        }).addTo(mapLayersGroup).bindPopup(`<b>${leg.origin.icao}</b><br>${leg.origin.name}`);
 
         L.circleMarker(destPt, {
           radius: 7,
@@ -1145,7 +1143,7 @@
           color: '#ffffff',
           weight: 2,
           fillOpacity: 1
-        }).addTo(mapLayersGroup).bindPopup(`<b>Leg ${leg.legIndex}: ${leg.flightNo}</b><br>${leg.destination.icao} - ${leg.destination.name}<br>Dist: ${leg.distanceNM} NM`);
+        }).addTo(mapLayersGroup).bindPopup(`<b>Leg ${leg.legIndex}: ${leg.flightNo}</b><br>${leg.destination.icao} - ${leg.destination.name}`);
 
         L.polyline([origPt, destPt], {
           color: index % 2 === 0 ? '#00f2fe' : '#f59e0b',
@@ -1159,7 +1157,7 @@
     }
 
     /* =========================================================================
-       8. RENDER CONTINUOUS LEG CARDS WITH BRIEFINGS (CALLSIGN BCJ)
+       8. LEG CARDS RENDERER
        ========================================================================= */
     function renderLegCards() {
       const container = document.getElementById('legCardsContainer');
@@ -1220,7 +1218,6 @@
             </div>
           </div>
 
-          <!-- PARAGRAPH MISSION BRIEFING -->
           <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300 leading-relaxed font-sans">
             <div class="text-[10px] font-mono font-bold text-cyan-400 uppercase mb-1">
               <i class="fa-solid fa-align-left mr-1"></i> Flight Operational Mission Briefing:
@@ -1364,7 +1361,7 @@
         document.getElementById('modalCatering').textContent = "Government Operational MRE & Hydration";
         document.getElementById('modalNotes').textContent = "Field Mission Seating";
       }
-      else { // ACMI_LEASE
+      else {
         document.getElementById('modalPaxName').textContent = `Airline Commercial Passenger`;
         document.getElementById('modalPaxRole').textContent = `${groupName} - Sub-Service Passenger`;
         document.getElementById('modalLuggage').textContent = "1 Standard Roller + 1 Personal Item (35 lbs)";
@@ -1380,7 +1377,7 @@
     }
 
     /* =========================================================================
-       10. BELLY CARGO SCHEMATIC & TELEMETRY
+       10. CARGO SECTION RENDERER
        ========================================================================= */
     function renderCargoSection() {
       const currentLeg = currentLegsData[activeLegIndex] || currentLegsData[0] || {
@@ -1475,11 +1472,16 @@
     }
 
     /* =========================================================================
-       11. OFFICIAL FAA DISPATCH RELEASE GENERATOR (CALLSIGN BCJ)
+       11. OFFICIAL FAA DISPATCH RELEASE GENERATOR
        ========================================================================= */
     function renderFAARelease() {
       const releaseEl = document.getElementById('print-modal-content');
       if (!releaseEl || currentLegsData.length === 0) return;
+
+      const dateInput = document.getElementById('dispatchDate');
+      const dateVal = dateInput ? dateInput.value : '2026-11-07';
+      const catSelect = document.getElementById('charterCategory');
+      const catText = catSelect ? catSelect.options[catSelect.selectedIndex].text : 'Sports Team';
 
       releaseEl.innerHTML = `
         <div class="border-b border-slate-700 pb-4 flex justify-between items-start">
@@ -1489,7 +1491,7 @@
           </div>
           <div class="text-right text-xs">
             <div>DISPATCH REF: <strong class="text-cyan-400">BCJ-361-DISP</strong></div>
-            <div>DATE: <strong class="text-slate-200">${document.getElementById('dispatchDate').value}</strong></div>
+            <div>DATE: <strong class="text-slate-200">${dateVal}</strong></div>
           </div>
         </div>
 
@@ -1508,7 +1510,7 @@
           </div>
           <div>
             <span class="text-slate-400 block uppercase">Operational Category</span>
-            <strong class="text-slate-100">${document.getElementById('charterCategory').options[document.getElementById('charterCategory').selectedIndex].text}</strong>
+            <strong class="text-slate-100">${catText}</strong>
           </div>
         </div>
 
