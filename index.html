@@ -836,7 +836,10 @@
         { id: "westjet_sub", name: "🍁 WestJet Transboundary & Canadian Sun Route ACMI", icon: "🍁" },
         { id: "transat_sub", name: "🌴 Air Transat Seasonal Leisure Route Wet Lease", icon: "🌴" },
         { id: "volaris_sub", name: "🇲🇽 Volaris Cross-Border Mexico-US Shuttle Sub-Service", icon: "🇲🇽" }
-      ]
+      ],
+      RANDOM: [
+        { id: "AUTO_RANDOM", name: "🎲 Multi-Category Random Mission Chain (Random Per Leg)", icon: "🎲" }
+  ]
     };
 
     let leafletMap = null;
@@ -942,7 +945,7 @@
 
       const originICAO = originSelect ? originSelect.value : 'KMSP';
       const rangeProfile = rangeSelect ? rangeSelect.value : 'MIXED';
-      const category = catSelect ? catSelect.value : 'SPORTS';
+      const mainCategory = catSelect ? catSelect.value : 'SPORTS';
       const subGroupId = subSelect ? subSelect.value : 'AUTO_ROTATION';
       const dateStr = dateInput ? dateInput.value : '2026-11-07';
       const legCount = legSelect ? parseInt(legSelect.value) : 4;
@@ -954,9 +957,16 @@
       activeLegIndex = 0;
 
       let currentAirport = AIRPORTS.find(a => a.icao === originICAO) || AIRPORTS[0];
+      const ALL_CATS = ['SPORTS', 'CORPORATE', 'ENTERTAINMENT', 'TOUR_OPERATOR', 'GOVERNMENT', 'ACMI_LEASE']
       const usedTeamIds = new Set();
 
       for (let i = 1; i <= legCount; i++) {
+        let category = mainCategory;
+        if (mainCategory === 'RANDOM') {
+          const prevCat = currentLegsData.length > 0 ? currentLegsData[currentLegsData.length - 1].categoryType : null;
+          const availCats = ALL_CATS.filter(c => c !== prevCat);
+          category = availCats[Math.floor(Math.random() * availCats.length)];
+        }
         let destAirport = null;
         let legEntity = null;
         let matchupTitle = "";
