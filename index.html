@@ -806,28 +806,55 @@
       ],
       CORPORATE: [
         { id: "AUTO", name: "🔄 Auto-Rotation Corporate Delegations", icon: "💼" },
-        { id: "tech_summit", name: "Silicon Valley Executive Leadership Retreat", icon: "💻" },
-        { id: "energy_summit", name: "Global Energy & Clean Tech Summit Envoy", icon: "⚡" },
-        { id: "finance_board", name: "Wall Street Investment Bank Board Meeting", icon: "🏦" },
-        { id: "retail_summit", name: "National Retail Operations Executive Tour", icon: "📦" }
+        { id: "walmart", name: "Walmart Global Store Leadership Summit", icon: "🛒" },
+        { id: "microsoft", name: "Microsoft Executive Engineering Retreat", icon: "💻" },
+        { id: "target", name: "Target Stores Executive Leadership Fly-In", icon: "🎯" },
+        { id: "exxonmobil", name: "ExxonMobil Energy & Technical Field Envoy", icon: "🛢️" },
+        { id: "apple", name: "Apple Launch Event & Hardware Production Unit", icon: "🍎" },
+        { id: "jpmorgan", name: "JPMorgan Chase Global MD Investor Tour", icon: "🏦" },
+        { id: "ford", name: "Ford Motor Co. Dealer & Assembly Plant Tour", icon: "🚗" },
+        { id: "salesforce", name: "Salesforce President's Club Incentive Charter", icon: "☁️" },
+        { id: "nike", name: "Nike Global Brand & Executive Summit", icon: "👟" },
+        { id: "boeing", name: "Boeing Defense & Flight Operations Delegation", icon: "✈️" }
       ],
       ENTERTAINMENT: [
         { id: "AUTO", name: "🔄 Auto-Rotation Entertainment Tours", icon: "🎸" },
-        { id: "stadium_tour", name: "Multi-City Arena Music Tour & Crew", icon: "🎤" },
-        { id: "film_unit", name: "Hollywood Motion Picture Location Stunt Crew", icon: "🎬" },
-        { id: "symphony", name: "Philharmonic Symphony Orchestra & Instruments", icon: "🎻" }
+        { id: "eras_tour", name: "Taylor Swift Eras Tour Production & Band", icon: "🎤" },
+        { id: "cirque_du_soleil", name: "Cirque du Soleil Touring Cast & Troupe", icon: "🎪" },
+        { id: "hamilton_broadway", name: "Hamilton National Broadway Tour Cast", icon: "🎭" },
+        { id: "ny_philharmonic", name: "New York Philharmonic World Tour", icon: "🎻" },
+        { id: "kpop_straykids", name: "Stray Kids World Tour Entourage & Crew", icon: "💫" },
+        { id: "wwe_roster", name: "WWE Live Event Roster & Crew Charter", icon: "🤼" },
+        { id: "marvel_film_unit", name: "Marvel Studios Remote Production Unit", icon: "🎬" },
+        { id: "metallica_tour", name: "Metallica Stadium Tour Production Crew", icon: "⚡" },
+        { id: "live_nation", name: "Live Nation Global Festival Production Team", icon: "🎟️" },
+        { id: "juilliard_tour", name: "Juilliard Orchestra International Tour", icon: "🎼" }
       ],
       TOUR_OPERATOR: [
         { id: "AUTO", name: "🔄 Auto-Rotation Tour Operator Groups", icon: "🏝️" },
-        { id: "cruise_shuttle", name: "Royal Caribbean Port Passenger Shuttle", icon: "🚢" },
-        { id: "caribbean_sun", name: "Punta Cana Seasonal All-Inclusive Run", icon: "☀️" },
-        { id: "alpine_ski", name: "Rockies Luxury Winter Ski Express", icon: "⛷️" }
+        { id: "tui_vacations", name: "TUI Group Resort & Beach Charter", icon: "🏖️" },
+        { id: "apple_vacations", name: "Apple Vacations Caribbean Sun Express", icon: "🌴" },
+        { id: "vacation_express", name: "Vacation Express All-Inclusive Resort Run", icon: "☀️" },
+        { id: "sunwing_vacations", name: "Sunwing Vacations Tropical Getaway", icon: "🍹" },
+        { id: "jet2holidays", name: "Jet2holidays European Package Tour", icon: "✈️" },
+        { id: "der_touristik", name: "DER Touristik Global Escorted Group Tour", icon: "🧳" },
+        { id: "royal_caribbean", name: "Royal Caribbean Air2Sea Cruise Shuttle", icon: "🚢" },
+        { id: "viking_expeditions", name: "Viking Cruises Guest Expedition Airlift", icon: "🛳️" },
+        { id: "alltours", name: "Alltours Mediterranean Package Charter", icon: "🇪🇸" },
+        { id: "collette_tours", name: "Collette Guided Group World Tour", icon: "🗺️" }
       ],
       GOVERNMENT: [
         { id: "AUTO", name: "🔄 Auto-Rotation Government & Relief Missions", icon: "🏛️" },
-        { id: "un_peace", name: "UN Peacekeeping Delegation & Staff Airlift", icon: "🇺🇳" },
-        { id: "red_cross", name: "Red Cross Emergency Relief Logistics", icon: "🚑" },
-        { id: "fema_first", name: "FEMA First Responders Disaster Taskforce", icon: "🚨" }
+        { id: "us_dod", name: "U.S. Department of Defense Troop Airlift", icon: "🎖️" },
+        { id: "un_peacekeeping", name: "UN Peacekeeping Force Rotation & Staff", icon: "🇺🇳" },
+        { id: "fema_disaster", name: "FEMA Emergency First Responder Deployment", icon: "🚨" },
+        { id: "state_dept", name: "U.S. Dept of State Evacuation & Diplomatic Envoy", icon: "🏛️" },
+        { id: "red_cross", name: "Red Cross Emergency Medical & Relief Team", icon: "🚑" },
+        { id: "nato_airlift", name: "NATO Joint Allied Troop Movement", icon: "🛡️" },
+        { id: "dhs_ice", name: "DHS Operational Personnel Transport", icon: "⚖️" },
+        { id: "eu_civil_protection", name: "EU Civil Protection Crisis Response Task Force", icon: "🇪🇺" },
+        { id: "caf_dnd", name: "Canadian Armed Forces Personnel Rotation", icon: "🇨🇦" },
+        { id: "uk_mod", name: "UK Ministry of Defence Troop Transport", icon: "🇬🇧" }
       ],
       ACMI_LEASE: [
         { id: "auto_acmi", name: "✈️ Auto-Rotate ACMI Sub-Service Carriers", icon: "✈️" },
@@ -1026,41 +1053,118 @@
           }
         }
         else if (category === 'ACMI_LEASE') {
-          let carrierHubs = [];
-          let carrierName = "Partner Carrier";
-          
-          if (subGroupId === 'allegiant_sub') {
-            carrierName = "Allegiant Air";
-            carrierHubs = ['KPGD', 'KPIE', 'KSFB', 'KIWA', 'KAVL', 'KMYR', 'KABE', 'KCVG', 'KLAS'];
-          } else if (subGroupId === 'frontier_sub') {
-            carrierName = "Frontier Airlines";
-            carrierHubs = ['KDEN', 'KMCO', 'KPHX', 'KATL', 'KDFW', 'KLAS', 'KPHL', 'KMDW', 'KTPA', 'KSAN'];
-          } else if (subGroupId === 'westjet_sub') {
-            carrierName = "WestJet";
-            carrierHubs = ['CYYC', 'CYYZ', 'CYVR', 'CYEG', 'CYWG', 'KMCO', 'KLAS', 'KMSP'];
-          } else if (subGroupId === 'transat_sub') {
-            carrierName = "Air Transat";
-            carrierHubs = ['CYUL', 'CYYZ', 'CYQB', 'MMUN', 'TJSJ', 'KMIA', 'KFLL', 'KMCO'];
-          } else if (subGroupId === 'volaris_sub') {
-            carrierName = "Volaris";
-            carrierHubs = ['MMMX', 'MMGL', 'MMUN', 'MMMTY', 'KLAX', 'KORD', 'KMIA', 'KDFW', 'KSFO', 'KSAT'];
-          } else {
-            carrierName = "ACMI Partner Carrier";
-            carrierHubs = ['KPGD', 'KDEN', 'CYYC', 'CYUL', 'MMMX', 'KLAX', 'KMCO', 'KLAS'];
-          }
+        let carrierHubs = [];
+        let carrierDests = [];
+        let carrierName = "Partner Carrier";
 
-          let possibleDests = AIRPORTS.filter(ap => ap.icao !== currentAirport.icao);
-          if (carrierHubs.includes(currentAirport.icao)) {
-            destAirport = possibleDests[Math.floor(Math.random() * possibleDests.length)];
-          } else {
-            let hubAirports = possibleDests.filter(ap => carrierHubs.includes(ap.icao));
-            destAirport = hubAirports.length > 0 ? hubAirports[Math.floor(Math.random() * hubAirports.length)] : possibleDests[0];
-          }
-
-          legEntity = { name: `${carrierName} ACMI Sub-Service`, icon: "✈️" };
-          matchupTitle = `✈️ ${carrierName} ACMI Sub-Service (Flt ${legCallsign})`;
-          paragraphSummary = `Leg ${i} (${legCallsign}) operates as ACMI wet lease sub-service for ${carrierName}, departing ${currentAirport.name} bound for ${destAirport.name} to supplement peak demand. Holds 1 & 2 carry airline ULD containers.`;
+        if (subGroupId === 'allegiant_sub') {
+          carrierName = "Allegiant Air";
+          // Operational Bases / Focus Hubs
+          carrierHubs = [
+            'KPGD', 'KPIE', 'KSFB', 'KAZA', 'KLAS', 'KVPS', 'KFLL', 'KMYR', 
+            'KCVG', 'KAVL', 'KTYS', 'KGRR', 'KDSM', 'KSDF', 'KSNA', 'KPVU'
+          ];
+          // Spoke Destinations
+          carrierDests = [
+            'KGRB', 'KBMI', 'KCID', 'KFSD', 'KIND', 'KCMH', 'KPIT', 'KATW', 
+            'KABE', 'KORF', 'KRIC', 'KCHA', 'KLEX', 'KFNT', 'KBLV', 'KPBG', 
+            'KSWF', 'KIAG', 'KROA', 'KHTS', 'KCKB', 'KGSP', 'KCAE', 'KSAV', 
+            'KHOU', 'KOKC', 'KTUL', 'KOMA', 'KGRI', 'KBIL', 'KBZN', 'KMSO', 
+            'KFCA', 'KIDA', 'KBOI', 'KEUG', 'KMFR', 'KBLI', 'KPSC', 'KFAT', 
+            'KSCK', 'KMRY', 'KBUR', 'KSLC', 'KCOS', 'KDEN', 'KXNA', 'KLIT', 
+            'KMCI', 'KCOU', 'KSGF', 'KUSA', 'KLSE', 'KPHL', 'KMDT', 'KACY'
+          ];
+        } else if (subGroupId === 'frontier_sub')
+          carrierName = "Frontier Airlines";
+          // Crew Bases & Major Focus Hubs
+          carrierHubs = [
+            'KDEN', 'KATL', 'KMCO', 'KLAS', 'KPHX', 'KDFW', 'KPHL', 
+            'KCLE', 'KMDW', 'KMIA', 'KTPA', 'KTTN', 'SJU'
+          ];
+          // Spoke Destinations
+          carrierDests = [
+            'KSAN', 'KLAX', 'KSFO', 'KOAK', 'KSJC', 'KSAC', 'KONT', 'KSNA', 'KBUR',
+            'KSEA', 'KPDX', 'KBOI', 'KSLC', 'KTUS', 'KABQ', 'KAMA', 'KELP',
+            'KSAT', 'KIAH', 'KXNA', 'KLCK', 'KMCI', 'KSTL', 'KMSP', 'KGRR',
+            'KDTW', 'KIND', 'KCVG', 'KCMH', 'KPIT', 'KBOS', 'KBDL', 'KKEWR',
+            'KJFK', 'KSWF', 'KRDU', 'KCLT', 'KCHS', 'KSAV', 'KJAX', 'KPNS',
+            'KFLL', 'KRSW', 'KSRQ', 'KMYR', 'KECP', 'MMUN', 'MMPV', 'MMSD',
+            'PUJ', 'SDQ', 'STI', 'SJO', 'SAL', 'GUA', 'SAP', 'MBJ'
+          ];
+        } else if (subGroupId === 'breeze_sub') {
+          carrierName = "Breeze Airways";
+          // Crew Bases & Focus Hubs
+          carrierHubs = [
+            'KCHS', 'KMSY', 'KPVD', 'KRIC', 'KSBD', 'KISP', 'KBDL', 
+            'KMCO', 'KTPA', 'KRSW', 'KVRB', 'KHVN'
+          ];
+          // Spoke Destinations
+          carrierDests = [
+            'KPWM', 'KPNS', 'KSAV', 'KILM', 'KORF', 'KROC', 'KCAK', 'KALB', 
+            'KACY', 'KBWI', 'KBGR', 'KBHM', 'KBOS', 'KBTV', 'KCUN', 'KCVG', 
+            'KCMH', 'KDAL', 'KDAY', 'KDAB', 'KDEN', 'KERI', 'KEVV', 'KXNA', 
+            'KFLL', 'KGJT', 'KGSO', 'KGSP', 'KGPT', 'KHVT', 'KJAX', 'KEYW', 
+            'KLNS', 'KLAN', 'KLAS', 'KLBE', 'KLNK', 'KLAX', 'KSDF', 'KMSN', 
+            'KMHT', 'KMEM', 'KMTJ', 'KMYR', 'KMYF', 'KNAS', 'KEWR', 'KSWF', 
+            'KOGD', 'KOGS', 'KSNA', 'KPHX', 'KPIT', 'KPSM', 'KPVU', 'KPUJ', 
+            'KRDU', 'KRDM', 'KSAT', 'KSAN', 'KSFO', 'KSJO', 'KSDQ', 'KSRQ', 
+            'KAVP', 'KSBN', 'KSPI', 'KSTT', 'KSYR', 'KTLH', 'KTRI', 'KTWF', 
+            'KIAD', 'KPBI', 'KHPN'
+          ];
+        } else if (subGroupId === 'westjet_sub') {
+          carrierName = "WestJet";
+          // Main & Secondary Hubs
+          carrierHubs = ['CYYC', 'CYYZ', 'CYVR', 'CYEG', 'CYWG'];
+          // Domestic & International Spokes
+          carrierDests = [
+            'KMCO', 'KLAS', 'KMSP', 'KPHX', 'KLAX', 'MMUN', 'KPSP', 'KKSAN',
+            'KSFO', 'KFLL', 'KRSW', 'KTPA', 'KOGG', 'PHNL', 'KOA', 'LIH',
+            'MMZP', 'MMPV', 'MMCZ', 'MBJ', 'PUJ', 'CYUL', 'CYQB', 'CYHZ',
+            'CYYT', 'CYXE', 'CYQR', 'CYLW', 'CYKA', 'CYQQ', 'CYXS', 'CYXJ'
+          ];
+        } else if (subGroupId === 'volaris_sub') {
+          carrierName = "Volaris";
+          // Main Hubs & Mexican Focus Cities
+          carrierHubs = ['MMMX', 'MMGL', 'TIJ', 'MMUN', 'MMMTY', 'BJX'];
+          // US & Latin American Spokes
+          carrierDests = [
+            'KLAX', 'KORD', 'KMIA', 'KDFW', 'KSFO', 'KSAT', 'KIAH', 'KDEN',
+            'KOAK', 'KSJC', 'KFAT', 'KSMF', 'KONT', 'KLAS', 'KPHX', 'KSLC',
+            'KMDW', 'KCVG', 'KCLT', 'KMCO', 'KTPA', 'KEWR', 'MGGT', 'MSLP',
+            'MROC', 'MPTO', 'MMMNT', 'MMPR', 'MMQT', 'PBC', 'SLP', 'CUL'
+          ];
         }
+
+        // Combine Hubs and Destinations into the airline's valid network
+        const carrierNetwork = [...new Set([...carrierHubs, ...carrierDests])];
+
+        // Filter dataset airports to those in this airline's network
+        let validNetworkDests = AIRPORTS.filter(ap => 
+          ap.icao !== currentAirport.icao && carrierNetwork.includes(ap.icao)
+        );
+
+        if (validNetworkDests.length === 0) {
+          validNetworkDests = AIRPORTS.filter(ap => ap.icao !== currentAirport.icao);
+        }
+
+        // ROUTING RULE: Hub -> Spoke or Spoke -> Hub
+        if (carrierHubs.includes(currentAirport.icao)) {
+          const spokeDests = validNetworkDests.filter(ap => carrierDests.includes(ap.icao));
+          destAirport = spokeDests.length > 0 
+            ? spokeDests[Math.floor(Math.random() * spokeDests.length)] 
+            : validNetworkDests[Math.floor(Math.random() * validNetworkDests.length)];
+        } else {
+          const hubDests = validNetworkDests.filter(ap => carrierHubs.includes(ap.icao));
+          destAirport = hubDests.length > 0 
+            ? hubDests[Math.floor(Math.random() * hubDests.length)] 
+            : validNetworkDests[Math.floor(Math.random() * validNetworkDests.length)];
+        }
+
+        legEntity = { name: `${carrierName} ACMI Sub-Service`, icon: "✈️" };
+        matchupTitle = `✈️ ${carrierName} ACMI Sub-Service (Flt ${legCallsign})`;
+        paragraphSummary = `Leg ${i} (${legCallsign}) operates as ACMI wet lease sub-service for ${carrierName}, departing ${currentAirport.name} bound for ${destAirport.name} to supplement peak demand. Holds 1 & 2 carry airline ULD containers.`;
+      }
+
         else {
           const subList = CATEGORY_SUBGROUPS[category] || CATEGORY_SUBGROUPS.CORPORATE;
           const chosenSub = subList.find(s => s.id === subGroupId) || subList[1 + ((i - 1) % (subList.length - 1))];
