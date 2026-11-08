@@ -888,6 +888,46 @@
     } else {
       initApp();
     }
+function updateSubGroupOptions() {
+  const catSelect = document.getElementById('categorySelect') || document.querySelector('select[name="category"]');
+  const subSelect = document.getElementById('subGroupSelect') || document.querySelector('select[name="subgroup"]');
+  
+  if (!catSelect || !subSelect) return;
+  
+  const rawVal = catSelect.value;
+  let key = rawVal;
+
+  // Map dropdown values / numbers to CATEGORY_SUBGROUPS object keys
+  if (rawVal === '1' || rawVal.includes('Sports')) key = 'SPORTS';
+  else if (rawVal === '2' || rawVal.includes('Corporate')) key = 'CORPORATE';
+  else if (rawVal === '3' || rawVal.includes('Entertainment')) key = 'ENTERTAINMENT';
+  else if (rawVal === '4' || rawVal.includes('Tour')) key = 'TOUR_OPERATOR';
+  else if (rawVal === '5' || rawVal.includes('Government')) key = 'GOVERNMENT';
+  else if (rawVal === '6' || rawVal.includes('ACMI')) key = 'ACMI_LEASE';
+  else if (rawVal === '7' || rawVal.includes('Random')) key = 'RANDOM';
+
+  // Retrieve array from CATEGORY_SUBGROUPS
+  const optionsList = CATEGORY_SUBGROUPS[key] || CATEGORY_SUBGROUPS[rawVal] || [];
+  
+  subSelect.innerHTML = '';
+  
+  // Fallback so the dropdown is NEVER empty
+  if (optionsList.length === 0) {
+    const opt = document.createElement('option');
+    opt.value = "AUTO";
+    opt.textContent = "🔄 Auto-Rotate Sub-Groups";
+    subSelect.appendChild(opt);
+    return;
+  }
+  
+  // Populate matching options
+  optionsList.forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item.id;
+    opt.textContent = `${item.icon ? item.icon + ' ' : ''}${item.name}`;
+    subSelect.appendChild(opt);
+  });
+}
 
     function initZuluClock() {
       function tick() {
