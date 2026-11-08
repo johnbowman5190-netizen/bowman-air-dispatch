@@ -169,29 +169,8 @@
             </label>
             <select id="originAirportSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500 font-medium font-mono">
               <option value="KMSP" selected>KMSP - Minneapolis-St. Paul Int'l (Minneapolis, MN)</option>
-              <option value="KATL">KATL - Hartsfield-Jackson Atlanta Int'l (Atlanta, GA)</option>
-              <option value="KBOS">KBOS - Boston Logan Int'l (Boston, MA)</option>
-              <option value="KBWI">KBWI - Baltimore/Washington Int'l (Annapolis/Navy, MD)</option>
-              <option value="KCLT">KCLT - Charlotte Douglas Int'l (Charlotte/Charlotte 49ers, NC)</option>
-              <option value="KDFW">KDFW - Dallas/Fort Worth Int'l (Dallas/Denton/North Texas, TX)</option>
-              <option value="KDTW">KDTW - Detroit Metropolitan (Detroit, MI)</option>
-              <option value="KFLL">KFLL - Fort Lauderdale-Hollywood Int'l (Fort Lauderdale/FAU Owls, FL)</option>
-              <option value="KHOU">KHOU - Houston Hobby Airport (Houston/Rice Owls, TX)</option>
-              <option value="KICT">KICT - Wichita Eisenhower Int'l (Wichita/Wichita St, KS)</option>
-              <option value="KJFK">KJFK - John F. Kennedy Int'l (New York, NY)</option>
-              <option value="KLAX">KLAX - Los Angeles Int'l (Los Angeles, CA)</option>
-              <option value="KMEM">KMEM - Memphis Int'l (Memphis/Memphis Tigers, TN)</option>
-              <option value="KMSY">KMSY - Louis Armstrong New Orleans Int'l (New Orleans/Tulane, LA)</option>
-              <option value="KORD">KORD - Chicago O'Hare Int'l (Chicago, IL)</option>
-              <option value="KPGV">KPGV - Pitt-Greenville Airport (Greenville/ECU Pirates, NC)</option>
-              <option value="KPHL">KPHL - Philadelphia Int'l (Philadelphia/Temple Owls, PA)</option>
-              <option value="KSAT">KSAT - San Antonio Int'l (San Antonio/UTSA, TX)</option>
-              <option value="KSWF">KSWF - New York Stewart Int'l (West Point/Army, NY)</option>
-              <option value="KTPA">KTPA - Tampa Int'l (Tampa/USF Bulls, FL)</option>
-              <option value="KTUL">KTUL - Tulsa Int'l (Tulsa/Tulsa Golden Hurricane, OK)</option>
-              <option value="LFMN">LFMN - Nice Côte d'Azur (Monaco Link, France)</option>
             </select>
-            <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, AAC, MN & VIP network.</p>
+            <p class="text-[10px] text-slate-400 mt-1">175+ hubs across Delta, Allegiant, Breeze, WestJet, Volaris & AAC network.</p>
           </div>
 
           <!-- Range Profile -->
@@ -207,7 +186,7 @@
             </select>
           </div>
 
-          <!-- UPDATED CHARTER CATEGORIES DROPDOWN (EXACT 7 CATEGORIES) -->
+          <!-- 6 CHARTER CATEGORIES DROPDOWN (NO VIP) -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
               Charter Mission Category
@@ -282,7 +261,7 @@
       
       <!-- 4-TAB NAVIGATION BAR -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 grid grid-cols-2 sm:grid-cols-4 gap-1 text-xs font-semibold">
-        <button onclick="switchTab('tab-route')" id="btn-tab-route" class="py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30">
+        <button onclick="switchTab('tab-route')" id="btn-tab-route" class="py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-2 bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 font-bold">
           <i class="fa-solid fa-map-location-dot"></i>
           <span class="truncate">Route Map & Legs</span>
         </button>
@@ -300,7 +279,7 @@
         </button>
       </div>
 
-      <!-- ACTIVE LEG SELECTOR BAR (SYNCED ACROSS CABIN, CARGO & RELEASE TABS) -->
+      <!-- ACTIVE LEG SELECTOR BAR -->
       <div id="activeLegSelectorBar" class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
         <div class="flex items-center space-x-2 text-slate-300">
           <i class="fa-solid fa-sliders text-amber-400"></i>
@@ -557,12 +536,10 @@
       </div>
     </div>
   </div>
-
-
   <!-- JAVASCRIPT DISPATCH ENGINE & DATASETS -->
   <script>
     /* =========================================================================
-       1. 175+ COMPREHENSIVE AIRPORT NETWORK (DELTA, ALLEGIANT, BREEZE, AAC, MN, VIP)
+       1. COMPREHENSIVE AIRPORT NETWORK (DELTA, ALLEGIANT, BREEZE, WESTJET, VOLARIS, TRANSAT, AAC, MN)
        ========================================================================= */
     const AIRPORTS_RAW = [
       // MINNESOTA & MN PRO TEAM HOMES
@@ -627,19 +604,13 @@
       { icao: "KRIC", iata: "RIC", name: "Richmond Int'l", city: "Richmond, VA", lat: 37.5052, lng: -77.3197 },
       { icao: "KIAD", iata: "IAD", name: "Washington Dulles Int'l", city: "Washington, DC", lat: 38.9531, lng: -77.4565 },
       { icao: "KBUF", iata: "BUF", name: "Buffalo Niagara Int'l", city: "Buffalo, NY", lat: 42.9405, lng: -78.7322 },
-      { icao: "KROC", iata: "ROC", name: "Greater Rochester Int'l", city: "Rochester, NY", lat: 43.1189, lng: -77.6724 },
-      { icao: "KSYR", iata: "SYR", name: "Syracuse Hancock Int'l", city: "Syracuse, NY", lat: 43.1112, lng: -76.1063 },
-      { icao: "KALB", iata: "ALB", name: "Albany International", city: "Albany, NY", lat: 42.7483, lng: -73.8017 },
-      { icao: "KPWM", iata: "PWM", name: "Portland International Jetport", city: "Portland, ME", lat: 43.6462, lng: -70.3088 },
-      { icao: "KBGR", iata: "BGR", name: "Bangor International", city: "Bangor, ME", lat: 44.8074, lng: -68.8281 },
-      { icao: "KGRR", iata: "GRR", name: "Gerald R. Ford Int'l", city: "Grand Rapids, MI", lat: 42.8808, lng: -85.5228 },
 
-      // ALLEGIANT & BREEZE NETWORK AIRPORTS
+      // ALLEGIANT, BREEZE, FRONTIER, WESTJET, TRANSAT & VOLARIS AIRPORTS
       { icao: "KABE", iata: "ABE", name: "Lehigh Valley Int'l", city: "Allentown, PA", lat: 40.6524, lng: -75.4404 },
       { icao: "KACY", iata: "ACY", name: "Atlantic City Int'l", city: "Atlantic City, NJ", lat: 39.4576, lng: -74.5772 },
       { icao: "KATW", iata: "ATW", name: "Appleton International", city: "Appleton/Green Bay, WI", lat: 44.2574, lng: -88.5191 },
       { icao: "KAVL", iata: "AVL", name: "Asheville Regional", city: "Asheville, NC", lat: 35.4362, lng: -82.5418 },
-      { icao: "KAZA", iata: "AZA", name: "Phoenix-Mesa Gateway", city: "Mesa/Phoenix, AZ", lat: 33.3078, lng: -111.6550 },
+      { icao: "KIWA", iata: "IWA", name: "Phoenix-Mesa Gateway", city: "Mesa/Phoenix, AZ", lat: 33.3078, lng: -111.6550 },
       { icao: "KBIL", iata: "BIL", name: "Billings Logan Int'l", city: "Billings, MT", lat: 45.8077, lng: -108.5429 },
       { icao: "KBLI", iata: "BLI", name: "Bellingham Int'l", city: "Bellingham, WA", lat: 48.7927, lng: -122.5375 },
       { icao: "KBLV", iata: "BLV", name: "MidAmerica St. Louis", city: "Belleville/St. Louis, IL", lat: 38.5452, lng: -89.8352 },
@@ -648,83 +619,47 @@
       { icao: "KBZN", iata: "BZN", name: "Bozeman Yellowstone Int'l", city: "Bozeman, MT", lat: 45.7775, lng: -111.1530 },
       { icao: "KCAK", iata: "CAK", name: "Akron-Canton Airport", city: "Akron/Canton, OH", lat: 40.9161, lng: -81.4422 },
       { icao: "KCID", iata: "CID", name: "Eastern Iowa Airport", city: "Cedar Rapids, IA", lat: 41.8847, lng: -91.7108 },
-      { icao: "KCKB", iata: "CKB", name: "North Central West Virginia", city: "Clarksburg, WV", lat: 39.2966, lng: -80.2281 },
-      { icao: "KCOU", iata: "COU", name: "Columbia Regional", city: "Columbia, MO", lat: 38.8181, lng: -92.2196 },
-      { icao: "KCPR", iata: "CPR", name: "Casper/Natrona County Int'l", city: "Casper, WY", lat: 42.9080, lng: -106.4644 },
       { icao: "KDAY", iata: "DAY", name: "Dayton International", city: "Dayton, OH", lat: 39.9024, lng: -84.2194 },
       { icao: "KDSM", iata: "DSM", name: "Des Moines Int'l", city: "Des Moines, IA", lat: 41.5340, lng: -93.6631 },
-      { icao: "KELM", iata: "ELM", name: "Elmira/Corning Regional", city: "Elmira, NY", lat: 42.1599, lng: -76.8914 },
       { icao: "KEUG", iata: "EUG", name: "Eugene Airport", city: "Eugene, OR", lat: 44.1233, lng: -123.2186 },
-      { icao: "KEVV", iata: "EVV", name: "Evansville Regional", city: "Evansville, IN", lat: 38.0383, lng: -87.5306 },
-      { icao: "KEYW", iata: "EYW", name: "Key West Int'l", city: "Key West, FL", lat: 24.5556, lng: -81.7596 },
       { icao: "KFAR", iata: "FAR", name: "Hector International", city: "Fargo, ND", lat: 46.9193, lng: -96.8158 },
-      { icao: "KFAT", iata: "FAT", name: "Fresno Yosemite Int'l", city: "Fresno, CA", lat: 36.7762, lng: -119.7181 },
-      { icao: "KFCA", iata: "FCA", name: "Glacier Park Int'l", city: "Kalispell, MT", lat: 48.3114, lng: -114.2550 },
-      { icao: "KFNT", iata: "FNT", name: "Bishop International", city: "Flint, MI", lat: 42.9654, lng: -83.7436 },
       { icao: "KFSD", iata: "FSD", name: "Sioux Falls Regional", city: "Sioux Falls, SD", lat: 43.5819, lng: -96.7417 },
       { icao: "KFWA", iata: "FWA", name: "Fort Wayne Int'l", city: "Fort Wayne, IN", lat: 40.9785, lng: -85.1951 },
-      { icao: "KGFK", iata: "GFK", name: "Grand Forks Int'l", city: "Grand Forks, ND", lat: 47.9493, lng: -97.1761 },
-      { icao: "KGPT", iata: "GPT", name: "Gulfport-Biloxi Int'l", city: "Gulfport, MS", lat: 30.4073, lng: -89.0701 },
-      { icao: "KGRI", iata: "GRI", name: "Central Nebraska Regional", city: "Grand Island, NE", lat: 40.9675, lng: -98.3097 },
       { icao: "KGSP", iata: "GSP", name: "Greenville-Spartanburg Int'l", city: "Greenville, SC", lat: 34.8956, lng: -82.2189 },
-      { icao: "KGTF", iata: "GTF", name: "Great Falls Int'l", city: "Great Falls, MT", lat: 47.4820, lng: -111.3707 },
-      { icao: "KHTS", iata: "HTS", name: "Tri-State Airport", city: "Huntington, WV", lat: 38.3667, lng: -82.5580 },
-      { icao: "KIDA", iata: "IDA", name: "Idaho Falls Regional", city: "Idaho Falls, ID", lat: 43.5146, lng: -112.0702 },
-      { icao: "KLCK", iata: "LCK", name: "Rickenbacker Int'l", city: "Columbus, OH", lat: 39.8138, lng: -82.9278 },
       { icao: "KLEX", iata: "LEX", name: "Blue Grass Airport", city: "Lexington, KY", lat: 38.0364, lng: -84.6059 },
-      { icao: "KLFT", iata: "LFT", name: "Lafayette Regional", city: "Lafayette, LA", lat: 30.2053, lng: -91.9876 },
-      { icao: "KLNK", iata: "LNK", name: "Lincoln Airport", city: "Lincoln, NE", lat: 40.8509, lng: -96.7592 },
-      { icao: "KLSE", iata: "LSE", name: "La Crosse Regional", city: "La Crosse, WI", lat: 43.8790, lng: -91.2560 },
       { icao: "KMDT", iata: "MDT", name: "Harrisburg Int'l", city: "Harrisburg, PA", lat: 40.1935, lng: -76.7634 },
-      { icao: "KMLB", iata: "MLB", name: "Melbourne Orlando Int'l", city: "Melbourne, FL", lat: 28.1028, lng: -80.6453 },
-      { icao: "KMFR", iata: "MFR", name: "Rogue Valley Int'l", city: "Medford, OR", lat: 42.3742, lng: -122.8735 },
-      { icao: "KMOT", iata: "MOT", name: "Minot International", city: "Minot, ND", lat: 48.2594, lng: -101.2803 },
-      { icao: "KMSO", iata: "MSO", name: "Missoula Montana Airport", city: "Missoula, MT", lat: 46.9163, lng: -114.0906 },
       { icao: "KMYR", iata: "MYR", name: "Myrtle Beach Int'l", city: "Myrtle Beach, SC", lat: 33.6797, lng: -78.9283 },
-      { icao: "KOAK", iata: "OAK", name: "Oakland San Francisco Bay", city: "Oakland, CA", lat: 37.7213, lng: -122.2207 },
       { icao: "KOMA", iata: "OMA", name: "Eppley Airfield", city: "Omaha, NE", lat: 41.3025, lng: -95.8942 },
       { icao: "KPGD", iata: "PGD", name: "Punta Gorda Airport", city: "Punta Gorda, FL", lat: 26.9175, lng: -82.0006 },
-      { icao: "KPIA", iata: "PIA", name: "General Wayne A. Downing", city: "Peoria, IL", lat: 40.6642, lng: -89.6933 },
       { icao: "KPIE", iata: "PIE", name: "St. Pete-Clearwater Int'l", city: "St. Petersburg, FL", lat: 27.9102, lng: -82.6874 },
-      { icao: "KPSC", iata: "PSC", name: "Tri-Cities Airport", city: "Pasco, WA", lat: 46.2647, lng: -119.1190 },
-      { icao: "KPSM", iata: "PSM", name: "Portsmouth International", city: "Portsmouth, NH", lat: 43.0779, lng: -70.8233 },
-      { icao: "KPVU", iata: "PVU", name: "Provo Municipal", city: "Provo, UT", lat: 40.2192, lng: -111.7234 },
-      { icao: "KRAP", iata: "RAP", name: "Rapid City Regional", city: "Rapid City, SD", lat: 44.0453, lng: -103.0574 },
-      { icao: "KRFD", iata: "RFD", name: "Chicago Rockford Int'l", city: "Rockford, IL", lat: 42.1954, lng: -89.0972 },
-      { icao: "KROA", iata: "ROA", name: "Roanoke-Blacksburg Regional", city: "Roanoke, VA", lat: 37.3255, lng: -79.9754 },
-      { icao: "KSCK", iata: "SCK", name: "Stockton Metropolitan", city: "Stockton, CA", lat: 37.8942, lng: -121.2383 },
       { icao: "KSFB", iata: "SFB", name: "Orlando Sanford Int'l", city: "Sanford/Orlando, FL", lat: 28.7776, lng: -81.2375 },
-      { icao: "KSHV", iata: "SHV", name: "Shreveport Regional", city: "Shreveport, LA", lat: 32.4466, lng: -93.8256 },
       { icao: "KSRQ", iata: "SRQ", name: "Sarasota-Bradenton Int'l", city: "Sarasota, FL", lat: 27.3954, lng: -82.5544 },
-      { icao: "KTRI", iata: "TRI", name: "Tri-Cities Airport", city: "Blountville/Bristol, TN", lat: 36.4752, lng: -82.4074 },
-      { icao: "KTVC", iata: "TVC", name: "Cherry Capital Airport", city: "Traverse City, MI", lat: 44.7414, lng: -85.5822 },
       { icao: "KTYS", iata: "TYS", name: "McGhee Tyson Airport", city: "Knoxville, TN", lat: 35.8110, lng: -83.9940 },
-      { icao: "KVPS", iata: "VPS", name: "Destin-Fort Walton Beach", city: "Fort Walton Beach, FL", lat: 30.4832, lng: -86.5254 },
-      { icao: "KXNA", iata: "XNA", name: "Northwest Arkansas National", city: "Fayetteville/Bentonville, AR", lat: 36.2818, lng: -94.3068 },
-      { icao: "KPNS", iata: "PNS", name: "Pensacola International", city: "Pensacola, FL", lat: 30.4734, lng: -87.1866 },
-      { icao: "KBTR", iata: "BTR", name: "Baton Rouge Metropolitan", city: "Baton Rouge, LA", lat: 30.5329, lng: -91.1496 },
-      { icao: "KHSV", iata: "HSV", name: "Huntsville International", city: "Huntsville, AL", lat: 34.6404, lng: -86.7731 },
-      { icao: "KMOB", iata: "MOB", name: "Mobile Regional", city: "Mobile, AL", lat: 30.6914, lng: -88.2428 },
-      { icao: "KBDL", iata: "BDL", name: "Bradley International", city: "Hartford, CT", lat: 41.9389, lng: -72.6832 },
-      { icao: "KPVD", iata: "PVD", name: "Rhode Island T.F. Green", city: "Providence, RI", lat: 41.7240, lng: -71.4282 },
+      { icao: "KHVN", iata: "HVN", name: "Tweed New Haven Airport", city: "New Haven, CT", lat: 41.2638, lng: -72.8868 },
       { icao: "KISP", iata: "ISP", name: "Long Island MacArthur", city: "Islip, NY", lat: 40.7952, lng: -73.1002 },
-      { icao: "KORF", iata: "ORF", name: "Norfolk International", city: "Norfolk, VA", lat: 36.8946, lng: -76.2012 },
-      { icao: "KSDF", iata: "SDF", name: "Louisville Muhammad Ali Int'l", city: "Louisville, KY", lat: 38.1744, lng: -85.7360 },
+      { icao: "KPWM", iata: "PWM", name: "Portland International Jetport", city: "Portland, ME", lat: 43.6462, lng: -70.3088 },
+      { icao: "KPNS", iata: "PNS", name: "Pensacola International", city: "Pensacola, FL", lat: 30.4734, lng: -87.1866 },
+      { icao: "KSBD", iata: "SBD", name: "San Bernardino Int'l", city: "San Bernardino, CA", lat: 34.0953, lng: -117.2350 },
+      { icao: "KILM", iata: "ILM", name: "Wilmington Int'l", city: "Wilmington, NC", lat: 34.2706, lng: -77.9026 },
 
-      // INTERNATIONAL ACJ320 & LUXURY HUBS
-      { icao: "LFMN", iata: "NCE", name: "Nice Côte d'Azur (Monaco Link)", city: "Nice/Monaco, France", lat: 43.6584, lng: 7.2159 },
-      { icao: "LFPB", iata: "LBG", name: "Paris Le Bourget Executive", city: "Paris, France", lat: 48.9694, lng: 2.4414 },
-      { icao: "EGLL", iata: "LHR", name: "London Heathrow", city: "London, UK", lat: 51.4700, lng: -0.4543 },
-      { icao: "EGGW", iata: "LTN", name: "London Luton Airport", city: "London, UK", lat: 51.8747, lng: -0.3683 },
-      { icao: "LSGG", iata: "GVA", name: "Geneva Airport", city: "Geneva, Switzerland", lat: 46.2381, lng: 6.1090 },
-      { icao: "LSZH", iata: "ZRH", name: "Zurich Airport", city: "Zurich, Switzerland", lat: 47.4647, lng: 8.5492 },
-      { icao: "LIMC", iata: "MXP", name: "Milan Malpensa", city: "Milan, Italy", lat: 45.6306, lng: 8.7281 },
+      // WESTJET & AIR TRANSAT CANADIAN HUBS
+      { icao: "CYYC", iata: "YYC", name: "Calgary International", city: "Calgary, AB", lat: 51.1215, lng: -114.0076 },
+      { icao: "CYYZ", iata: "YYZ", name: "Toronto Pearson Int'l", city: "Toronto, ON", lat: 43.6777, lng: -79.6248 },
+      { icao: "CYVR", iata: "YVR", name: "Vancouver International", city: "Vancouver, BC", lat: 49.1967, lng: -123.1815 },
+      { icao: "CYEG", iata: "YEG", name: "Edmonton International", city: "Edmonton, AB", lat: 53.3097, lng: -113.5797 },
+      { icao: "CYWG", iata: "YWG", name: "Winnipeg Richardson Int'l", city: "Winnipeg, MB", lat: 49.9100, lng: -97.2399 },
+      { icao: "CYUL", iata: "YUL", name: "Montreal-Trudeau Int'l", city: "Montreal, QC", lat: 45.4706, lng: -73.7408 },
+      { icao: "CYQB", iata: "YQB", name: "Quebec City Jean Lesage", city: "Quebec City, QC", lat: 46.7911, lng: -71.3933 },
+
+      // VOLARIS & TRANSBOUNDARY LEISURE HUBS
+      { icao: "MMMX", iata: "MEX", name: "Mexico City Benito Juarez", city: "Mexico City, Mexico", lat: 19.4363, lng: -99.0721 },
+      { icao: "MMGL", iata: "GDL", name: "Guadalajara International", city: "Guadalajara, Mexico", lat: 20.5218, lng: -103.3112 },
       { icao: "MMUN", iata: "CUN", name: "Cancun International", city: "Cancun, Mexico", lat: 21.0365, lng: -86.8771 },
-      { icao: "MDPC", iata: "PUJ", name: "Punta Cana Int'l", city: "Punta Cana, Dominican Rep.", lat: 18.5674, lng: -68.3634 },
-      { icao: "MYNN", iata: "NAS", name: "Lynden Pindling Int'l", city: "Nassau, Bahamas", lat: 25.0390, lng: -77.4662 }
+      { icao: "MMMTY", iata: "MTY", name: "Monterrey International", city: "Monterrey, Mexico", lat: 25.7785, lng: -100.1070 },
+      { icao: "TJSJ", iata: "SJU", name: "Luis Munoz Marin Int'l", city: "San Juan, Puerto Rico", lat: 18.4394, lng: -66.0018 }
     ];
 
-    // Clean Deduplicated Airport List
+    // Deduplicate Airports
     const AIRPORT_MAP = new Map();
     AIRPORTS_RAW.forEach(ap => {
       if (!AIRPORT_MAP.has(ap.icao)) AIRPORT_MAP.set(ap.icao, ap);
@@ -799,8 +734,6 @@
       { id: "wsu", name: "Wichita State Shockers", league: "AAC", home: "KICT", icon: "🌾", months: [10,11,12,1,2,3,4,5] }
     ];
 
-    const ACJ_VIP_HUBS = ["LFMN", "LFPB", "EGLL", "LSZH", "LIMC", "KJFK", "KLAS", "KLAX", "KMSP", "KFLL"];
-
     const CATEGORY_SUBGROUPS = {
       SPORTS: [
         { id: "AUTO_ROTATION", name: "⭐ Auto-Anchor Teams to Selection / Home Airfield", icon: "⭐" },
@@ -809,49 +742,37 @@
       ],
       CORPORATE: [
         { id: "AUTO", name: "🔄 Auto-Rotation Corporate Delegations", icon: "💼" },
-        { id: "apple", name: "Apple Inc. Global Leadership Retreat", icon: "🍏" },
-        { id: "microsoft", name: "Microsoft Cloud Summit Executive Envoy", icon: "💻" },
-        { id: "target", name: "Target Corp Board of Directors & Officers", icon: "🎯" },
-        { id: "goldman", name: "Goldman Sachs Managing Directors Summit", icon: "🏦" },
-        { id: "amazon", name: "Amazon Global Operations Executive Tour", icon: "📦" }
-      ],
-      ACJ320_VIP: [
-        { id: "AUTO", name: "🔄 Auto-Rotation ACJ320 VIP Envoys", icon: "👑" },
-        { id: "monaco_f1", name: "Monaco Grand Prix Paddock Suite VIPs", icon: "🏎️" },
-        { id: "head_of_state", name: "Head-of-State Diplomatic Presidential Suite", icon: "🏛️" },
-        { id: "royal_family", name: "Royal Family Private Sovereign Travel", icon: "👑" },
-        { id: "hnw_estate", name: "High-Net-Worth Intercontinental Delegation", icon: "💎" }
+        { id: "tech_summit", name: "Silicon Valley Executive Leadership Retreat", icon: "💻" },
+        { id: "energy_summit", name: "Global Energy & Clean Tech Summit Envoy", icon: "⚡" },
+        { id: "finance_board", name: "Wall Street Investment Bank Board Meeting", icon: "🏦" },
+        { id: "retail_summit", name: "National Retail Operations Executive Tour", icon: "📦" }
       ],
       ENTERTAINMENT: [
         { id: "AUTO", name: "🔄 Auto-Rotation Entertainment Tours", icon: "🎸" },
-        { id: "stadium_tour", name: "World Stadium Concert Tour & Production", icon: "🎸" },
-        { id: "film_unit", name: "Universal Pictures Film Cast & Stunt Crew", icon: "🎬" },
-        { id: "symphony", name: "Philharmonic Symphony Orchestra & Instruments", icon: "🎻" },
-        { id: "festival", name: "Global Music Festival Headliner Entourage", icon: "🎤" }
+        { id: "stadium_tour", name: "Multi-City Arena Music Tour & Crew", icon: "🎤" },
+        { id: "film_unit", name: "Hollywood Motion Picture Location Stunt Crew", icon: "🎬" },
+        { id: "symphony", name: "Philharmonic Symphony Orchestra & Instruments", icon: "🎻" }
       ],
       TOUR_OPERATOR: [
         { id: "AUTO", name: "🔄 Auto-Rotation Tour Operator Groups", icon: "🏝️" },
         { id: "cruise_shuttle", name: "Royal Caribbean Port Passenger Shuttle", icon: "🚢" },
-        { id: "alpine_ski", name: "Swiss Alps Express Luxury Ski Charter", icon: "⛷️" },
-        { id: "caribbean_resort", name: "Punta Cana All-Inclusive Seasonal Run", icon: "🏖️" },
-        { id: "peak_holiday", name: "Peak Holiday Riviera Resort Transfer", icon: "✈️" }
+        { id: "caribbean_sun", name: "Punta Cana Seasonal All-Inclusive Run", icon: "☀️" },
+        { id: "alpine_ski", name: "Rockies Luxury Winter Ski Express", icon: "⛷️" }
       ],
       GOVERNMENT: [
         { id: "AUTO", name: "🔄 Auto-Rotation Government & Relief Missions", icon: "🏛️" },
-        { id: "un_peace", name: "UN Peacekeeping Envoy & Staff Airlift", icon: "🇺🇳" },
-        { id: "us_state", name: "US Department of State Foreign Service", icon: "🦅" },
-        { id: "red_cross", name: "Red Cross Disaster Relief Taskforce", icon: "🚑" },
-        { id: "fema_first", name: "FEMA First Responders Emergency Logistics", icon: "🚨" }
+        { id: "un_peace", name: "UN Peacekeeping Delegation & Staff Airlift", icon: "🇺🇳" },
+        { id: "red_cross", name: "Red Cross Emergency Relief Logistics", icon: "🚑" },
+        { id: "fema_first", name: "FEMA First Responders Disaster Taskforce", icon: "🚨" }
       ],
-      acmi: [
-        { id: 'auto_acmi', name: '✈️ Auto-Rotate ACMI Sub-Service Carriers' },
-        { id: 'allegiant_sub', name: '☀️ Allegiant Air High-Demand Vacation Route Cover' },
-        { id: 'frontier_sub', name: '🟢 Frontier Airlines Network Surge & Sub-Service' },
-        { id: 'westjet_sub', name: '🍁 WestJet Transboundary & Canadian Sun Route ACMI' },
-        { id: 'transat_sub', name: '🌴 Air Transat Seasonal Leisure Route Wet Lease' },
-        { id: 'volaris_sub', name: '🇲🇽 Volaris Cross-Border Mexico-US Shuttle Sub-Service' }
+      ACMI_LEASE: [
+        { id: "auto_acmi", name: "✈️ Auto-Rotate ACMI Sub-Service Carriers", icon: "✈️" },
+        { id: "allegiant_sub", name: "☀️ Allegiant Air High-Demand Vacation Route Cover", icon: "☀️" },
+        { id: "frontier_sub", name: "🟢 Frontier Airlines Network Surge & Sub-Service", icon: "🟢" },
+        { id: "westjet_sub", name: "🍁 WestJet Transboundary & Canadian Sun Route ACMI", icon: "🍁" },
+        { id: "transat_sub", name: "🌴 Air Transat Seasonal Leisure Route Wet Lease", icon: "🌴" },
+        { id: "volaris_sub", name: "🇲🇽 Volaris Cross-Border Mexico-US Shuttle Sub-Service", icon: "🇲🇽" }
       ]
-
     };
 
     /* =========================================================================
@@ -948,7 +869,7 @@
       return Math.round(R * c);
     }
 
-        /* =========================================================================
+    /* =========================================================================
        5. DISPATCH GENERATOR ENGINE FOR ALL 6 CATEGORIES (CALLSIGN BCJ)
        ========================================================================= */
     function handleGenerateDispatch() {
@@ -1132,7 +1053,6 @@
       renderActiveLegCabinAndCargo();
       renderFAARelease();
     }
-#
 
     /* =========================================================================
        6. ACTIVE LEG SELECTOR BAR & SYNCHRONIZATION
@@ -1408,21 +1328,6 @@
           document.getElementById('modalNotes').textContent = "Aft Operations Seating";
         }
       } 
-      else if (cat === 'ACJ320_VIP') {
-        if (rowNum <= 4) {
-          document.getElementById('modalPaxName').textContent = `State Delegate / Sovereign VIP`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - Principal VIP`;
-          document.getElementById('modalLuggage').textContent = "2 Rimowa Cases + Diplomatic Pouches (60 lbs)";
-          document.getElementById('modalCatering').textContent = "Dom Pérignon & Gourmet Caviar Service";
-          document.getElementById('modalNotes').textContent = "ACJ Master Suite Recline & Security";
-        } else {
-          document.getElementById('modalPaxName').textContent = `Diplomatic Attaché / VIP Guest`;
-          document.getElementById('modalPaxRole').textContent = `${groupName} - VIP Entourage`;
-          document.getElementById('modalLuggage').textContent = "1 Designer Suiter + 1 Carry-On (40 lbs)";
-          document.getElementById('modalCatering').textContent = "Premium European Wine & Fine Dining";
-          document.getElementById('modalNotes').textContent = "Priority VIP Apron Deboarding";
-        }
-      }
       else if (cat === 'CORPORATE') {
         if (rowNum <= 4) {
           document.getElementById('modalPaxName').textContent = `Executive Vice President`;
@@ -1513,19 +1418,6 @@
           <div>• 180 Individual Player Duffels</div>
           <div>• Medical & Taping Tables</div>
           <div>• Training Hydration Coolers</div>
-        `;
-      } else if (cat === 'ACJ320_VIP') {
-        holdFwdTitle.textContent = `ACJ320 Diplomatic ULDs`;
-        holdFwdManifest.innerHTML = `
-          <div>• 4x AKH Sealed ULD Containers</div>
-          <div>• State Gifts & Armored Pouches</div>
-          <div>• VIP Catering Hardware Trunks</div>
-        `;
-        holdAftTitle.textContent = `Valet Designer Suitcases`;
-        holdAftManifest.innerHTML = `
-          <div>• 180 Luxury Designer Wardrobe Cases</div>
-          <div>• Personal Escort Baggage</div>
-          <div>• Executive Gift Hampers</div>
         `;
       } else if (cat === 'CORPORATE') {
         holdFwdTitle.textContent = `Keynote & Server Hardware`;
